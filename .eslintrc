@@ -11,7 +11,8 @@
     "@typescript-eslint/no-inferrable-types": "off",
     "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
     "max-lines-per-function": [ "error", 40 ],
-    "max-lines": ["error", 350 ]
+    "max-lines": ["error", 350 ],
+    "arrow-parens": ["error", "always"]
   },
   "extends": [
     "plugin:prettier/recommended",

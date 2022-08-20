@@ -5,7 +5,7 @@ import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
-import { IBaseComponent, PageTypes } from '../types/types';
+import { IBaseComponent, PageType } from '../types/types';
 
 export class Router {
   private currentPage: IBaseComponent;
@@ -29,7 +29,7 @@ export class Router {
     this.navigateApp(navigationButtons);
   }
 
-  public getPage(pageID?: string): PageTypes {
+  public getPage(pageID?: string): PageType {
     switch (pageID) {
       case this.mainPage:
         return MainPage;
@@ -51,7 +51,7 @@ export class Router {
   }
 
   public updatePage(pageID: string): void {
-    const newSection: PageTypes = this.getPage(pageID);
+    const newSection: PageType = this.getPage(pageID);
     if (this.currentPage instanceof newSection) {
       return;
     }

@@ -1,5 +1,5 @@
 import { BaseComponent } from '../../components/base-component/base-component';
-import { Constants } from '../../constants/Constants';
+import { Constants } from '../../constants/constants';
 import { Router } from '../../router/router';
 import { IBaseComponent } from '../../types/types';
 import './main.scss';

@@ -13,8 +13,8 @@ export class BaseComponent implements IBaseComponent {
     this.element = document.createElement(tag);
     parent.append(this.element);
     if (classList) {
-      const classes = classList.split(' ');
-      classes.forEach(classItem => this.element.classList.add(classItem));
+      const classes: string[] = classList.split(' ');
+      classes.forEach((classItem: string): void => this.element.classList.add(classItem));
     }
     if (Object.entries(attributes).length) {
       Object.entries(attributes).forEach(([attr, value]: string[]): void => this.element.setAttribute(attr, value));

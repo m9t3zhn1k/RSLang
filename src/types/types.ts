@@ -13,4 +13,4 @@ export interface IConstants {
   DEFAULT_PAGE: 'main';
 }
 
-export type PageTypes = typeof AboutTeam | typeof Ebook | typeof Games | typeof MainPage | typeof Statistics;
+export type PageType = typeof AboutTeam | typeof Ebook | typeof Games | typeof MainPage | typeof Statistics;
