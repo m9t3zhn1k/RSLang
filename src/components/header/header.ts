@@ -7,7 +7,7 @@ export class Header extends BaseComponent implements IBaseComponent {
   public readonly navigation: Navigation;
 
   constructor(parent: HTMLElement) {
-    super(parent, 'header', 'header');
+    super(parent, 'header', ['header']);
     this.navigation = new Navigation(this.element);
   }
 }

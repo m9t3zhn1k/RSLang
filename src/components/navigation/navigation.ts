@@ -16,7 +16,7 @@ export class Navigation extends BaseComponent {
   public navigationButtons: NodeListOf<ChildNode>;
 
   constructor(parent: HTMLElement) {
-    super(parent, 'nav', 'navigation');
+    super(parent, 'nav', ['navigation']);
     this.toMainPageButton = new BaseComponent(this.element, 'button');
     this.toEbookButton = new BaseComponent(this.element, 'button');
     this.toGamesButton = new BaseComponent(this.element, 'button');
