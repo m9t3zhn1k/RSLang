@@ -1,11 +1,11 @@
-import { AboutTeam } from '../pages/about-team/about-team';
-import { AudiochallengePage } from '../pages/audiochallenge-page/audiochallenge-page';
-import { Ebook } from '../pages/ebook/ebook';
-import { Games } from '../pages/games/games';
-import { MainPage } from '../pages/main-page/main-page';
-import { SprintPage } from '../pages/sprint-page/sprint-page';
-import { Statistics } from '../pages/statistics/statistics';
-import { IBaseComponent, TypeOfPage } from '../types/types';
+import { AboutTeam } from '../components/about-team/about-team';
+import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
+import { Ebook } from '../components/ebook/ebook';
+import { Games } from '../components/games/games';
+import { MainPage } from '../components/main-page/main-page';
+import { SprintPage } from '../components/sprint-page/sprint-page';
+import { Statistics } from '../components/statistics/statistics';
+import { IBaseComponent, PageTypes } from '../types/types';
 
 export class Router {
   private currentPage: IBaseComponent;
@@ -29,7 +29,7 @@ export class Router {
     this.navigateApp(navigationButtons);
   }
 
-  public getPage(pageID?: string): TypeOfPage {
+  public getPage(pageID?: string): PageTypes {
     switch (pageID) {
       case this.mainPage:
         return MainPage;
@@ -51,7 +51,7 @@ export class Router {
   }
 
   public updatePage(pageID: string): void {
-    const newSection: TypeOfPage = this.getPage(pageID);
+    const newSection: PageTypes = this.getPage(pageID);
     if (this.currentPage instanceof newSection) {
       return;
     }

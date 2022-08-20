@@ -6,14 +6,15 @@ export class BaseComponent implements IBaseComponent {
   constructor(
     parent: HTMLElement,
     tag: keyof HTMLElementTagNameMap = 'div',
-    className: string = '',
+    classList: string = '',
     content: string = '',
     attributes: { [key: string]: string } = {}
   ) {
     this.element = document.createElement(tag);
     parent.append(this.element);
-    if (className) {
-      this.element.className = className;
+    if (classList) {
+      const classes = classList.split(' ');
+      classes.forEach(classItem => this.element.classList.add(classItem));
     }
     if (Object.entries(attributes).length) {
       Object.entries(attributes).forEach(([attr, value]: string[]): void => this.element.setAttribute(attr, value));

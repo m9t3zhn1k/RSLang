@@ -1,12 +1,11 @@
-import { BaseComponent } from '../../components/base-component/base-component';
+import { BaseComponent } from '../base-component/base-component';
 import { Router } from '../../router/router';
 import { IBaseComponent } from '../../types/types';
-import './games.scss';
+import './ebook.scss';
 
-export class Games extends BaseComponent {
+export class Ebook extends BaseComponent {
   constructor(parent: HTMLElement, router: Router) {
-    super(parent, 'section', 'page blue flex');
-    this.element.innerHTML = 'I am the games';
+    super(parent, 'section', 'page green flex');
     const firstGameButton: IBaseComponent = new BaseComponent(this.element, 'button', 'game-button');
     const secondGameButton: IBaseComponent = new BaseComponent(this.element, 'button', 'game-button');
     firstGameButton.element.textContent = 'AudioChallenge';

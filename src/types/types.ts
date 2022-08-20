@@ -1,8 +1,8 @@
-import { AboutTeam } from '../pages/about-team/about-team';
-import { Ebook } from '../pages/ebook/ebook';
-import { Games } from '../pages/games/games';
-import { MainPage } from '../pages/main-page/main-page';
-import { Statistics } from '../pages/statistics/statistics';
+import { AboutTeam } from '../components/about-team/about-team';
+import { Ebook } from '../components/ebook/ebook';
+import { Games } from '../components/games/games';
+import { MainPage } from '../components/main-page/main-page';
+import { Statistics } from '../components/statistics/statistics';
 
 export interface IBaseComponent {
   element: HTMLElement;
@@ -13,4 +13,4 @@ export interface IConstants {
   DEFAULT_PAGE: 'main';
 }
 
-export type TypeOfPage = typeof AboutTeam | typeof Ebook | typeof Games | typeof MainPage | typeof Statistics;
+export type PageTypes = typeof AboutTeam | typeof Ebook | typeof Games | typeof MainPage | typeof Statistics;
