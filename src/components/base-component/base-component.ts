@@ -7,6 +7,7 @@ export class BaseComponent implements IBaseComponent {
     parent: HTMLElement,
     tag: keyof HTMLElementTagNameMap = 'div',
     className: string = '',
+    content: string = '',
     attributes: { [key: string]: string } = {}
   ) {
     this.element = document.createElement(tag);
@@ -17,6 +18,7 @@ export class BaseComponent implements IBaseComponent {
     if (Object.entries(attributes).length) {
       Object.entries(attributes).forEach(([attr, value]: string[]): void => this.element.setAttribute(attr, value));
     }
+    this.element.textContent = content;
   }
 
   public remove(): void {
