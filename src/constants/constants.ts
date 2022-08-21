@@ -1,5 +1,5 @@
 import { IConstants } from '../types/types';
 
-export const Constants: IConstants = {
+export const constants: IConstants = {
   DEFAULT_PAGE: 'main',
 };
