@@ -13,4 +13,30 @@ export interface IConstants {
   DEFAULT_PAGE: 'main';
 }
 
+export interface IUser {
+  email: string;
+  password: string;
+  name?: string;
+}
+
+export interface ILoginUser {
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
+}
+
+export interface IGetUserWord {
+  userId: string;
+  wordId: string;
+  token: string;
+}
+
+export interface ICreateUserWord {
+  userId: string;
+  wordId: string;
+  token: string;
+}
+
 export type PageType = typeof AboutTeam | typeof Ebook | typeof Games | typeof MainPage | typeof Statistics;
