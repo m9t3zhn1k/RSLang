@@ -6,9 +6,7 @@
   background-color: $blue-medium;
   position: relative;
   margin-top: -129px;
-  background: linear-gradient(-60deg, $blue-light, $blue-medium, $blue-dark, $text-black);
-  background-size: 200% 200%;
-  animation: gradient 10s ease infinite;
+  background: linear-gradient(-60deg, $blue-medium, $blue-dark, $blue-darkest);
 
   &__wave {
     bottom: 0%;

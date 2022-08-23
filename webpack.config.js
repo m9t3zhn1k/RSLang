@@ -3,6 +3,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const { merge } = require('webpack-merge');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const baseConfig = {
   entry: path.resolve(__dirname, './src/index.ts'),
@@ -51,6 +52,27 @@ const baseConfig = {
     new CleanWebpackPlugin(),
     new MiniCSSExtractPlugin({
       filename: 'styles.[contenthash].css',
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: './src/assets/images/developers',
+          to: '../dist/assets/images/developers'
+        },
+        {
+          from: './src/assets/images/waves',
+          to: '../dist/assets/images/waves'
+        },
+        {
+          from: './src/assets/images/main',
+          to: '../dist/assets/images/main'
+        }
+        ,
+        {
+          from: './src/assets/icons/rs_school_js.svg',
+          to: '../dist/assets/icons/rs_school_js.svg'
+        }
+      ]
     }),
   ]
 }
