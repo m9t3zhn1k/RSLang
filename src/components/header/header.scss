@@ -11,7 +11,7 @@
   padding-bottom: 50px;
 
   &.hidden {
-    background-color: $blue-medium;
+    background: linear-gradient(-60deg, $blue-medium, $blue-dark);
   }
 
   &__container {

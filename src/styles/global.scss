@@ -82,14 +82,103 @@ button {
   border-radius: 0.25rem;
 }
 
-@keyframes gradient {
+.light {
+  position: absolute;
+  width: 0px;
+  opacity: .75;
+  background-color: white;
+  box-shadow: #e9f1f1 0px 0px 20px 2px;
+  opacity: 0;
+  top: 20vh;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+}
+
+.x1 {
+  animation: floatUp 4s infinite linear;
+  transform: scale(0.2);
+}
+
+.x2 {
+  animation: floatUp 7s infinite linear;
+  transform: scale(0.3);
+  left: 15%;
+}
+
+.x3 {
+  animation: floatUp 2.5s infinite linear;
+  transform: scale(0.1);
+  left: -15%;
+}
+
+.x4 {
+  animation: floatUp 4.5s infinite linear;
+  transform: scale(0.2);
+  left: -34%;
+}
+
+.x5 {
+  animation: floatUp 8s infinite linear;
+  transform: scale(0.4);
+  left: -57%;
+}
+
+.x6 {
+  animation: floatUp 3s infinite linear;
+  transform: scale(0.15);
+  left: -81%;
+}
+
+.x7 {
+  animation: floatUp 5.3s infinite linear;
+  transform: scale(0.6);
+  left: 37%;
+}
+
+.x8 {
+  animation: floatUp 4.7s infinite linear;
+  transform: scale(0.4);
+  left: 62%;
+}
+
+.x9 {
+animation: floatUp 4.1s infinite linear;
+transform: scale(0.2);
+left: 85%;
+}
+
+@keyframes floatUp {
   0% {
-      background-position: 0% 50%;
+    top: 100vh;
+    opacity: 0;
   }
+
+  25% {
+    opacity: 1;
+  }
+
   50% {
-      background-position: 100% 50%;
+    top: 0vh;
+    opacity: 0.8;
   }
+
+  75% {
+    opacity: 1;
+  }
+
   100% {
-      background-position: 0% 50%;
+    top: -100vh;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

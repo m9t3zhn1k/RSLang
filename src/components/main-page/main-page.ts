@@ -23,6 +23,7 @@ export class MainPage extends BaseComponent {
     this.renderGeneralSection();
     this.renderAdvantagesSection();
     this.renderDevelopersSection();
+    this.renderLights();
   }
 
   private renderGeneralSection(): void {
@@ -123,5 +124,17 @@ export class MainPage extends BaseComponent {
     useElem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `${github_logo}#logo`);
     element.appendChild(useElem);
     container.appendChild(element);
+  }
+
+  private renderLights(): void {
+    new BaseComponent(this.element, 'div', ['light', 'x1']);
+    new BaseComponent(this.element, 'div', ['light', 'x2']);
+    new BaseComponent(this.element, 'div', ['light', 'x3']);
+    new BaseComponent(this.element, 'div', ['light', 'x4']);
+    new BaseComponent(this.element, 'div', ['light', 'x5']);
+    new BaseComponent(this.element, 'div', ['light', 'x6']);
+    new BaseComponent(this.element, 'div', ['light', 'x7']);
+    new BaseComponent(this.element, 'div', ['light', 'x8']);
+    new BaseComponent(this.element, 'div', ['light', 'x9']);
   }
 }
