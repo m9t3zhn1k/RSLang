@@ -12,7 +12,8 @@
     "@typescript-eslint/comma-dangle": ["error", "only-multiline"],
     "max-lines-per-function": [ "error", 40 ],
     "max-lines": ["error", 350 ],
-    "arrow-parens": ["error", "always"]
+    "arrow-parens": ["error", "always"],
+    "@typescript-eslint/no-unused-expressions": "off"
   },
   "overrides": [
     {

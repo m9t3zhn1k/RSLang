@@ -1,0 +1,30 @@
+[
+  {
+    "imageSource": "./assets/images/main/advantage__ebook.svg",
+    "imageAlt": "eBook",
+    "title": "Учебник",
+    "description": "Ровно 3600 слов для изучения, которые разбиты на 6 разделов. Помимо перевода и тракскрипции у каждого слова имеется изображение и примеры произношений как отдельного слова, так и в составе предложения.",
+    "id": "ebook"
+  },
+  {
+    "imageSource": "./assets/images/main/advantages_games.svg",
+    "imageAlt": "Games",
+    "title": "Игры",
+    "description": "В приложении есть 2 игры: Спринт и Аудиовызов, которые помогут в игровой форме пополнить словарный запас, а также научиться на слух воспринимать английскую речь.",
+    "id": "games"
+  },
+  {
+    "imageSource": "./assets/images/main/advantages_statistics.svg",
+    "imageAlt": "Statisctics",
+    "title": "Статистика",
+    "description": "Прогресс своего обучения можно посмотреть в статистике, где представлены данные по играм и по употреблению за каждый день.",
+    "id": "statistics"
+  },
+  {
+    "imageSource": "./assets/images/main/advantages_difficult_words.svg",
+    "imageAlt": "Difficult words",
+    "title": "Сложные слова",
+    "description": "Создай свой собственный список сложных слов - добавляй те слова, которым хочешь уделить особое внимание и удаляй, если слово тебе уже известно.",
+    "id": "ebook"
+  }
+]

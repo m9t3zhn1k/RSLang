@@ -1,0 +1,61 @@
+@import '../../styles/pallete.scss';
+
+.footer {
+  background-color: $blue-medium;
+  color: $text-light;
+  padding-top: 50px;
+  margin-top: 6rem;
+  position: relative;
+
+  &__wave {
+    top: 0%;
+
+    & > img {
+      top: 0%;
+    }
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+
+  &__rs-logo {
+    height: 35px;
+    transition: all .3s;
+    cursor: pointer;
+
+    & > img {
+      height: 100%;
+    }
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  &__year {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  &__member {
+    & > a {
+      display: inline-block;
+      color: inherit;
+      transition: all .3s;
+
+      &:hover {
+        transform: scale(1.05);
+        color: $blue-light;
+      }
+    }
+
+    &s-list {
+      display: flex;
+      gap: 1.5rem;
+    }
+  }
+}

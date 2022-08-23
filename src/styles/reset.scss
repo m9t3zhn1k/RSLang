@@ -29,7 +29,6 @@ input::-ms-clear {
 }
 
 button {
-  cursor: pointer;
   border: 0;
   background-color: transparent;
 }
@@ -62,6 +61,13 @@ h6 {
 
 p,
 span,
-a {
+a,
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   user-select: none;
 }

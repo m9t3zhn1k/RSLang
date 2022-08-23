@@ -3,7 +3,8 @@ import './audiochallenge-page.scss';
 
 export class AudiochallengePage extends BaseComponent {
   constructor(parent: HTMLElement) {
-    super(parent, 'section', ['page', 'brown']);
-    this.element.textContent = 'I am the Audiochallenge';
+    super(parent, 'div', ['wrapper']);
+    const container: HTMLElement = new BaseComponent(this.element, 'div', ['container']).element;
+    new BaseComponent(container, 'p', [], 'I am the Audiochallenge');
   }
 }
