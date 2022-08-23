@@ -15,6 +15,7 @@ export interface IConstants {
 }
 
 export interface IHeader {
+  element: HTMLElement;
   navigation: INavigation;
   authorizationButton: HTMLButtonElement;
   wave: HTMLElement;

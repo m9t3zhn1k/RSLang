@@ -9,7 +9,10 @@
   width: 100%;
   color: $text-light;
   padding-bottom: 50px;
-  background-color: $blue-medium;
+
+  &.hidden {
+    background-color: $blue-medium;
+  }
 
   &__container {
     display: flex;
