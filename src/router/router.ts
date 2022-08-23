@@ -4,7 +4,7 @@ import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
-import { IBaseComponent, IRouter, PageType } from '../types/types';
+import { IBaseComponent, IHeader, IRouter, PageType } from '../types/types';
 
 export class Router implements IRouter {
   private currentPage: IBaseComponent;
@@ -24,7 +24,7 @@ export class Router implements IRouter {
   constructor(
     private parent: HTMLElement,
     navigationButtons: HTMLElement[],
-    private headerWave: HTMLElement,
+    private header: IHeader,
     pageID?: string
   ) {
     this.currentPage = new (this.getPage(pageID))(this.parent, this);
@@ -45,7 +45,7 @@ export class Router implements IRouter {
         return AudiochallengePage;
       case this.mainPage:
       default:
-        this.headerWave.classList.add('hidden');
+        this.header.wave.classList.add('hidden');
         return MainPage;
     }
   }
@@ -58,9 +58,11 @@ export class Router implements IRouter {
     this.currentPage.remove();
     this.currentPage = new newSection(this.parent, this);
     if (this.currentPage instanceof MainPage) {
-      this.headerWave.classList.add('hidden');
+      this.header.wave.classList.add('hidden');
+      this.header.element.classList.remove('hidden');
     } else {
-      this.headerWave.classList.remove('hidden');
+      this.header.wave.classList.remove('hidden');
+      this.header.element.classList.add('hidden');
     }
   }
 
