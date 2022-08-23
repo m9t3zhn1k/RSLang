@@ -23,7 +23,8 @@ class SingIn extends BaseComponent {
     ) => HTMLInputElement,
     public isValidateEmail: (inputEmail: HTMLInputElement) => boolean,
     public isValidatePassword: (inputPassword: HTMLInputElement) => boolean,
-    public destroyAuthorization: () => void
+    public destroyAuthorization: () => void,
+    public contentForButton: (content: string) => void
   ) {
     super(parentNode, 'div', ['sing-in__wrapper']);
     this.form = new BaseComponent(this.element, 'form', ['form__body']);
@@ -57,6 +58,7 @@ class SingIn extends BaseComponent {
         createToken(content.userId, content.refreshToken);
         this.resetForm();
         this.destroyAuthorization();
+        this.contentForButton('Выйти');
         break;
       }
       case 403:

@@ -13,7 +13,7 @@ class Authorization extends BaseComponent {
 
   private wrapperForm: BaseComponent;
 
-  constructor(protected parentNode: HTMLElement) {
+  constructor(protected parentNode: HTMLElement, public contentForButton: (content: string) => void) {
     super(document.body, 'div', ['authorization']);
     this.wrapperAuthorization = new BaseComponent(this.element, 'div', ['authorization__wrapper']);
     const navigation = new BaseComponent(this.wrapperAuthorization.element, 'div', ['nav-authorization']);
@@ -62,7 +62,8 @@ class Authorization extends BaseComponent {
       this.createItemForForm.bind(this),
       this.isValidateEmail.bind(this),
       this.isValidatePassword.bind(this),
-      this.destroyAuthorization.bind(this)
+      this.destroyAuthorization.bind(this),
+      this.contentForButton
     );
   }
 
