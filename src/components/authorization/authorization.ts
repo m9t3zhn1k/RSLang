@@ -129,10 +129,6 @@ class Authorization extends BaseComponent {
   isValidatePassword(inputPassword: HTMLInputElement): boolean {
     return inputPassword.value.length >= MAX_COUNT_OF_SYMBOLS;
   }
-
-  destroyAuthorization(): void {
-    this.remove();
-  }
 }
 
 export default Authorization;

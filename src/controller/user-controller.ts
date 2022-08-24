@@ -1,14 +1,14 @@
 import { BASE_URL } from '../constants/constants';
-import { IUser } from '../types/types';
+import { IUser, IWord } from '../types/types';
 
-export const getWords = async (): Promise<void> => {
-  const rawResponse = await fetch(`${BASE_URL}/words?page=2&group=0`);
-  const content = await rawResponse.json();
+export const getWords = async (): Promise<IWord[]> => {
+  const rawResponse: Response = await fetch(`${BASE_URL}/words?page=2&group=0`);
+  const content: Promise<IWord[]> = await rawResponse.json();
   return content;
 };
 
 export const createUser = async (user: IUser): Promise<void> => {
-  const rawResponse = await fetch(`${BASE_URL}/users`, {
+  const rawResponse: Response = await fetch(`${BASE_URL}/users`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -43,7 +43,7 @@ export const getUser = async (userId: string, token: string): Promise<void> => {
 };
 
 export const createToken = async (userId: string, refreshToken: string): Promise<void> => {
-  const rawResponse = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
+  const rawResponse: Response = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${refreshToken}`,
