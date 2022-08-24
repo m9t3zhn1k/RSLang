@@ -102,10 +102,6 @@ class SingUp extends BaseComponent {
   hideMessage(): void {
     this.messageForPass.element.classList.add('message-active');
   }
-
-  destroySingUp(): void {
-    this.remove();
-  }
 }
 
 export default SingUp;
