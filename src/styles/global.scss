@@ -31,10 +31,7 @@ button {
   color: inherit;
   letter-spacing: inherit;
   cursor: pointer;
-}
-
-.wrapper {
-  margin-top: 129px;
+  transition: all 0.3s;
 }
 
 .wave {
@@ -60,6 +57,18 @@ button {
     & > img {
       bottom: 0%;
     }
+  }
+}
+
+.wrapper {
+  padding-top: 129px;
+  padding-bottom: 6rem;
+  height: 100%;
+
+  &__sprint-game {
+    background: linear-gradient(-60deg, $blue-medium, $blue-dark, $blue-darkest);
+    //padding-top: 2rem;
+    padding-bottom: 2rem;
   }
 }
 

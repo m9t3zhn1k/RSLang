@@ -26,9 +26,9 @@ export class Header extends BaseComponent implements IHeader {
     this.navigation = new Navigation(controlsContainer);
     this.authorizationButton = new BaseComponent(controlsContainer, 'button', ['button', 'header__button'], 'Войти')
       .element as HTMLButtonElement;
-    this.wave = new BaseComponent(waveContainer, 'img', ['wave', 'header__wave'], '', {
+    this.wave = new BaseComponent(waveContainer, 'img', [], '', {
       src: './assets/images/waves/header_wave.svg',
-      alt: 'Footer wave',
+      alt: 'Header wave',
     }).element;
     this.renderLogo(logo, logoContainer);
     this.addEventAuthBtn();

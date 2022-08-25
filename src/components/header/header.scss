@@ -11,6 +11,10 @@
   padding-bottom: 50px;
 
   &.hidden {
+    display: none;
+  }
+
+  &.opaque {
     background: linear-gradient(-60deg, $blue-medium, $blue-dark);
   }
 
@@ -18,7 +22,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem 1rem 0.5rem;
+    padding: 1rem 0rem 0.5rem;
   }
 
   &__block {
@@ -33,11 +37,11 @@
 
     & > img {
       bottom: 0%;
-    }
-
-    &.hidden {
-      visibility: hidden;
-      opacity: 0;
+      
+      &.hidden {
+        visibility: hidden;
+        opacity: 0;
+      }
     }
   }
 
@@ -46,7 +50,6 @@
     min-width: 95px;
     border: 2px solid $text-light;
     border-radius: 0.5rem;
-    transition: all .3s;
 
     &:hover {
       border: 2px solid $blue-light;
