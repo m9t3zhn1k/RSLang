@@ -1,0 +1,170 @@
+.word-card {
+    display: flex;
+    border: .2rem solid #fff;
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 80rem;
+    border-radius: .2rem;
+}
+
+.img {
+    width: 18rem;
+    border-radius: .2rem;
+}
+
+.allTextWrap {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    font-size: 1.5rem;
+    color: rgb(73, 72, 83);
+}
+
+.allTextWrap div:first-child {
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 3rem;
+}
+
+.audio-button {
+    width: 3rem;
+    height: 3rem;
+    background-image: url(../../../../assets/icons/sound.svg);
+    background-size: contain;
+}
+
+.audio-button:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.first-text-line-wrap {
+    display: flex;
+    gap: 1rem;
+}
+
+.dif-button,
+.learned-button {
+    width: 3rem;
+    height: 3rem;
+    background-size: contain;
+}
+
+.dif-button:hover,
+.learned-button:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.buttons-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-left: auto;
+    margin-right: 2rem;
+    padding: 1rem;
+}
+
+.dif-button {
+    background-image: url(../../../../assets/icons/add-to-difficult.svg);
+}
+
+.dif-button:hover::after {
+    content: 'add/remove from difficult words';
+    position: absolute;
+    width: 7rem; 
+    left: 110%;   
+    background: #fff; 
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+}
+
+.learned-button {
+    background-image: url(../../../../assets/icons/add-to-learned.svg);
+}
+
+.learned-button:hover::after {
+    content: 'add/remove from learned words';
+    position: absolute;
+    width: 7rem; 
+    left: 110%; 
+    background: #fff; 
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+}
+
+.active-button.dif-button {
+    background-image: url(../../../../assets/icons/add-to-difficult-active.svg);
+}
+
+.active-button.learned-button {
+    background-image: url(../../../../assets/icons/add-to-learned-active.svg);
+}
+
+.point {
+    align-self: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.difficult-word {
+    border: .2rem solid rgb(247, 148, 148);
+    box-shadow: 0px 0px 5px rgb(247, 148, 148);
+    background-color: rgb(252, 246, 246);
+}
+
+.learned-word {
+    border: .2rem solid rgb(136, 211, 170);
+    box-shadow: 0px 0px 5px rgb(136, 211, 170);
+}
+
+.learned-word .img,
+.learned-word .allTextWrap{
+    opacity: .3;
+}
+
+.game-result-wrap {
+    display: flex;
+    justify-content: space-between;
+    width: 5rem;
+    height: 2rem;
+}
+
+.game-result-pos {
+    background-color: rgb(161, 222, 250);
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+}
+
+.game-result-neg {
+    background-color: rgb(240, 159, 159);
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+}
+
+.game-result-pos:hover::after {
+    content: 'number of correct answers';
+    position: absolute;
+    width: 8rem; 
+    left: 70%; top: 80%; 
+    z-index: 2; 
+    background: #fff; 
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+}
+
+.game-result-neg:hover::after {
+    content: 'number of incorrect answers';
+    position: absolute;
+    width: 8rem; 
+    left: 70%; top: 80%; 
+    z-index: 2; 
+    background: #fff; 
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+}
