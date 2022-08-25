@@ -1,0 +1,44 @@
+.pagination-wrap {
+    display: flex;
+    gap: .5rem;
+}
+
+.label {
+    display: flex;
+    gap: .5rem;
+    background-color: rgb(56, 90, 124);
+    color: #fff;
+    border-radius: .5rem;
+    padding: 0 .5rem;
+}
+
+.label-name {
+    line-height: 3rem;
+}
+
+.label-page-num {
+    line-height: 3rem;
+}
+
+.arrow-button {
+    width: 3rem;
+    height: 3rem;
+    border-radius: .5rem;
+    background-color: rgb(56, 90, 124);
+    color: #fff;
+    line-height: 3rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.arrow-button:hover {
+    cursor: pointer;
+    opacity: .8;
+}
+
+.learned-page-label {
+    background-color: rgb(18, 131, 18);
+ }
+
+
+
