@@ -1,0 +1,26 @@
+.ebook {
+    padding: 1rem;
+    background-color: rgb(225, 231, 236);
+}
+
+.title {
+    font-size: 3rem;   
+}
+
+.controls {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    margin-top: 6rem;
+}
+
+.cards-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.learned-page {
+   background-color: rgb(229, 247, 229);
+}
+

@@ -1,5 +1,5 @@
 import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
-import { Ebook } from '../components/ebook/ebook';
+import Ebook from '../components/ebook/ebook';
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
 import { SprintPage } from '../components/sprint-page/sprint-page';
@@ -102,4 +102,25 @@ export interface IWord {
   transcription: string;
   word: string;
   wordTranslate: string;
+}
+
+export interface IUserWord  {
+  "id": "string",
+  "optional": {
+      "isDif": boolean,
+      "isLearned": boolean
+  },
+  "wordId": "string"
+}
+
+export interface IQueryParam {
+  key: string;
+  value: string;
+}
+
+export type RequestBody = {
+  "optional": {
+      "isDif": boolean,
+      "isLearned": boolean
+  }
 }
