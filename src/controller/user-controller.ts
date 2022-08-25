@@ -1,4 +1,5 @@
 import { BASE_URL } from '../constants/constants';
+<<<<<<< HEAD
 import { IGetAllUsersWords, IUser, IUserWord, RequestBody } from '../types/types';
 
 export const getToken: () => string | null = (): string | null => {
@@ -8,6 +9,9 @@ export const getToken: () => string | null = (): string | null => {
     return null;
   }
 };
+=======
+import { IUser } from '../types/types';
+>>>>>>> b3e3e7e (feat: add init page of sprint game)
 
 export const getUserId: () => string | null = (): string | null => {
   if (window.localStorage.getItem('rslang-team58-user')) {

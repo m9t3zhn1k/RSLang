@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { BASE_URL } from '../constants/constants';
 import { IQueryParam, IWord } from '../types/types';
 
@@ -33,3 +34,13 @@ export const getOneWord: (wordId: string) => Promise<IWord> = async (wordId: str
   wordData.audioExample = `${BASE_URL}/${wordData.audioExample}`;
   return wordData;
 };
+=======
+import { BASE_URL } from '../constants/constants';
+import { IWord } from '../types/types';
+
+export const getWords = async (): Promise<IWord[]> => {
+  const rawResponse: Response = await fetch(`${BASE_URL}/words?page=2&group=0`);
+  const content: Promise<IWord[]> = await rawResponse.json();
+  return content;
+};
+>>>>>>> b3e3e7e (feat: add init page of sprint game)

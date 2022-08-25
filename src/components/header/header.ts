@@ -32,7 +32,7 @@ export class Header extends BaseComponent implements IHeader {
     this.authorizationButton.textContent = this.storage ? 'Выйти' : 'Войти';
     this.wave = new BaseComponent(waveContainer, 'img', ['wave', 'header__wave'], '', {
       src: './assets/images/waves/header_wave.svg',
-      alt: 'Footer wave',
+      alt: 'Header wave',
     }).element;
     this.renderLogo(logo, logoContainer);
     this.addEventAuthBtn();
