@@ -80,7 +80,7 @@ export default class WordCards extends BaseComponent {
     };
 
     private addButtonsIfAuthorized: () => void = (): void => {
-        if (this.isDifSection || !getToken()) {
+        if (!getToken()) {
             this.buttonsWrap.style.visibility = 'hidden'
         }
     }

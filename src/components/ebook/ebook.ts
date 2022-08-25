@@ -28,8 +28,8 @@ export default class Ebook extends BaseComponent {
         this.sectionPagination = new Pagination(this.controls, 'section', this);
         this.pagePagination = new Pagination(this.controls, 'page', this);
         this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
-        this.audioGame = new Button(this.controls, 'Audio Game').element;
-        this.sprintGame = new Button(this.controls, 'Sprint Game').element;
+        this.audioGame = new Button(this.controls, 'Аудиовызов').element;
+        this.sprintGame = new Button(this.controls, 'Спринт').element;
         this.audioGame.id = 'audiochallenge';
         this.sprintGame.id = 'sprint';
         router.navigateApp([this.audioGame, this.sprintGame]);

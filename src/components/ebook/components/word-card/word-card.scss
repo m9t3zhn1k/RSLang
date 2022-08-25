@@ -1,10 +1,13 @@
+@import "../../../../styles/pallete.scss";
+
 .word-card {
     display: flex;
-    border: .2rem solid #fff;
+    border: .1rem solid $blue-light;
+    box-shadow: 1px 1px 5px $blue-light;
     padding: 1rem;
     gap: 1rem;
     max-width: 80rem;
-    border-radius: .2rem;
+    border-radius: .5rem;
 }
 
 .img {
@@ -16,12 +19,11 @@
     display: flex;
     flex-direction: column;
     gap: .5rem;
-    font-size: 1.5rem;
-    color: rgb(73, 72, 83);
+    color: $grey-text;
 }
 
 .allTextWrap div:first-child {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
     line-height: 3rem;
 }
@@ -74,10 +76,14 @@
 .dif-button:hover::after {
     content: 'add/remove from difficult words';
     position: absolute;
+    font-size: 0.7rem;
     width: 7rem; 
-    left: 110%;   
-    background: #fff; 
-    padding: .5rem 1rem;
+    right: 100%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
     border-radius: .5rem;
 }
 
@@ -88,10 +94,14 @@
 .learned-button:hover::after {
     content: 'add/remove from learned words';
     position: absolute;
+    font-size: 0.7rem;
     width: 7rem; 
-    left: 110%; 
-    background: #fff; 
-    padding: .5rem 1rem;
+    right: 100%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
     border-radius: .5rem;
 }
 
@@ -111,19 +121,19 @@
 }
 
 .difficult-word {
-    border: .2rem solid rgb(247, 148, 148);
-    box-shadow: 0px 0px 5px rgb(247, 148, 148);
-    background-color: rgb(252, 246, 246);
+    border: .2rem solid $soft-red;
+    box-shadow: 0px 0px 5px $soft-red;
 }
 
 .learned-word {
-    border: .2rem solid rgb(136, 211, 170);
-    box-shadow: 0px 0px 5px rgb(136, 211, 170);
+    border: .2rem solid $soft-green;
+    box-shadow: 0px 0px 5px $soft-green;
 }
 
 .learned-word .img,
-.learned-word .allTextWrap{
-    opacity: .3;
+.learned-word .allTextWrap,
+.learned-word .game-result-wrap {
+    opacity: .2;
 }
 
 .game-result-wrap {
@@ -134,14 +144,14 @@
 }
 
 .game-result-pos {
-    background-color: rgb(161, 222, 250);
+    background-color: $soft-blue;
     position: relative;
     width: 2rem;
     height: 2rem;
 }
 
 .game-result-neg {
-    background-color: rgb(240, 159, 159);
+    background-color: $soft-red;
     position: relative;
     width: 2rem;
     height: 2rem;
@@ -150,21 +160,29 @@
 .game-result-pos:hover::after {
     content: 'number of correct answers';
     position: absolute;
-    width: 8rem; 
-    left: 70%; top: 80%; 
-    z-index: 2; 
-    background: #fff; 
-    padding: .5rem 1rem;
+    font-size: 0.7rem;
+    width: 7rem; 
+    right: 100%;
+    top: 70%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
     border-radius: .5rem;
 }
 
 .game-result-neg:hover::after {
     content: 'number of incorrect answers';
     position: absolute;
+    font-size: 0.7rem;
     width: 8rem; 
-    left: 70%; top: 80%; 
-    z-index: 2; 
-    background: #fff; 
-    padding: .5rem 1rem;
+    right: 100%;
+    top: 70%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
     border-radius: .5rem;
 }

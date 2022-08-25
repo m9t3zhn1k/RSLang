@@ -14,8 +14,11 @@ export class Header extends BaseComponent implements IHeader {
 
   public authorization: Authorization | undefined;
 
+  public storage: string | null;
+
   constructor(parent: HTMLElement) {
     super(parent, 'header', ['header']);
+    this.storage = localStorage.getItem('rslang-team58-user');
     const container: HTMLElement = new BaseComponent(this.element, 'div', ['container', 'header__container']).element;
     const logoContainer: HTMLElement = new BaseComponent(container, 'div', ['header__block_logo', 'logo'], '', {
       id: 'main',
@@ -24,8 +27,9 @@ export class Header extends BaseComponent implements IHeader {
     const controlsContainer: HTMLElement = new BaseComponent(container, 'div', ['header__block_controls']).element;
     const waveContainer: HTMLElement = new BaseComponent(this.element, 'div', ['wave', 'header__wave']).element;
     this.navigation = new Navigation(controlsContainer);
-    this.authorizationButton = new BaseComponent(controlsContainer, 'button', ['button', 'header__button'], 'Войти')
+    this.authorizationButton = new BaseComponent(controlsContainer, 'button', ['button', 'header__button'])
       .element as HTMLButtonElement;
+    this.authorizationButton.textContent = this.storage ? 'Выйти' : 'Войти';
     this.wave = new BaseComponent(waveContainer, 'img', ['wave', 'header__wave'], '', {
       src: './assets/images/waves/header_wave.svg',
       alt: 'Footer wave',
@@ -50,7 +54,7 @@ export class Header extends BaseComponent implements IHeader {
           this.authorization = new Authorization(document.body, this.changeContentForButtonLogin.bind(this));
           break;
         case 'Выйти':
-          this.authorization?.signOut();
+          localStorage.removeItem('rslang-team58-user');
           this.changeContentForButtonLogin('Войти');
           break;
       }

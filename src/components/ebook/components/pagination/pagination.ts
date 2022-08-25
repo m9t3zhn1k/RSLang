@@ -30,7 +30,7 @@ export default class Pagination extends BaseComponent {
 
         switch (paginationType) {
             case 'section':
-                this.labelName.textContent = 'Section';
+                this.labelName.textContent = 'Раздел';
                 this.currentPageNum = +((window.localStorage.getItem('sectionNum') as string) ?? START_PAGINATION_PAGE);
                 this.labelPageNum.textContent = `${this.currentPageNum}`;
                 const token: string | null = getToken();
@@ -39,7 +39,7 @@ export default class Pagination extends BaseComponent {
                 break;
         
             default:
-                this.labelName.textContent = 'Page';
+                this.labelName.textContent = 'Страница';
                 this.currentPageNum = +((window.localStorage.getItem('pageNum') as string) ?? START_PAGINATION_PAGE);
                 this.labelPageNum.textContent = `${this.currentPageNum}`;
                 this.maxPageNum = MAX_COUNT_OF_PAGES;

@@ -1,3 +1,5 @@
+@import "../../../../styles/pallete.scss";
+
 .pagination-wrap {
     display: flex;
     gap: .5rem;
@@ -6,7 +8,7 @@
 .label {
     display: flex;
     gap: .5rem;
-    background-color: rgb(56, 90, 124);
+    background-color: $blue-dark;
     color: #fff;
     border-radius: .5rem;
     padding: 0 .5rem;
@@ -24,7 +26,7 @@
     width: 3rem;
     height: 3rem;
     border-radius: .5rem;
-    background-color: rgb(56, 90, 124);
+    background-color: $blue-dark;
     color: #fff;
     line-height: 3rem;
     text-align: center;
