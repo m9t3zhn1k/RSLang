@@ -18,6 +18,7 @@ export default class WordCards extends BaseComponent {
     private gameResultsWrap: HTMLElement;
     private gameResultPositive: HTMLElement;
     private gameResultNegative: HTMLElement;
+    private audioArr: HTMLAudioElement[];
 
     constructor(parent: HTMLElement, wordData: IWord, sectionNum: keyof typeof SECTIONS_COLORS, isDifSection: boolean = false) {
         super(parent, 'div', ['word-card']);
@@ -41,24 +42,41 @@ export default class WordCards extends BaseComponent {
         new BaseComponentInnerHTML(this.allTextWrap, wordData.textMeaningTranslate);
         new BaseComponentInnerHTML(this.allTextWrap, wordData.textExample);
         new BaseComponentInnerHTML(this.allTextWrap, wordData.textExampleTranslate);
+        this.audioArr = [
+            new Audio(this.wordData.audio),
+            new Audio(this.wordData.audioMeaning),
+            new Audio(this.wordData.audioExample)
+        ]
         
-        this.audioButton.addEventListener('click', this.audioHandler);
+        this.audioButton.addEventListener('click', this.playAudioHandler);
         this.addToDifButton.addEventListener('click', this.buttonHandler);
         this.addtoLearnedButton.addEventListener('click', this.buttonHandler);
     
         this.addButtonsIfAuthorized();
     }
     
-    private audioHandler: () => void = (): void => {
-        const audio: HTMLAudioElement = (new Audio(this.wordData.audio));
-        const meaning: HTMLAudioElement = (new Audio(this.wordData.audioMeaning));
-        const example: HTMLAudioElement = (new Audio(this.wordData.audioExample));
-        audio.play();
-        audio.addEventListener('ended', ():void => {
-            meaning.play();
-            meaning.addEventListener('ended', (): Promise<void> => example.play())
-        })
+    private playAudioHandler: () => void = (): void => {
+        if (!this.audioButton.classList.contains('stop-audio')) {
+            this.audioButton.classList.add('stop-audio');
+            this.audioArr[0].play();
+            this.audioArr[0].addEventListener('ended', (): void => {
+                this.audioArr[1].play();
+                this.audioArr[1].addEventListener('ended', (): void => {
+                    this.audioArr[2].play();
+                    this.audioArr[2].addEventListener('ended', (): void => {
+                        this.audioButton.classList.remove('stop-audio');
+                    })
+                })
+            })
+        } else {
+            this.audioButton.classList.remove('stop-audio');
+            this.audioArr.forEach( (audio: HTMLAudioElement) => {
+                audio.pause();
+                audio.currentTime = 0;
+            })
+        }
     }
+
 
     private buttonHandler: (e: Event) => void = (e: Event): void => {
         const button: HTMLElement = e.currentTarget as HTMLElement;

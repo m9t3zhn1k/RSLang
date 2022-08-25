@@ -34,10 +34,14 @@
     background-image: url(../../../../assets/icons/sound.svg);
     background-size: contain;
 }
+.stop-audio {
+    background-image: url(../../../../assets/icons/stop.svg);
+}
 
 .audio-button:hover {
     cursor: pointer;
-    transform: scale(1.2);
+    opacity: .7;
+    transform: scale(1.05);
 }
 
 .first-text-line-wrap {
@@ -55,7 +59,8 @@
 .dif-button:hover,
 .learned-button:hover {
     cursor: pointer;
-    transform: scale(1.2);
+    opacity: .7;
+    transform: scale(1.05);
 }
 
 .buttons-wrap {
