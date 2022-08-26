@@ -1,13 +1,14 @@
-@import "../../../../styles/pallete.scss";
+@import "../../styles/pallete.scss";
 
 .word-card {
     display: flex;
     border: .1rem solid $blue-light;
-    box-shadow: 1px 1px 5px $blue-light;
+    box-shadow: 0px 0px 5px $blue-light;
     padding: 1rem;
     gap: 1rem;
     max-width: 80rem;
     border-radius: .5rem;
+    box-sizing: border-box;
 }
 
 .img {
@@ -31,11 +32,11 @@
 .audio-button {
     width: 3rem;
     height: 3rem;
-    background-image: url(../../../../assets/icons/sound.svg);
+    background-image: url(../../assets/icons/sound.svg);
     background-size: contain;
 }
 .stop-audio {
-    background-image: url(../../../../assets/icons/stop.svg);
+    background-image: url(../../assets/icons/stop.svg);
 }
 
 .audio-button:hover {
@@ -75,12 +76,13 @@
 }
 
 .dif-button {
-    background-image: url(../../../../assets/icons/add-to-difficult.svg);
+    background-image: url(../../assets/icons/add-to-difficult.svg);
 }
 
 .dif-button:hover::after {
-    content: 'add/remove from difficult words';
+    content: 'добавить/удалить из сложных слов';
     position: absolute;
+    opacity: .7;
     font-size: 0.7rem;
     width: 7rem; 
     right: 100%;
@@ -93,12 +95,13 @@
 }
 
 .learned-button {
-    background-image: url(../../../../assets/icons/add-to-learned.svg);
+    background-image: url(../../assets/icons/add-to-learned.svg);
 }
 
 .learned-button:hover::after {
-    content: 'add/remove from learned words';
+    content: 'добавить/удалить из изученных слов';
     position: absolute;
+    opacity: .7;
     font-size: 0.7rem;
     width: 7rem; 
     right: 100%;
@@ -111,11 +114,11 @@
 }
 
 .active-button.dif-button {
-    background-image: url(../../../../assets/icons/add-to-difficult-active.svg);
+    background-image: url(../../assets/icons/add-to-difficult-active.svg);
 }
 
 .active-button.learned-button {
-    background-image: url(../../../../assets/icons/add-to-learned-active.svg);
+    background-image: url(../../assets/icons/add-to-learned-active.svg);
 }
 
 .point {
@@ -126,12 +129,12 @@
 }
 
 .difficult-word {
-    border: .2rem solid $soft-red;
+    border: .1rem solid $soft-red;
     box-shadow: 0px 0px 5px $soft-red;
 }
 
 .learned-word {
-    border: .2rem solid $soft-green;
+    border: .1rem solid $soft-green;
     box-shadow: 0px 0px 5px $soft-green;
 }
 
@@ -148,7 +151,13 @@
     height: 2rem;
 }
 
-.game-result-pos {
+.game-result-pos,
+.game-result-neg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $grey-text;
+    font-family: inherit;
     background-color: $soft-blue;
     position: relative;
     width: 2rem;
@@ -157,15 +166,13 @@
 
 .game-result-neg {
     background-color: $soft-red;
-    position: relative;
-    width: 2rem;
-    height: 2rem;
 }
 
 .game-result-pos:hover::after {
-    content: 'number of correct answers';
+    content: 'количество правильных ответов';
     position: absolute;
     font-size: 0.7rem;
+    opacity: .7;
     width: 7rem; 
     right: 100%;
     top: 70%;
@@ -178,9 +185,10 @@
 }
 
 .game-result-neg:hover::after {
-    content: 'number of incorrect answers';
+    content: 'количество неправильных ответов';
     position: absolute;
     font-size: 0.7rem;
+    opacity: .7;
     width: 8rem; 
     right: 100%;
     top: 70%;

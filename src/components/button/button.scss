@@ -1,11 +1,11 @@
-@import "../../../../styles/pallete.scss";
+@import "../../styles/pallete.scss";
 
 .button {
     width: fit-content;
     padding: 0rem 1rem;
     height: 2 rem;
     background-color: $blue-medium;
-    color: #fff;
+    color: $text-light;
     text-align: center;
     line-height: 2rem;
     border-radius: 0.5rem;

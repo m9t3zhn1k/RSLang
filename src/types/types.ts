@@ -104,13 +104,13 @@ export interface IWord {
   wordTranslate: string;
 }
 
-export interface IUserWord  {
-  "id": "string",
-  "optional": {
-      "isDif": boolean,
-      "isLearned": boolean
-  },
-  "wordId": "string"
+export interface IUserWord {
+  id: 'string';
+  optional: {
+    isDif: boolean;
+    isLearned: boolean;
+  };
+  wordId: 'string';
 }
 
 export interface IQueryParam {
@@ -119,8 +119,8 @@ export interface IQueryParam {
 }
 
 export type RequestBody = {
-  "optional": {
-      "isDif": boolean,
-      "isLearned": boolean
-  }
-}
+  optional: {
+    isDif: boolean;
+    isLearned: boolean;
+  };
+};

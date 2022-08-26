@@ -5,6 +5,7 @@ import { MainPage } from '../components/main-page/main-page';
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
 import { IBaseComponent, IHeader, IRouter, PageType } from '../types/types';
+import { addLastPageInLocalStorage } from '../utils/storage/storage';
 
 export class Router implements IRouter {
   private currentPage: IBaseComponent;
@@ -21,12 +22,7 @@ export class Router implements IRouter {
 
   private audioChallengePage: string = 'audiochallenge';
 
-  constructor(
-    private parent: HTMLElement,
-    navigationButtons: HTMLElement[],
-    private header: IHeader,
-    pageID?: string
-  ) {
+  constructor(private parent: HTMLElement, navigationButtons: HTMLElement[], private header: IHeader, pageID?: string) {
     this.currentPage = new (this.getPage(pageID))(this.parent, this);
     this.navigateApp(navigationButtons);
   }
@@ -55,8 +51,10 @@ export class Router implements IRouter {
     if (this.currentPage instanceof newSection) {
       return;
     }
+    addLastPageInLocalStorage(pageID);
     this.currentPage.remove();
     this.currentPage = new newSection(this.parent, this);
+
     if (this.currentPage instanceof MainPage) {
       this.header.wave.classList.add('hidden');
       this.header.element.classList.remove('hidden');

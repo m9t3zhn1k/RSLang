@@ -1,4 +1,4 @@
-@import "../../../../styles/pallete.scss";
+@import "../../styles/pallete.scss";
 
 .pagination-wrap {
     display: flex;
@@ -9,16 +9,14 @@
     display: flex;
     gap: .5rem;
     background-color: $blue-dark;
-    color: #fff;
+    color: $text-light;
     border-radius: .5rem;
     padding: 0 .5rem;
 }
 
-.label-name {
-    line-height: 3rem;
-}
-
-.label-page-num {
+.label-name,
+.label-page-num,
+.arrow-button {
     line-height: 3rem;
 }
 
@@ -27,8 +25,7 @@
     height: 3rem;
     border-radius: .5rem;
     background-color: $blue-dark;
-    color: #fff;
-    line-height: 3rem;
+    color: $text-light;
     text-align: center;
     font-size: 1.5rem;
 }
@@ -39,8 +36,5 @@
 }
 
 .learned-page-label {
-    background-color: rgb(18, 131, 18);
+    background-color: $dark-green;
  }
-
-
-
