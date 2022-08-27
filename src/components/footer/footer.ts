@@ -24,7 +24,7 @@ export class Footer extends BaseComponent {
     const waveContainer: HTMLElement = new BaseComponent(this.element, 'div', ['wave', 'footer__wave']).element;
     const schoolLogoContainer: HTMLElement = new BaseComponent(container, 'a', ['footer__rs-logo'], '', {
       href: 'https://rs.school/js/',
-      target: "_blank"
+      target: '_blank',
     }).element;
     const membersContainer: HTMLElement = new BaseComponent(container, 'ul', ['footer__members-list']).element;
     new BaseComponent(container, 'span', ['footer__year'], '2022');

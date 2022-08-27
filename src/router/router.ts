@@ -66,7 +66,12 @@ export class Router implements IRouter {
     }
     this.currentPage.remove();
     this.currentPage = new newSection(this.parent, this);
-    if (this.currentPage instanceof MainPage || this.currentPage instanceof SprintPage || this.currentPage instanceof AudiochallengePage) {
+    localStorage.setItem('lastPage', pageID);
+    if (
+      this.currentPage instanceof MainPage ||
+      this.currentPage instanceof SprintPage ||
+      this.currentPage instanceof AudiochallengePage
+    ) {
       this.header.wave.classList.add('hidden');
       this.header.element.classList.remove('opaque');
     } else {

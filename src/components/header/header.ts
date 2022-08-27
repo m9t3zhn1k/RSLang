@@ -15,7 +15,7 @@ export class Header extends BaseComponent implements IHeader {
   public authorization: Authorization | undefined;
 
   constructor(parent: HTMLElement) {
-    super(parent, 'header', ['header']);
+    super(parent, 'header', ['header', 'opaque']);
     const container: HTMLElement = new BaseComponent(this.element, 'div', ['container', 'header__container']).element;
     const logoContainer: HTMLElement = new BaseComponent(container, 'div', ['header__block_logo', 'logo'], '', {
       id: 'main',
