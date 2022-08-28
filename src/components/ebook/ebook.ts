@@ -1,6 +1,6 @@
 import './ebook.scss';
 import '../word-card/word-card.scss';
-import { IWord, IUserWord } from '../../types/types';
+import { IWord, IUserWord, IEbook } from '../../types/types';
 import { getOneUserWord, getAllUsersWords, getUserId } from '../../controller/user-controller';
 import { getWords, getOneWord } from '../../controller/words-controller';
 import { BaseComponent } from '../base-component/base-component';
@@ -10,14 +10,14 @@ import { MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED, SECTIONS_COLORS } from '../../c
 import Pagination from '../pagination/pagination';
 import WordCards from '../word-card/word-card';
 
-export default class Ebook extends BaseComponent {
+export default class Ebook extends BaseComponent implements IEbook {
   private controls: HTMLElement;
 
   private cardsView: HTMLElement;
 
   private sectionPagination: Pagination;
 
-  public pagePagination: Pagination;
+  public pagePagination;
 
   private audioGame: HTMLElement;
 
@@ -41,7 +41,7 @@ export default class Ebook extends BaseComponent {
     this.saveStageToLocalStorage();
   }
 
-  public drawCards: () => Promise<void> = async (): Promise<void> => {
+  public drawCards = async (): Promise<void> => {
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
     const wordsArr: IWord[] = await getWords(sectionNumForApi, pageNumForApi);
@@ -105,7 +105,7 @@ export default class Ebook extends BaseComponent {
         .filter((userWord: IUserWord): boolean => userWord.optional.isDif && !userWord.optional.isLearned)
         .forEach(async (userWord: IUserWord): Promise<void> => {
           const wordData: IWord = await getOneWord(userWord.wordId);
-          new WordCards(this.cardsView, wordData, '6', true, this.drawCards);
+          new WordCards(this.cardsView, wordData, '6', true);
         });
     }
   };

@@ -2,6 +2,7 @@ import { AudiochallengePage } from '../components/audiochallenge-page/audiochall
 import Ebook from '../components/ebook/ebook';
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
+import Pagination from '../components/pagination/pagination';
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
 
@@ -124,3 +125,25 @@ export type RequestBody = {
     isLearned: boolean;
   };
 };
+
+export interface IEbook {
+  pagePagination: Pagination;
+  drawCards: () => Promise<void>;
+}
+
+export interface IPagination {
+  label: HTMLElement;
+  currentPageNum: number;
+}
+
+export interface IWordCards {
+  addToDifButton: HTMLElement;
+  addtoLearnedButton: HTMLElement;
+}
+
+export interface IBaseComponentInnerHTML {
+  element: HTMLElement;
+  remove: () => void;
+}
+
+export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;

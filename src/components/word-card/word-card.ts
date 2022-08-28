@@ -1,11 +1,11 @@
 import { SECTIONS_COLORS } from '../../constants/constants';
 import { addOptional, getUserId, getOneUserWord, getToken } from '../../controller/user-controller';
-import { IWord, IUserWord } from '../../types/types';
+import { IWord, IUserWord, IWordCards } from '../../types/types';
 import { BaseComponentInnerHTML } from '../base-component-inner-HTML/base-component-inner-HTML';
 import { BaseComponent } from '../base-component/base-component';
 import './word-card.scss';
 
-export default class WordCards extends BaseComponent {
+export default class WordCards extends BaseComponent implements IWordCards {
   private allTextWrap: HTMLElement;
 
   private firstTextLineWrap: HTMLElement;
@@ -14,9 +14,9 @@ export default class WordCards extends BaseComponent {
 
   private buttonsWrap: HTMLElement;
 
-  public addToDifButton: HTMLElement;
+  public addToDifButton;
 
-  public addtoLearnedButton: HTMLElement;
+  public addtoLearnedButton;
 
   private coloredPoint: HTMLElement;
 
@@ -29,15 +29,12 @@ export default class WordCards extends BaseComponent {
   private audioArr: HTMLAudioElement[];
 
   constructor(
-    public parent: HTMLElement,
-    public wordData: IWord,
+    private parent: HTMLElement,
+    private wordData: IWord,
     sectionNum: keyof typeof SECTIONS_COLORS,
-    public isDifSection: boolean = false,
-    public drawCards?: () => Promise<void>
+    private isDifSection: boolean = false
   ) {
     super(parent, 'div', ['word-card']);
-
-    this.isDifSection = isDifSection;
     new BaseComponent(this.element, 'img', ['img'], '', { src: `${wordData.image}` });
     this.allTextWrap = new BaseComponent(this.element, 'div', ['allTextWrap']).element;
     this.firstTextLineWrap = new BaseComponent(this.allTextWrap, 'div', ['first-text-line-wrap']).element;

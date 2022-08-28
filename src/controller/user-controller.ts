@@ -1,5 +1,5 @@
 import { BASE_URL } from '../constants/constants';
-import { IUser, IUserWord, RequestBody } from '../types/types';
+import { IGetAllUsersWords, IUser, IUserWord, RequestBody } from '../types/types';
 
 export const getToken: () => string | null = (): string | null => {
   if (window.localStorage.getItem('rslang-team58-user')) {
@@ -136,9 +136,7 @@ export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<v
   }
 };
 
-export const getAllUsersWords: () => Promise<IUserWord[] | null | void> = async (): Promise<
-IUserWord[] | null | void
-> => {
+export const getAllUsersWords: IGetAllUsersWords = async (): Promise<IUserWord[] | null | void> => {
   const userId: string | null = getUserId();
   if (!userId) {
     return;

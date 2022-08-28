@@ -1,4 +1,6 @@
-export class BaseComponentInnerHTML {
+import { IBaseComponentInnerHTML } from '../../types/types';
+
+export class BaseComponentInnerHTML implements IBaseComponentInnerHTML {
   public element: HTMLElement;
 
   constructor(parent: HTMLElement, content: string = '') {

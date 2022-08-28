@@ -5,16 +5,17 @@ import {
   MAX_COUNT_OF_PAGES,
 } from '../../constants/constants';
 import { getToken } from '../../controller/user-controller';
+import { IPagination } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import Ebook from '../ebook/ebook';
 import './pagination.scss';
 
-export default class Pagination extends BaseComponent {
+export default class Pagination extends BaseComponent implements IPagination {
   private leftArrow: HTMLElement;
 
   private rightArrow: HTMLElement;
 
-  public label: HTMLElement;
+  public label;
 
   private labelName: HTMLElement;
 
@@ -22,15 +23,14 @@ export default class Pagination extends BaseComponent {
 
   private maxPageNum: number;
 
-  public currentPageNum: number;
+  public currentPageNum;
 
   private leftRewind: HTMLElement;
 
   private rightRewind: HTMLElement;
 
-  constructor(parent: HTMLElement, paginationType: string, public parentInstance: Ebook) {
+  constructor(parent: HTMLElement, paginationType: string, private parentInstance: Ebook) {
     super(parent, 'div', ['pagination-wrap']);
-    this.parentInstance = parentInstance;
     this.leftRewind = new BaseComponent(this.element, 'div', ['arrow-button'], '<<').element;
     this.leftArrow = new BaseComponent(this.element, 'div', ['arrow-button'], '<').element;
     this.label = new BaseComponent(this.element, 'div', ['label']).element;
