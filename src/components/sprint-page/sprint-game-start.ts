@@ -1,10 +1,10 @@
-import { BaseComponent } from "../base-component/base-component";
-import { SprintGamePage } from "./sprint-game-gaming";
+import { BaseComponent } from '../base-component/base-component';
+import { SprintGamePage } from './sprint-game-gaming';
 
 export class SprintStartPage {
-  private group: number | null = null;
+  private group: number = 0;
 
-  private page: number | null = null;
+  private page: number = 0;
 
   constructor(private parent: HTMLElement, private nextPage: typeof SprintGamePage) {
     this.renderStartPage();
@@ -24,22 +24,14 @@ export class SprintStartPage {
     const languageLevelsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__levels']).element;
     const languageLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(
       (level: string, index: number): HTMLElement =>
-<<<<<<< HEAD
         new BaseComponent(languageLevelsContainer, 'button', ['game__button_level'], level, {
-=======
-        new BaseComponent(languageLevelsContainer, 'button', ['button', 'game__button_level'], level, {
->>>>>>> f32c8057b83b65812a0924f367895a8bbf968d07
           id: `${index}`,
         }).element
     );
     const startGameButton: HTMLButtonElement = new BaseComponent(
       this.parent,
       'button',
-<<<<<<< HEAD
       ['game__button_start'],
-=======
-      ['button', 'game__button_start'],
->>>>>>> f32c8057b83b65812a0924f367895a8bbf968d07
       'Начать игру',
       { disabled: '' }
     ).element as HTMLButtonElement;
@@ -65,8 +57,8 @@ export class SprintStartPage {
           this.page = this.getRandomNumber(0, 29);
           startGameButton.disabled = false;
         } else {
-          this.group = null;
-          this.page = null;
+          this.group = 0;
+          this.page = 0;
           startGameButton.disabled = true;
         }
         languageLevels.forEach((button: HTMLElement): void => {
@@ -76,7 +68,10 @@ export class SprintStartPage {
         });
       })
     );
-    startGameButton.addEventListener('click', () => new this.nextPage(this.parent, this.group!, this.page!));
+    startGameButton.addEventListener(
+      'click',
+      (): SprintGamePage => new this.nextPage(this.parent, this.group, this.page)
+    );
   }
 
   private getRandomNumber(startNumber: number, finishNumber: number): number {

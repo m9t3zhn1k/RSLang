@@ -1,5 +1,5 @@
 import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
-import  Ebook from '../components/ebook/ebook';
+import Ebook from '../components/ebook/ebook';
 import { Footer } from '../components/footer/footer';
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
@@ -65,10 +65,9 @@ export class Router implements IRouter {
     if (this.currentPage instanceof newSection) {
       return;
     }
-    addLastPageInLocalStorage(pageID);
     this.currentPage.remove();
     this.currentPage = new newSection(this.parent, this);
-    localStorage.setItem('lastPage', pageID);
+    addLastPageInLocalStorage(pageID);
     if (
       this.currentPage instanceof MainPage ||
       this.currentPage instanceof SprintPage ||

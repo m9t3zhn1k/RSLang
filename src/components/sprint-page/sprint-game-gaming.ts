@@ -1,18 +1,25 @@
-import { getWords } from "../../controller/words-controller";
-import { IWord } from "../../types/types";
-import { BaseComponent } from "../base-component/base-component";
-import { Timer } from "../timer/timer";
+import { SPRINT_DURATION } from '../../constants/constants';
+import { getWords } from '../../controller/words-controller';
+import { IWord } from '../../types/types';
+import { BaseComponent } from '../base-component/base-component';
+import { Timer } from '../timer/timer';
 
 export class SprintGamePage {
-  private gameWords: IWord[] | null = null;
+  private gameWords: IWord[] = [];
 
-  private gameResults: { word: IWord, result: boolean }[] = [];
+  private currentWordIndex: number = 0;
+
+  private currentWord: IWord | null = null;
+
+  private gameResults: { word: IWord; result: boolean }[] = [];
 
   private timer: Timer;
 
   private pointsCounter: HTMLElement;
 
-  private pointsIncrementValue: HTMLElement;
+  private pointsIncrementValue: number = 10;
+
+  private pointsIncrementIndicator: HTMLElement;
 
   private answerIndicator1: HTMLElement;
 
@@ -20,73 +27,175 @@ export class SprintGamePage {
 
   private answerIndicator3: HTMLElement;
 
+
   private wordEN: HTMLElement;
 
   private wordRU: HTMLElement;
 
-  private answerTrueButton: HTMLElement;
+  private answerTrueButton: HTMLButtonElement;
 
-  private answerFalseButton: HTMLElement;
+  private answerFalseButton: HTMLButtonElement;
 
   constructor(private parent: HTMLElement, private group: number, private page: number) {
-    this.prepareGamePage();
-    this.timer = new Timer(this.parent, ['timer'], 30);
+    this.initGame();
+    this.timer = new Timer(this.parent, ['timer'], SPRINT_DURATION);
     const pointsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__points']).element;
     const pointsAnswerIndicators: HTMLElement = new BaseComponent(pointsContainer, 'div', ['game__points_indicators'])
-    .element;
+      .element;
     const wordsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__words']).element;
     const buttonsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__answers']).element;
     this.pointsCounter = new BaseComponent(pointsContainer, 'p', ['game__points_score'], '0 очков').element;
-    this.pointsIncrementValue = new BaseComponent(
+    this.pointsIncrementIndicator = new BaseComponent(
       pointsContainer,
       'p',
       ['game__points_increment'],
-      '+10 очков'
+      `+${this.pointsIncrementValue} очков`
     ).element;
-    this.answerIndicator1 = new BaseComponent(pointsAnswerIndicators, 'div', [
-      'game__points_indicator-item',
-    ]).element;
-    this.answerIndicator2 = new BaseComponent(pointsAnswerIndicators, 'div', [
-      'game__points_indicator-item',
-    ]).element;
-    this.answerIndicator3 = new BaseComponent(pointsAnswerIndicators, 'div', [
-      'game__points_indicator-item',
-    ]).element;
-    this.wordEN = new BaseComponent(wordsContainer, 'span', ['game__word'], 'transport').element;
+    this.answerIndicator1 = new BaseComponent(pointsAnswerIndicators, 'div', ['game__points_indicator-item']).element;
+    this.answerIndicator2 = new BaseComponent(pointsAnswerIndicators, 'div', ['game__points_indicator-item']).element;
+    this.answerIndicator3 = new BaseComponent(pointsAnswerIndicators, 'div', ['game__points_indicator-item']).element;
+    this.wordEN = new BaseComponent(wordsContainer, 'span', ['game__word']).element;
     new BaseComponent(wordsContainer, 'span', [], 'переводится как');
-    this.wordRU = new BaseComponent(wordsContainer, 'span', ['game__word'], 'транспорт').element;
+    this.wordRU = new BaseComponent(wordsContainer, 'span', ['game__word']).element;
     this.answerTrueButton = new BaseComponent(
       buttonsContainer,
       'button',
       ['game__answer', 'game__answer_true'],
       'Верно'
-    ).element;
+    ).element as HTMLButtonElement;
     this.answerFalseButton = new BaseComponent(
       buttonsContainer,
       'button',
       ['game__answer', 'game__answer_false'],
       'Неверно'
-    ).element;
+    ).element as HTMLButtonElement;
   }
 
-  private async prepareGamePage(): Promise<void> {
+  private addEventListenersToButtons(): void {
+    this.answerTrueButton.addEventListener('click', this.addWordResult.bind(this));
+    this.answerFalseButton.addEventListener('click', this.addWordResult.bind(this));
+  }
+
+  private updateGameWord(): void {
+    this.currentWord = this.gameWords[this.currentWordIndex];
+    const isSettingWordTranslateCorrect: boolean = Math.random() > 0.5;
+    this.wordEN.textContent = this.currentWord.word.toLowerCase();
+    this.wordRU.textContent =
+      isSettingWordTranslateCorrect === true
+        ? this.currentWord.wordTranslate.toLowerCase()
+        : this.gameWords[this.getRandomNumber(0, this.gameWords.length - 1, this.currentWordIndex)].wordTranslate;
+  }
+
+  private isAnswerCorrect(e: Event): boolean {
+    const activeButton: HTMLElement = e.target as HTMLElement;
+    const isCorrect: boolean =
+      (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
+      (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
+    this.handleAnswer(isCorrect);
+    return isCorrect;
+  }
+
+  private handleAnswer(answer: boolean): void {
+    const [first, second, third]: HTMLElement[] = [this.answerIndicator1, this.answerIndicator2, this.answerIndicator3];
+    if (answer) {
+      if (!this.isAnswerIndicatorGreen([first])) {
+        this.setAnswerIndicatorGreen(first);
+        this.updateScore();
+        return;
+      }
+      if (this.isAnswerIndicatorGreen([third])) {
+        this.removeAnswerIndicatorsGreen([first, second, third]);
+        this.setAnswerIndicatorGreen(first);
+        this.setPointsIncrementValue(true);
+        this.updateScore();
+        return;
+      }
+      if (this.isAnswerIndicatorGreen([second])) {
+        this.setAnswerIndicatorGreen(third);
+        this.updateScore();
+        return;
+      }
+      if (this.isAnswerIndicatorGreen([first])) {
+        this.setAnswerIndicatorGreen(second);
+        this.updateScore();
+        return;
+      }
+    } else {
+      this.removeAnswerIndicatorsGreen([first, second, third]);
+      this.setPointsIncrementValue(false);
+      return;
+    }
+  }
+
+  private isAnswerIndicatorGreen(indicators: HTMLElement[]): boolean {
+    return indicators.every((indicator: HTMLElement): boolean => indicator.classList.contains('active'));
+  }
+
+  private setAnswerIndicatorGreen(indicator: HTMLElement): void {
+    indicator.classList.add('active');
+  }
+
+  private removeAnswerIndicatorsGreen(indicators: HTMLElement[]): void {
+    indicators.forEach((indicator: HTMLElement): void => indicator.classList.remove('active'));
+  }
+
+  private setPointsIncrementValue(isLevelUp: boolean): void {
+    if (isLevelUp) {
+      this.pointsIncrementValue += 10;
+    } else {
+      this.pointsIncrementValue = 10;
+    }
+    this.pointsIncrementIndicator.textContent = `+${this.pointsIncrementValue} очков`;
+  }
+
+  private updateScore(): void {
+    if (this.pointsCounter.textContent) {
+      this.pointsCounter.textContent = `${parseInt(this.pointsCounter.textContent) + this.pointsIncrementValue} очков`;
+    }
+  }
+
+  private addWordResult(e: Event): void {
+    const result: boolean = this.isAnswerCorrect(e);
+    if (this.currentWord) {
+      this.gameResults.push({ word: this.currentWord, result: result });
+    }
+    this.setNextGameWord();
+  }
+
+  private setNextGameWord(): void {
+    this.currentWordIndex += 1;
+    if (this.currentWordIndex <= this.gameWords.length - 1) {
+      this.updateGameWord();
+    } else {
+      this.answerTrueButton.disabled = true;
+      this.answerFalseButton.disabled = true;
+    }
+  }
+
+  private async initGame(): Promise<void> {
     while (this.parent.firstChild) {
       this.parent.removeChild(this.parent.firstChild);
     }
     this.gameWords = this.shuffle(await getWords(this.group, this.page));
-    console.log(this.gameWords);
-  }
-
-  private getRandomNumber(startNumber: number, finishNumber: number): number {
-    return Math.round(Math.random() * (finishNumber - startNumber) + startNumber);
+    this.timer.startTimer();
+    this.addEventListenersToButtons();
+    this.updateGameWord();
   }
 
   private shuffle = (array: IWord[]): IWord[] => {
     const arraycopy = [...array];
     for (let i = arraycopy.length - 1; i > 0; i--) {
-      let j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(Math.random() * (i + 1));
       [arraycopy[i], arraycopy[j]] = [arraycopy[j], arraycopy[i]];
     }
     return arraycopy;
   };
+
+  private getRandomNumber(startNumber: number, finishNumber: number, exception?: number): number {
+    const number: number = Math.round(Math.random() * (finishNumber - startNumber) + startNumber);
+    if (number === exception) {
+      return this.getRandomNumber(startNumber, finishNumber, exception);
+    }
+    return number;
+  }
 }

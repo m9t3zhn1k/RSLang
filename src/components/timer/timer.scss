@@ -17,11 +17,15 @@
     left: 0;
   }
 
-  &__label {
+  &__input {
     display: block;
     position: relative;
     top: 0.80rem;
     font-size: 2rem;
     color: $text-light;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    text-align: center;
   }
 }

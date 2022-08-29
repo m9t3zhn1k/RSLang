@@ -4,13 +4,15 @@ export const BASE_URL: string = 'https://app-rslang-exsample.herokuapp.com';
 
 export const MAX_COUNT_OF_SYMBOLS: number = 8;
 
-export const MAX_COUNT_OF_SECTIONS_FOR_AUTHORIZED = 7;
+export const MAX_COUNT_OF_SECTIONS_FOR_AUTHORIZED: number = 7;
 
-export const MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED = 6;
+export const MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED: number = 6;
 
-export const MAX_COUNT_OF_PAGES = 30;
+export const MAX_COUNT_OF_PAGES: number = 30;
 
-export const START_PAGINATION_PAGE = 1;
+export const START_PAGINATION_PAGE: number = 1;
+
+export const SPRINT_DURATION: number = 30;
 
 export const SECTIONS_COLORS: {
   '0': string;

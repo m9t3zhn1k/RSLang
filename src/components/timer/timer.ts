@@ -1,6 +1,7 @@
 import { BaseComponent } from '../base-component/base-component';
 import timer_icon from '../../assets/icons/timer.svg';
 import './timer.scss';
+import { SprintResultPage } from '../sprint-page/sprint-game-results';
 
 export class Timer extends BaseComponent {
   private timePassed: number = 0;
@@ -9,14 +10,15 @@ export class Timer extends BaseComponent {
 
   private timerInterval: number | null = null;
 
-  private timerLabel: HTMLElement;
+  public timerInput: HTMLInputElement;
 
-  constructor(parent: HTMLElement, className: string[], private timeLimit: number) {
+  constructor(private parent: HTMLElement, className: string[], private timeLimit: number) {
     super(parent, 'div', className);
     const timerIcon: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.timeLeft = this.timeLimit;
-    this.timerLabel = new BaseComponent(this.element, 'span', ['timer__label'], `${this.timeLeft}`).element;
-    this.startTimer();
+    this.timerInput = new BaseComponent(this.element, 'input', ['timer__input'], '', { type: 'text' })
+      .element as HTMLInputElement;
+    this.timerInput.value = `${this.timeLeft}`;
     this.renderTimerIcon(timerIcon, this.element);
   }
 
@@ -24,13 +26,14 @@ export class Timer extends BaseComponent {
     clearInterval(this.timerInterval as number);
   }
 
-  private startTimer(): void {
+  public startTimer(): void {
     this.timerInterval = +setInterval((): void => {
       this.timePassed = this.timePassed += 1;
       this.timeLeft = this.timeLimit - this.timePassed;
-      this.timerLabel.innerHTML = `${this.timeLeft}`;
+      this.timerInput.value = `${this.timeLeft}`;
       if (this.timeLeft === 0) {
         this.onTimesUp();
+        new SprintResultPage(this.parent);
       }
     }, 1000);
   }
