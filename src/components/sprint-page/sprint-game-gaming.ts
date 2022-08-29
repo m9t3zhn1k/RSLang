@@ -79,6 +79,10 @@ export class SprintGamePage {
   }
 
   private updateGameWord(): void {
+    if (this.currentWordIndex) {
+      this.wordEN.classList.add('hidden');
+      this.wordRU.classList.add('hidden');
+    }
     this.currentWord = this.gameWords[this.currentWordIndex];
     const isSettingWordTranslateCorrect: boolean = Math.random() > 0.5;
     this.wordEN.textContent = this.currentWord.word.toLowerCase();
@@ -86,10 +90,17 @@ export class SprintGamePage {
       isSettingWordTranslateCorrect === true
         ? this.currentWord.wordTranslate.toLowerCase()
         : this.gameWords[this.getRandomNumber(0, this.gameWords.length - 1, this.currentWordIndex)].wordTranslate;
+    setTimeout(() => {
+      this.wordEN.classList.remove('hidden');
+      this.wordRU.classList.remove('hidden');
+    }, 150);
   }
 
   private isAnswerCorrect(e: Event): boolean {
     let isCorrect: boolean;
+    if (this.answerFalseButton.disabled) {
+      return false;
+    }
     if (e.type === 'keydown') {
       isCorrect =
         ((e as KeyboardEvent).code === 'ArrowLeft' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
@@ -101,7 +112,24 @@ export class SprintGamePage {
         (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
     }
     this.handleAnswer(isCorrect);
+    this.paintAnswer(isCorrect);
     return isCorrect;
+  }
+
+  private paintAnswer(answer: boolean): void {
+    if (answer) {
+      this.answerFalseButton.classList.add('correct');
+      this.answerTrueButton.classList.add('correct');
+    } else {
+      this.answerFalseButton.classList.add('wrong');
+      this.answerTrueButton.classList.add('wrong');
+    }
+    setTimeout((): void => {
+      this.answerFalseButton.classList.remove('correct');
+      this.answerTrueButton.classList.remove('correct');
+      this.answerFalseButton.classList.remove('wrong');
+      this.answerTrueButton.classList.remove('wrong');
+    }, 200)
   }
 
   private handleAnswer(answer: boolean): void {

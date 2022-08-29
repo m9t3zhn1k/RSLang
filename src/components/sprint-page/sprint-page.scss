@@ -175,6 +175,9 @@
     letter-spacing: 0.05rem;
     color: $blue-light;
     height: 57px;
+    transition: all 0.15s;
+    visibility: visible;
+    opacity: 1;
 
     &s {
       display: flex;
@@ -182,6 +185,11 @@
       align-items: center;
       gap: 0.25rem;
       margin: 2rem 0;
+    }
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
     }
   }
 
@@ -217,6 +225,16 @@
       color: $grey-darkest;
       border: 2px solid $grey-darkest;
       cursor: auto;
+    }
+
+    &.correct {
+      border-color: $green;
+      background-color: $green;
+    }
+
+    &.wrong {
+      background-color: $color-wrong-form;
+      border-color: $color-wrong-form;
     }
   }
 }
