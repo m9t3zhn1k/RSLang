@@ -31,6 +31,10 @@ export interface IRouter {
   navigateApp(buttons: HTMLElement[]): void;
 }
 
+export interface IMain {
+  currentPageID: string;
+}
+
 export type Advantage = {
   imageSource: string;
   imageAlt: string;
@@ -103,3 +107,24 @@ export interface IWord {
   word: string;
   wordTranslate: string;
 }
+
+export interface IUserWord {
+  id: 'string';
+  optional: {
+    isDif: boolean;
+    isLearned: boolean;
+  };
+  wordId: 'string';
+}
+
+export interface IQueryParam {
+  key: string;
+  value: string;
+}
+
+export type RequestBody = {
+  optional: {
+    isDif: boolean;
+    isLearned: boolean;
+  };
+};

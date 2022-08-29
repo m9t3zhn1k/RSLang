@@ -190,7 +190,7 @@
     height: 46px;
     border: 2px solid $text-light;
 
-    &_left {
+    &_true {
       border-radius: 23px 0 0 23px;
 
       &:hover {
@@ -198,7 +198,7 @@
       }
     }
 
-    &_right {
+    &_false {
       border-radius: 0 23px 23px 0;
       border-left: none;
 
@@ -209,7 +209,7 @@
 
     &:active {
       background-color: $text-light;
-      color: black;
+      color: $text-black
     }
   }
 }
