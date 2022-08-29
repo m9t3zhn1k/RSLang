@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import { BaseComponent } from '../base-component/base-component';
+import { Router } from '../../router/router';
+>>>>>>> 501d168 (refactor: update contents of the branch from develop)
 import './ebook.scss';
 import '../word-card/word-card.scss';
 import { IWord, IUserWord, IEbook } from '../../types/types';
@@ -24,6 +29,7 @@ export default class Ebook extends BaseComponent implements IEbook {
   private sprintGame: HTMLElement;
 
   constructor(parent: HTMLElement, router: Router) {
+<<<<<<< HEAD
     super(parent, 'div', ['ebook']);
     new BaseComponent(this.element, 'div', ['title'], 'Учебник');
     this.controls = new BaseComponent(this.element, 'div', ['controls']).element;
@@ -39,6 +45,18 @@ export default class Ebook extends BaseComponent implements IEbook {
     router.navigateApp([this.audioGame, this.sprintGame]);
     this.drawCards();
     this.saveStageToLocalStorage();
+=======
+    super(parent, 'div', ['wrapper']);
+    const container: HTMLElement = new BaseComponent(this.element, 'div', ['container']).element;
+    const firstGameButton: HTMLElement = new BaseComponent(container, 'button', ['game-button']).element;
+    const secondGameButton: HTMLElement = new BaseComponent(container, 'button', ['game-button']).element;
+    firstGameButton.textContent = 'AudioChallenge';
+    secondGameButton.textContent = 'Sprint';
+    firstGameButton.id = 'audiochallenge';
+    secondGameButton.id = 'sprint';
+    new BaseComponent(container, 'p', [], 'I am the eBook');
+    router.navigateApp([firstGameButton, secondGameButton]);
+>>>>>>> 501d168 (refactor: update contents of the branch from develop)
   }
 
   public drawCards = async (): Promise<void> => {

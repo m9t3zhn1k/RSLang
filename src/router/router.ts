@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
 import Ebook from '../components/ebook/ebook';
+=======
+import { AudioChallengePage } from '../components/audiochallenge-page/audiochallenge-page';
+import { Ebook } from '../components/ebook/ebook';
+>>>>>>> 501d168 (refactor: update contents of the branch from develop)
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
 import { IBaseComponent, IHeader, IRouter, PageType } from '../types/types';
+<<<<<<< HEAD
 import { addLastPageInLocalStorage } from '../utils/storage/storage';
+=======
+>>>>>>> 501d168 (refactor: update contents of the branch from develop)
 
 export class Router implements IRouter {
   private currentPage: IBaseComponent;
@@ -38,7 +46,11 @@ export class Router implements IRouter {
       case this.sprintPage:
         return SprintPage;
       case this.audioChallengePage:
+<<<<<<< HEAD
         return AudiochallengePage;
+=======
+        return AudioChallengePage;
+>>>>>>> 501d168 (refactor: update contents of the branch from develop)
       case this.mainPage:
       default:
         this.header.wave.classList.add('hidden');
@@ -54,8 +66,16 @@ export class Router implements IRouter {
     addLastPageInLocalStorage(pageID);
     this.currentPage.remove();
     this.currentPage = new newSection(this.parent, this);
+<<<<<<< HEAD
 
     if (this.currentPage instanceof MainPage) {
+=======
+    if (
+      this.currentPage instanceof MainPage ||
+      this.currentPage instanceof SprintPage ||
+      this.currentPage instanceof AudioChallengePage
+    ) {
+>>>>>>> 501d168 (refactor: update contents of the branch from develop)
       this.header.wave.classList.add('hidden');
       this.header.element.classList.remove('hidden');
     } else {
