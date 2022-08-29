@@ -74,6 +74,7 @@ export class SprintGamePage {
   private addEventListenersToButtons(): void {
     this.answerTrueButton.addEventListener('click', this.addWordResult.bind(this));
     this.answerFalseButton.addEventListener('click', this.addWordResult.bind(this));
+    window.addEventListener('keydown', this.addWordResult.bind(this));
   }
 
   private updateGameWord(): void {
@@ -87,10 +88,17 @@ export class SprintGamePage {
   }
 
   private isAnswerCorrect(e: Event): boolean {
-    const activeButton: HTMLElement = e.target as HTMLElement;
-    const isCorrect: boolean =
-      (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
-      (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
+    let isCorrect: boolean;
+    if (e.type === 'keydown') {
+      isCorrect =
+        ((e as KeyboardEvent).code === 'ArrowLeft' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
+        ((e as KeyboardEvent).code === 'ArrowRight' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
+    } else {
+      const activeButton: HTMLElement = e.target as HTMLElement;
+      isCorrect =
+        (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
+        (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
+    }
     this.handleAnswer(isCorrect);
     return isCorrect;
   }
