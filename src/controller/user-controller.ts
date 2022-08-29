@@ -1,5 +1,5 @@
 import { BASE_URL } from '../constants/constants';
-import { IGetAllUsersWords, IUser, IUserWord, RequestBody } from '../types/types';
+import { IGetAllUsersWords, IUser, IUserWord, Optional, RequestBody } from '../types/types';
 
 export const getToken: () => string | null = (): string | null => {
   if (window.localStorage.getItem('rslang-team58-user')) {
@@ -150,3 +150,40 @@ export const getAllUsersWords: IGetAllUsersWords = async (): Promise<IUserWord[]
   });
   return resp.ok ? resp.json() : null;
 };
+
+export const addGameResults = async (wordId: string, isCorrect: boolean) => {
+  const userId: string | null = getUserId();
+  if (!userId) {
+    return
+  };
+  const userWordData: IUserWord | null = await getOneUserWord(userId, wordId);
+  const optional: Optional = userWordData?.optional 
+    ? userWordData.optional 
+    : {isDif: false, isLearned: false};
+  if (isCorrect) {
+    optional.correctAnswers = optional.correctAnswers 
+      ? optional.correctAnswers += 1 
+      : 1;
+    optional.seriesOfCorrectAnswers = optional.seriesOfCorrectAnswers 
+      ? optional.seriesOfCorrectAnswers += 1 
+      : 1;
+    if (optional.isDif && optional.seriesOfCorrectAnswers >= 5 
+      || !optional.isDif && optional.seriesOfCorrectAnswers >= 3) {
+        optional.isLearned = true;
+        optional.isDif = false;
+      }
+  } else {
+    optional.incorrectAnswers = optional.incorrectAnswers 
+      ? optional.incorrectAnswers += 1 
+      : 1;
+    optional.seriesOfCorrectAnswers = 0;
+    if (optional.isLearned) {
+      optional.isLearned = false;
+    }
+  }
+  if (userWordData) {
+    updateUserWord(userId, wordId, {optional})
+  } else {
+    createUserWord(userId, wordId, {optional})
+  }
+}

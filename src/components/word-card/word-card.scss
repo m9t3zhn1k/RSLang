@@ -149,6 +149,7 @@
     justify-content: space-between;
     width: 5rem;
     height: 2rem;
+    visibility: hidden;
 }
 
 .game-result-pos,
@@ -198,4 +199,12 @@
     background: $text-light; 
     padding: .2rem .5rem;
     border-radius: .5rem;
+}
+
+.visible-element {
+    visibility: visible;
+}
+
+.hidden-element {
+    visibility: hidden;
 }

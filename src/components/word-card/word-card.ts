@@ -1,8 +1,9 @@
 import { SECTIONS_COLORS } from '../../constants/constants';
 import { addOptional, getUserId, getOneUserWord, getToken } from '../../controller/user-controller';
-import { IWord, IUserWord, IWordCards } from '../../types/types';
+import { IWord, IUserWord, IWordCards, Optional } from '../../types/types';
 import { BaseComponentInnerHTML } from '../base-component-inner-HTML/base-component-inner-HTML';
 import { BaseComponent } from '../base-component/base-component';
+import Ebook from '../ebook/ebook';
 import './word-card.scss';
 
 export default class WordCards extends BaseComponent implements IWordCards {
@@ -30,9 +31,11 @@ export default class WordCards extends BaseComponent implements IWordCards {
 
   constructor(
     private parent: HTMLElement,
+    private ebook: Ebook,
     private wordData: IWord,
     sectionNum: keyof typeof SECTIONS_COLORS,
-    private isDifSection: boolean = false
+    private isDifSection: boolean = false,
+    private optional: Optional | undefined = undefined
   ) {
     super(parent, 'div', ['word-card']);
     new BaseComponent(this.element, 'img', ['img'], '', { src: `${wordData.image}` });
@@ -58,7 +61,7 @@ export default class WordCards extends BaseComponent implements IWordCards {
     this.addToDifButton.addEventListener('click', this.buttonHandler);
     this.addtoLearnedButton.addEventListener('click', this.buttonHandler);
     this.addButtonsIfAuthorized();
-    this.addStyleforDifWords();
+    this.setStylesForControls();
     this.addText(wordData);
   }
 
@@ -94,20 +97,27 @@ export default class WordCards extends BaseComponent implements IWordCards {
   private buttonHandler: (e: Event) => void = (e: Event): void => {
     const button: HTMLElement = e.currentTarget as HTMLElement;
     button.classList.toggle('active-button');
+    if (this.isDifSection) {
+      this.element.remove();
+    }
     if (button.classList.contains('dif-button')) {
       this.element.classList.toggle('difficult-word');
-      addOptional('dif', this.wordData.id);
-      if (this.isDifSection) {
-        this.element.remove();
+      if (this.element.classList.contains('difficult-word')) {
+        this.ebook.numOfLearnedOrDifCards += 1;
+      } else {
+        this.ebook.numOfLearnedOrDifCards -= 1;
       }
+      addOptional('dif', this.wordData.id);
     } else {
       this.element.classList.toggle('learned-word');
       this.element.classList.remove('difficult-word');
       this.addToDifButton.classList.remove('active-button');
       if (this.element.classList.contains('learned-word')) {
-        this.addToDifButton.style.visibility = 'hidden';
+        this.ebook.numOfLearnedOrDifCards += 1;
+        this.addToDifButton.classList.add('hidden-element');
       } else {
-        this.addToDifButton.style.visibility = 'visible';
+        this.ebook.numOfLearnedOrDifCards -= 1;
+        this.addToDifButton.classList.remove('hidden-element');
         if (getUserId()) {
           getOneUserWord(getUserId(), this.wordData.id).then((res: IUserWord | null): void => {
             if (res?.optional.isDif) {
@@ -118,22 +128,26 @@ export default class WordCards extends BaseComponent implements IWordCards {
         }
       }
       addOptional('learned', this.wordData.id);
-      if (this.isDifSection) {
-        this.element.remove();
-      }
     }
+    this.ebook.addLearnedStyleToPage();
   };
 
   private addButtonsIfAuthorized: () => void = (): void => {
     if (!getToken()) {
-      this.buttonsWrap.style.visibility = 'hidden';
+      this.buttonsWrap.classList.add('hidden-element');
     }
   };
 
-  private addStyleforDifWords = (): void => {
+  private setStylesForControls: () => Promise<void> = async (): Promise<void> => {
     if (this.isDifSection) {
       this.element.classList.add('difficult-word');
       this.addToDifButton.classList.add('active-button');
+    };
+    if (this.optional && Object.hasOwn(this.optional, "correctAnswers")) {
+      this.gameResultsWrap.classList.add('visible-element');
+      this.gameResultPositive.textContent = `${this.optional.correctAnswers}`;
+      this.gameResultNegative.textContent = `${this.optional.incorrectAnswers}`;
     }
+
   };
 }
