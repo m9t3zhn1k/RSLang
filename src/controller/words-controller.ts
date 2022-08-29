@@ -4,10 +4,7 @@ import { IQueryParam, IWord } from '../types/types';
 const generateQueryString: (queryParams?: IQueryParam[]) => string = (queryParams: IQueryParam[] = []): string =>
   queryParams.length ? `?${queryParams.map((x): string => `${x.key}=${x.value}`).join('&')}` : '';
 
-export const getWords: (section: number, page: number) => Promise<IWord[]> = async (
-  section: number,
-  page: number
-): Promise<IWord[]> => {
+export const getWords = async (section: number, page: number): Promise<IWord[]> => {
   const resp: Response = await fetch(
     `${BASE_URL}/words${generateQueryString([
       { key: 'group', value: `${section}` },
@@ -24,7 +21,7 @@ export const getWords: (section: number, page: number) => Promise<IWord[]> = asy
   return wordsArr;
 };
 
-export const getOneWord: (wordId: string) => Promise<IWord> = async (wordId: string): Promise<IWord> => {
+export const getOneWord = async (wordId: string): Promise<IWord> => {
   const resp: Response = await fetch(`${BASE_URL}/words/${wordId}`);
   const wordData: IWord = await resp.json();
   wordData.image = `${BASE_URL}/${wordData.image}`;

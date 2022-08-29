@@ -32,6 +32,10 @@ export interface IRouter {
   navigateApp(buttons: HTMLElement[]): void;
 }
 
+export interface IMain {
+  currentPageID: string;
+}
+
 export type Advantage = {
   imageSource: string;
   imageAlt: string;
