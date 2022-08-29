@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 [
   {
     "imageSource": "./assets/images/developers/test.jpg",
@@ -25,31 +24,3 @@
     "className": "developers__left"
   }
 ]
-=======
-[
-  {
-    "imageSource": "./assets/images/developers/test.jpg",
-    "name": "Pavel Korshunov",
-    "title": "Team Lead, Developer",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit ipsam fuga minima odio id saepe ea delectus eum nisi, repellendus atque possimus sint quos aperiam, at earum? Quae, non.",
-    "github": "https://github.com/m9t3zhn1k",
-    "className": "developers__left"
-  },
-  {
-    "imageSource": "./assets/images/developers/test.jpg",
-    "name": "Anton Kochetov",
-    "title": "Developer",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit ipsam fuga minima odio id saepe ea delectus eum nisi, repellendus atque possimus sint quos aperiam, at earum? Quae, non.",
-    "github": "https://github.com/Anton13602",
-    "className": "developers__right"
-  },
-  {
-    "imageSource": "./assets/images/developers/test.jpg",
-    "name": "Maksim Amialchuk",
-    "title": "Developer",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit ipsam fuga minima odio id saepe ea delectus eum nisi, repellendus atque possimus sint quos aperiam, at earum? Quae, non.",
-    "github": "https://github.com/MaximOmelchuk",
-    "className": "developers__left"
-  }
-]
->>>>>>> 501d168 (refactor: update contents of the branch from develop)

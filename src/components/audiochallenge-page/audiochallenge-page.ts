@@ -1,4 +1,4 @@
-import { BASE_URL, LANGUAGE_LEVELS } from '../../constants/constants';
+import { LANGUAGE_LEVELS } from '../../constants/constants';
 import { getWords } from '../../controller/words-controller';
 import { IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
@@ -12,12 +12,11 @@ export class AudioChallengePage extends BaseComponent {
 
   private levelGame: null | number = null;
 
-  constructor(protected parentNode: HTMLElement, private router: Router, public data?: IWord[], public level?: number) {
+  constructor(protected parentNode: HTMLElement, private router: Router, public data?: IWord[]) {
     super(parentNode, 'div', ['audio-challenge']);
 
-    if (data && level) {
+    if (data) {
       this.words = data;
-      this.levelGame = level;
       this.renderGame();
     } else {
       this.renderLights();
@@ -88,7 +87,7 @@ export class AudioChallengePage extends BaseComponent {
     startGameButton.element.addEventListener('click', async (): Promise<void> => {
       const page = this.generateRandomNum();
       if (this.levelGame !== null) {
-        const data: IWord[] = await getWords(page, this.levelGame);
+        const data: IWord[] = await getWords(this.levelGame, page);
         this.words = [];
         this.words.push(...data);
         wrapperStart.remove();
@@ -98,6 +97,7 @@ export class AudioChallengePage extends BaseComponent {
   }
 
   private renderGame(): void {
+    console.log(1)
     new AudioChallengeGame(this.element, this.words, this.renderResultGame.bind(this));
   }
 
@@ -142,7 +142,7 @@ export class AudioChallengePage extends BaseComponent {
     wordsNum.forEach((word: number): void => {
       const itemWrapper: BaseComponent = new BaseComponent(parentElement, 'div', ['word-item']);
       const audio: HTMLAudioElement = document.createElement('audio');
-      audio.src = `${BASE_URL}/${this.words[word].audio}`;
+      audio.src = this.words[word].audio;
 
       const soundItem: BaseComponent = new BaseComponent(itemWrapper.element, 'div', ['word-item__sound']);
       const buttonAudioCard: BaseComponent = new BaseComponent(soundItem.element, 'button', [
