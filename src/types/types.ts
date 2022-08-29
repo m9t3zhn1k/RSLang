@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
+import { AudioChallengePage } from '../components/audiochallenge-page/audiochallenge-page';
 import Ebook from '../components/ebook/ebook';
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
 import Pagination from '../components/pagination/pagination';
-=======
-import { AudioChallengePage } from '../components/audiochallenge-page/audiochallenge-page';
-import { Ebook } from '../components/ebook/ebook';
-import { Games } from '../components/games/games';
-import { MainPage } from '../components/main-page/main-page';
->>>>>>> 501d168 (refactor: update contents of the branch from develop)
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
 
@@ -67,11 +60,7 @@ export type PageType =
   | typeof MainPage
   | typeof Statistics
   | typeof SprintPage
-<<<<<<< HEAD
-  | typeof AudiochallengePage;
-=======
   | typeof AudioChallengePage;
->>>>>>> 501d168 (refactor: update contents of the branch from develop)
 
 export interface IUser {
   email: string;
@@ -114,10 +103,9 @@ export interface IWord {
   transcription: string;
   word: string;
   wordTranslate: string;
+  userWord?: { difficulty: string; optional: { isDif: boolean; isLearned: boolean } };
 }
 
-<<<<<<< HEAD
-=======
 export interface ILanguageLevels {
   A1: number;
   A2: number;
@@ -127,7 +115,6 @@ export interface ILanguageLevels {
   C2: number;
 }
 
->>>>>>> 501d168 (refactor: update contents of the branch from develop)
 export interface IUserWord {
   id: 'string';
   optional: {
@@ -137,14 +124,11 @@ export interface IUserWord {
   wordId: 'string';
 }
 
-<<<<<<< HEAD
 export interface IQueryParam {
   key: string;
   value: string;
 }
 
-=======
->>>>>>> 501d168 (refactor: update contents of the branch from develop)
 export type RequestBody = {
   optional: {
     isDif: boolean;
@@ -152,7 +136,6 @@ export type RequestBody = {
   };
 };
 
-<<<<<<< HEAD
 export interface IEbook {
   pagePagination: Pagination;
   drawCards: () => Promise<void>;
@@ -173,6 +156,23 @@ export interface IBaseComponentInnerHTML {
   remove: () => void;
 }
 
-=======
->>>>>>> 501d168 (refactor: update contents of the branch from develop)
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
+
+export interface IResponseWord {
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  _id: string;
+  image: string;
+  page: number;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+  textExample: string;
+}
+
+export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCount: [{ count: number }] };

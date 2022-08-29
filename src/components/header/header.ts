@@ -17,11 +17,7 @@ export class Header extends BaseComponent implements IHeader {
   public storage: string | null;
 
   constructor(parent: HTMLElement) {
-<<<<<<< HEAD
-    super(parent, 'header', ['header', 'opaque']);
-=======
     super(parent, 'header', ['header']);
->>>>>>> 501d168 (refactor: update contents of the branch from develop)
     this.storage = localStorage.getItem('rslang-team58-user');
     const container: HTMLElement = new BaseComponent(this.element, 'div', ['container', 'header__container']).element;
     const logoContainer: HTMLElement = new BaseComponent(container, 'div', ['header__block_logo', 'logo'], '', {
