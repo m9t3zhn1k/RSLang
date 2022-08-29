@@ -1,9 +1,13 @@
 @import "./pallete.scss";
+@import "./fonts.scss";
 @import "./reset.scss";
 
 html {
   font-size: 16px;
   height: 100%;
+  font-family: "PFBeauSansPro", "Helvetica", "Arial", sans-serif;
+  letter-spacing: 0.02rem;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -12,87 +16,169 @@ body {
   flex-direction: column;
 }
 
-.header {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  border: 2px solid red;
-  font-size: 1.5rem;
-  padding: 10px 20px;
+.main {
+  flex: 1 0 auto;
 }
 
-.navigation {
-  display: flex;
-  gap: 10px;
+.container {
+  max-width: 1300px;
+  width: 90%;
+  margin: 0 auto;
+}
 
-  & > button {
-    font-size: inherit;
-    padding: 5px 10px;
-    border: 1px solid blue;
-    transition: all .3s;
+button {
+  font-size: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
 
-    &:hover {
-      background-color: aqua;
+.wrapper {
+  margin-top: 129px;
+}
+
+.wave {
+  position: absolute;
+  width: 100%;
+
+  & > img {
+    position: absolute;
+    width: 100%;
+  }
+
+  &__top {
+    top: 0%;
+
+    & > img {
+      top: 0%;
+    }
+  }
+
+  &__bottom {
+    bottom: 0%;
+
+    & > img {
+      bottom: 0%;
     }
   }
 }
 
-.main {
-  flex: 1 1 auto;
+.shadow {
+  -webkit-box-shadow: 0px 5px 10px 2px $grey-dark;
+  -moz-box-shadow: 0px 5px 10px 2px $grey-dark;
+  box-shadow: 0px 5px 10px 2px $grey-dark;
 }
 
-.page {
-  min-height: 100%;
-  border: 5px dotted maroon;
-  font-size: 3rem;
+::-webkit-scrollbar {
+  width: 0.5rem;
 }
 
-.yellow {
-  background-color: rgb(139, 139, 66);
+::-webkit-scrollbar-track {
+  background: $grey-dark;
 }
 
-.green {
-  background-color: rgb(68, 110, 68);
+::-webkit-scrollbar-thumb {
+  background: $blue-dark;
+  border-radius: 0.25rem;
 }
 
-.blue {
-  background-color: rgb(70, 70, 129);
-}
-
-.red {
-  background-color: rgb(155, 96, 96);
-}
-
-.orange {
-  background-color: rgb(150, 124, 76);
-}
-
-.yellowgreen {
-  background-color: rgb(120, 141, 77);
-}
-
-.brown {
-  background-color: rgb(100, 54, 54);
-}
-
-.footer {
-  height: 50px;
-  padding: 10px;
-  color: white;
-  background-color: black;
-  border: 2px solid red;
-  text-align: center;
-}
-
-.game-button {
-  font-size: 2rem;
+.light {
+  position: absolute;
+  width: 0px;
+  opacity: .75;
   background-color: white;
-  color: black;
-  padding: 5px;
-  height: min-content;
+  box-shadow: #e9f1f1 0px 0px 20px 2px;
+  opacity: 0;
+  top: 20vh;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin: auto;
 }
 
-.flex {
-  display: flex;
-  gap: 1rem;
+.x1 {
+  animation: floatUp 4s infinite linear;
+  transform: scale(0.2);
+}
+
+.x2 {
+  animation: floatUp 7s infinite linear;
+  transform: scale(0.3);
+  left: 15%;
+}
+
+.x3 {
+  animation: floatUp 2.5s infinite linear;
+  transform: scale(0.1);
+  left: -15%;
+}
+
+.x4 {
+  animation: floatUp 4.5s infinite linear;
+  transform: scale(0.2);
+  left: -34%;
+}
+
+.x5 {
+  animation: floatUp 8s infinite linear;
+  transform: scale(0.4);
+  left: -57%;
+}
+
+.x6 {
+  animation: floatUp 3s infinite linear;
+  transform: scale(0.15);
+  left: -81%;
+}
+
+.x7 {
+  animation: floatUp 5.3s infinite linear;
+  transform: scale(0.6);
+  left: 37%;
+}
+
+.x8 {
+  animation: floatUp 4.7s infinite linear;
+  transform: scale(0.4);
+  left: 62%;
+}
+
+.x9 {
+animation: floatUp 4.1s infinite linear;
+transform: scale(0.2);
+left: 85%;
+}
+
+@keyframes floatUp {
+  0% {
+    top: 100vh;
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+  }
+
+  50% {
+    top: 0vh;
+    opacity: 0.8;
+  }
+
+  75% {
+    opacity: 1;
+  }
+
+  100% {
+    top: -100vh;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

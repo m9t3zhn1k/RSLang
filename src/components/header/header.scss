@@ -1,0 +1,71 @@
+@import "../../styles/pallete.scss";
+
+.header {
+  font-size: 1.15rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  color: $text-light;
+  padding-bottom: 50px;
+
+  &.hidden {
+    background: linear-gradient(-60deg, $blue-medium, $blue-dark);
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem 0.5rem;
+  }
+
+  &__block {
+    &_controls {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  &__wave {
+    bottom: 0%;
+
+    & > img {
+      bottom: 0%;
+    }
+
+    &.hidden {
+      visibility: hidden;
+      opacity: 0;
+    }
+  }
+
+  &__button {
+    padding: 0.25rem 1rem;
+    min-width: 95px;
+    border: 2px solid $text-light;
+    border-radius: 0.5rem;
+    transition: all .3s;
+
+    &:hover {
+      border: 2px solid $blue-light;
+      color: $text-black;
+      background-color: $text-light;
+    }
+  }
+}
+
+.logo {
+  &__image {
+    height: 50px;
+    width: 165px;
+    cursor: pointer;
+    transition: all .3s;
+    fill: $text-light;
+
+    &:hover {
+      fill: $blue-light;
+    }
+  }
+}

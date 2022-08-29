@@ -94,10 +94,6 @@ class SingIn extends BaseComponent {
     this.inputEmail.value = '';
     this.inputPassword.value = '';
   }
-
-  destroySingIn(): void {
-    this.remove();
-  }
 }
 
 export default SingIn;

@@ -1,17 +1,18 @@
 import { BaseComponent } from '../base-component/base-component';
 import { Router } from '../../router/router';
-import { IBaseComponent } from '../../types/types';
 import './games.scss';
 
 export class Games extends BaseComponent {
   constructor(parent: HTMLElement, router: Router) {
-    super(parent, 'section', ['page', 'blue', 'flex']);
-    const firstGameButton: IBaseComponent = new BaseComponent(this.element, 'button', ['game-button']);
-    const secondGameButton: IBaseComponent = new BaseComponent(this.element, 'button', ['game-button']);
-    firstGameButton.element.textContent = 'AudioChallenge';
-    secondGameButton.element.textContent = 'Sprint';
-    firstGameButton.element.id = 'audiochallenge';
-    secondGameButton.element.id = 'sprint';
-    router.navigateApp(this.element.childNodes);
+    super(parent, 'div', ['wrapper']);
+    const container: HTMLElement = new BaseComponent(this.element, 'div', ['container']).element;
+    const firstGameButton: HTMLElement = new BaseComponent(container, 'button', ['game-button']).element;
+    const secondGameButton: HTMLElement = new BaseComponent(container, 'button', ['game-button']).element;
+    firstGameButton.textContent = 'AudioChallenge';
+    secondGameButton.textContent = 'Sprint';
+    firstGameButton.id = 'audiochallenge';
+    secondGameButton.id = 'sprint';
+    new BaseComponent(container, 'p', [], 'I am the Games');
+    router.navigateApp([firstGameButton, secondGameButton]);
   }
 }
