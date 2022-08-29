@@ -1,4 +1,4 @@
-import { IConstants } from '../types/types';
+import { IConstants, ILanguageLevels } from '../types/types';
 
 export const constants: IConstants = {
   DEFAULT_PAGE: 'main',
@@ -34,7 +34,7 @@ export const SECTIONS_COLORS: {
   '6': '#190af2',
 };
 
-export const LANGUAGE_LEVELS = {
+export const LANGUAGE_LEVELS: ILanguageLevels = {
   A1: 0,
   A2: 1,
   B1: 2,
@@ -42,3 +42,5 @@ export const LANGUAGE_LEVELS = {
   C1: 4,
   C2: 5,
 };
+
+export const COUNT_WORDS = 5;
