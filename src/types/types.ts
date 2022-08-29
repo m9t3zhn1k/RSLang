@@ -150,4 +150,9 @@ export interface IBaseComponentInnerHTML {
   remove: () => void;
 }
 
+export interface IPlayList {
+  title: string;
+  src: string;
+}
+
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;

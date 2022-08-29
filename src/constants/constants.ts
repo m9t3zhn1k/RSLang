@@ -1,3 +1,5 @@
+import { IPlayList } from "../types/types";
+
 export const DEFAULT_PAGE: string = 'main';
 
 export const BASE_URL: string = 'https://app-rslang-exsample.herokuapp.com';
@@ -31,3 +33,14 @@ export const SECTIONS_COLORS: {
   '5': '#f20acb',
   '6': '#190af2',
 };
+
+export const PLAYLIST: IPlayList[] = [
+  {
+    title: 'right-answer',
+    src: '../assets/sounds/right_answer.mp3',
+  },
+  {
+    title: 'wrong-answer',
+    src: '../assets/sounds/wrong_answer.mp3',
+  },
+];

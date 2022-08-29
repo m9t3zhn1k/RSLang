@@ -1,4 +1,4 @@
-import { SPRINT_DURATION } from '../../constants/constants';
+import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
 import { getWords } from '../../controller/words-controller';
 import { IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
@@ -27,7 +27,6 @@ export class SprintGamePage {
 
   private answerIndicator3: HTMLElement;
 
-
   private wordEN: HTMLElement;
 
   private wordRU: HTMLElement;
@@ -35,6 +34,8 @@ export class SprintGamePage {
   private answerTrueButton: HTMLButtonElement;
 
   private answerFalseButton: HTMLButtonElement;
+
+  private audio: HTMLAudioElement = new Audio();
 
   constructor(private parent: HTMLElement, private group: number, private page: number) {
     this.initGame();
@@ -106,6 +107,7 @@ export class SprintGamePage {
   private handleAnswer(answer: boolean): void {
     const [first, second, third]: HTMLElement[] = [this.answerIndicator1, this.answerIndicator2, this.answerIndicator3];
     if (answer) {
+      this.playAudio(0);
       if (!this.isAnswerIndicatorGreen([first])) {
         this.setAnswerIndicatorGreen(first);
         this.updateScore();
@@ -129,6 +131,7 @@ export class SprintGamePage {
         return;
       }
     } else {
+      this.playAudio(1);
       this.removeAnswerIndicatorsGreen([first, second, third]);
       this.setPointsIncrementValue(false);
       return;
@@ -206,4 +209,10 @@ export class SprintGamePage {
     }
     return number;
   }
+
+  private playAudio = (index: number): void => {
+    this.audio.volume = 0.1;
+    this.audio.src = PLAYLIST[index].src;
+    this.audio.play();
+  };
 }
