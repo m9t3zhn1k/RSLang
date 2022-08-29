@@ -24,14 +24,22 @@ export class SprintStartPage {
     const languageLevelsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__levels']).element;
     const languageLevels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].map(
       (level: string, index: number): HTMLElement =>
+<<<<<<< HEAD
         new BaseComponent(languageLevelsContainer, 'button', ['game__button_level'], level, {
+=======
+        new BaseComponent(languageLevelsContainer, 'button', ['button', 'game__button_level'], level, {
+>>>>>>> f32c8057b83b65812a0924f367895a8bbf968d07
           id: `${index}`,
         }).element
     );
     const startGameButton: HTMLButtonElement = new BaseComponent(
       this.parent,
       'button',
+<<<<<<< HEAD
       ['game__button_start'],
+=======
+      ['button', 'game__button_start'],
+>>>>>>> f32c8057b83b65812a0924f367895a8bbf968d07
       'Начать игру',
       { disabled: '' }
     ).element as HTMLButtonElement;
