@@ -1,0 +1,201 @@
+@import "../../styles/pallete.scss";
+
+.word-card {
+    display: flex;
+    border: .1rem solid $blue-light;
+    box-shadow: 0px 0px 5px $blue-light;
+    padding: 1rem;
+    gap: 1rem;
+    max-width: 80rem;
+    border-radius: .5rem;
+    box-sizing: border-box;
+}
+
+.img {
+    width: 18rem;
+    border-radius: .2rem;
+}
+
+.allTextWrap {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    color: $grey-text;
+}
+
+.allTextWrap div:first-child {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 3rem;
+}
+
+.audio-button {
+    width: 3rem;
+    height: 3rem;
+    background-image: url(../../assets/icons/sound.svg);
+    background-size: contain;
+}
+.stop-audio {
+    background-image: url(../../assets/icons/stop.svg);
+}
+
+.audio-button:hover {
+    cursor: pointer;
+    opacity: .7;
+    transform: scale(1.05);
+}
+
+.first-text-line-wrap {
+    display: flex;
+    gap: 1rem;
+}
+
+.dif-button,
+.learned-button {
+    width: 3rem;
+    height: 3rem;
+    background-size: contain;
+}
+
+.dif-button:hover,
+.learned-button:hover {
+    cursor: pointer;
+    opacity: .7;
+    transform: scale(1.05);
+}
+
+.buttons-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-left: auto;
+    margin-right: 2rem;
+    padding: 1rem;
+}
+
+.dif-button {
+    background-image: url(../../assets/icons/add-to-difficult.svg);
+}
+
+.dif-button:hover::after {
+    content: 'добавить/удалить из сложных слов';
+    position: absolute;
+    opacity: .7;
+    font-size: 0.7rem;
+    width: 7rem; 
+    right: 100%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
+    border-radius: .5rem;
+}
+
+.learned-button {
+    background-image: url(../../assets/icons/add-to-learned.svg);
+}
+
+.learned-button:hover::after {
+    content: 'добавить/удалить из изученных слов';
+    position: absolute;
+    opacity: .7;
+    font-size: 0.7rem;
+    width: 7rem; 
+    right: 100%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
+    border-radius: .5rem;
+}
+
+.active-button.dif-button {
+    background-image: url(../../assets/icons/add-to-difficult-active.svg);
+}
+
+.active-button.learned-button {
+    background-image: url(../../assets/icons/add-to-learned-active.svg);
+}
+
+.point {
+    align-self: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.difficult-word {
+    border: .1rem solid $soft-red;
+    box-shadow: 0px 0px 5px $soft-red;
+}
+
+.learned-word {
+    border: .1rem solid $soft-green;
+    box-shadow: 0px 0px 5px $soft-green;
+}
+
+.learned-word .img,
+.learned-word .allTextWrap,
+.learned-word .game-result-wrap {
+    opacity: .2;
+}
+
+.game-result-wrap {
+    display: flex;
+    justify-content: space-between;
+    width: 5rem;
+    height: 2rem;
+}
+
+.game-result-pos,
+.game-result-neg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $grey-text;
+    font-family: inherit;
+    background-color: $soft-blue;
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+}
+
+.game-result-neg {
+    background-color: $soft-red;
+}
+
+.game-result-pos:hover::after {
+    content: 'количество правильных ответов';
+    position: absolute;
+    font-size: 0.7rem;
+    opacity: .7;
+    width: 7rem; 
+    right: 100%;
+    top: 70%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
+    border-radius: .5rem;
+}
+
+.game-result-neg:hover::after {
+    content: 'количество неправильных ответов';
+    position: absolute;
+    font-size: 0.7rem;
+    opacity: .7;
+    width: 8rem; 
+    right: 100%;
+    top: 70%;
+    font-size: 0.7rem;
+    border: 0.5px solid $blue-dark;
+    text-align: center;   
+    background: $text-light; 
+    padding: .2rem .5rem;
+    border-radius: .5rem;
+}

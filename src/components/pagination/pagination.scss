@@ -1,0 +1,40 @@
+@import "../../styles/pallete.scss";
+
+.pagination-wrap {
+    display: flex;
+    gap: .5rem;
+}
+
+.label {
+    display: flex;
+    gap: .5rem;
+    background-color: $blue-dark;
+    color: $text-light;
+    border-radius: .5rem;
+    padding: 0 .5rem;
+}
+
+.label-name,
+.label-page-num,
+.arrow-button {
+    line-height: 3rem;
+}
+
+.arrow-button {
+    width: 3rem;
+    height: 3rem;
+    border-radius: .5rem;
+    background-color: $blue-dark;
+    color: $text-light;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.arrow-button:hover {
+    cursor: pointer;
+    opacity: .8;
+}
+
+.learned-page-label {
+    background-color: $dark-green;
+ }

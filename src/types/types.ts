@@ -1,7 +1,8 @@
 import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
-import { Ebook } from '../components/ebook/ebook';
+import Ebook from '../components/ebook/ebook';
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
+import Pagination from '../components/pagination/pagination';
 import { SprintPage } from '../components/sprint-page/sprint-page';
 import { Statistics } from '../components/statistics/statistics';
 
@@ -103,3 +104,46 @@ export interface IWord {
   word: string;
   wordTranslate: string;
 }
+
+export interface IUserWord {
+  id: 'string';
+  optional: {
+    isDif: boolean;
+    isLearned: boolean;
+  };
+  wordId: 'string';
+}
+
+export interface IQueryParam {
+  key: string;
+  value: string;
+}
+
+export type RequestBody = {
+  optional: {
+    isDif: boolean;
+    isLearned: boolean;
+  };
+};
+
+export interface IEbook {
+  pagePagination: Pagination;
+  drawCards: () => Promise<void>;
+}
+
+export interface IPagination {
+  label: HTMLElement;
+  currentPageNum: number;
+}
+
+export interface IWordCards {
+  addToDifButton: HTMLElement;
+  addtoLearnedButton: HTMLElement;
+}
+
+export interface IBaseComponentInnerHTML {
+  element: HTMLElement;
+  remove: () => void;
+}
+
+export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;

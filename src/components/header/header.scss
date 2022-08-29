@@ -10,6 +10,10 @@
   color: $text-light;
   padding-bottom: 50px;
 
+  &.opaque {
+    background: linear-gradient(-60deg, $blue-medium, $blue-dark);
+  }
+
   &.hidden {
     background: linear-gradient(-60deg, $blue-medium, $blue-dark);
   }
