@@ -2,6 +2,7 @@ import { BaseComponent } from '../base-component/base-component';
 import timer_icon from '../../assets/icons/timer.svg';
 import './timer.scss';
 import { SprintResultPage } from '../sprint-page/sprint-game-results';
+import { IWord } from '../../types/types';
 
 export class Timer extends BaseComponent {
   private timePassed: number = 0;
@@ -11,6 +12,10 @@ export class Timer extends BaseComponent {
   private timerInterval: number | null = null;
 
   public timerInput: HTMLInputElement;
+
+  public results: { word: IWord; result: boolean }[] = [];
+
+  public score: number = 0;
 
   constructor(private parent: HTMLElement, className: string[], private timeLimit: number) {
     super(parent, 'div', className);
@@ -33,7 +38,7 @@ export class Timer extends BaseComponent {
       this.timerInput.value = `${this.timeLeft}`;
       if (this.timeLeft === 0) {
         this.onTimesUp();
-        new SprintResultPage(this.parent);
+        new SprintResultPage(this.parent, this.results, this.score);
       }
     }, 1000);
   }

@@ -75,7 +75,7 @@ export class SprintGamePage {
   private addEventListenersToButtons(): void {
     this.answerTrueButton.addEventListener('click', this.addWordResult.bind(this));
     this.answerFalseButton.addEventListener('click', this.addWordResult.bind(this));
-    window.addEventListener('keydown', this.addWordResult.bind(this));
+    window.addEventListener('keyup', this.addWordResult.bind(this));
   }
 
   private updateGameWord(): void {
@@ -97,20 +97,17 @@ export class SprintGamePage {
   }
 
   private isAnswerCorrect(e: Event): boolean {
-    let isCorrect: boolean;
-    if (this.answerFalseButton.disabled) {
-      return false;
-    }
-    if (e.type === 'keydown') {
+    let isCorrect: boolean = false;
+    if (((e as KeyboardEvent).code === 'ArrowLeft' || (e as KeyboardEvent).code === 'ArrowRight')) {
       isCorrect =
         ((e as KeyboardEvent).code === 'ArrowLeft' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         ((e as KeyboardEvent).code === 'ArrowRight' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
-    } else {
+    } else if (e instanceof MouseEvent) {
       const activeButton: HTMLElement = e.target as HTMLElement;
       isCorrect =
         (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
-    }
+    };
     this.handleAnswer(isCorrect);
     this.paintAnswer(isCorrect);
     return isCorrect;
@@ -190,13 +187,21 @@ export class SprintGamePage {
   private updateScore(): void {
     if (this.pointsCounter.textContent) {
       this.pointsCounter.textContent = `${parseInt(this.pointsCounter.textContent) + this.pointsIncrementValue} очков`;
+      this.timer.score = parseInt(this.pointsCounter.textContent) + this.pointsIncrementValue;
     }
   }
 
   private addWordResult(e: Event): void {
+    if (this.answerFalseButton.disabled) {
+      return;
+    }
+    if (e instanceof KeyboardEvent && !((e as KeyboardEvent).code === 'ArrowLeft' || (e as KeyboardEvent).code === 'ArrowRight')) {
+      return;
+    }
     const result: boolean = this.isAnswerCorrect(e);
     if (this.currentWord) {
       this.gameResults.push({ word: this.currentWord, result: result });
+      this.timer.results.push({ word: this.currentWord, result: result });
     }
     this.setNextGameWord();
   }
@@ -238,7 +243,7 @@ export class SprintGamePage {
     return number;
   }
 
-  private playAudio = (index: number): void => {
+  private playAudio(index: number): void {
     this.audio.volume = 0.1;
     this.audio.src = PLAYLIST[index].src;
     this.audio.play();
