@@ -1,4 +1,4 @@
-import { IPlayList } from "../types/types";
+import { IPlayList } from '../types/types';
 
 export const DEFAULT_PAGE: string = 'main';
 

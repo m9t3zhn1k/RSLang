@@ -97,7 +97,7 @@ export class SprintGamePage {
       isSettingWordTranslateCorrect === true
         ? this.currentWord.wordTranslate.toLowerCase()
         : this.gameWords[this.getRandomNumber(0, this.gameWords.length - 1, this.currentWordIndex)].wordTranslate;
-    setTimeout(() => {
+    setTimeout((): void => {
       this.wordEN.classList.remove('hidden');
       this.wordRU.classList.remove('hidden');
     }, 150);
@@ -105,7 +105,7 @@ export class SprintGamePage {
 
   private isAnswerCorrect(e: Event): boolean {
     let isCorrect: boolean = false;
-    if (((e as KeyboardEvent).code === 'ArrowLeft' || (e as KeyboardEvent).code === 'ArrowRight')) {
+    if ((e as KeyboardEvent).code === 'ArrowLeft' || (e as KeyboardEvent).code === 'ArrowRight') {
       isCorrect =
         ((e as KeyboardEvent).code === 'ArrowLeft' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         ((e as KeyboardEvent).code === 'ArrowRight' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
@@ -114,7 +114,7 @@ export class SprintGamePage {
       isCorrect =
         (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
-    };
+    }
     this.handleAnswer(isCorrect);
     this.paintAnswer(isCorrect);
     return isCorrect;
@@ -133,7 +133,7 @@ export class SprintGamePage {
       this.answerTrueButton.classList.remove('correct');
       this.answerFalseButton.classList.remove('wrong');
       this.answerTrueButton.classList.remove('wrong');
-    }, 200)
+    }, 200);
   }
 
   private handleAnswer(answer: boolean): void {
@@ -224,8 +224,13 @@ export class SprintGamePage {
       this.isGameEnded = true;
       this.answerTrueButton.remove();
       this.answerFalseButton.remove();
-      const renderResultPageButton: HTMLButtonElement = new BaseComponent(this.buttonsContainer, 'button', ['game__answer', 'game__answer_result'], 'Результат игры').element as HTMLButtonElement;
-      renderResultPageButton.onclick = () => {
+      const renderResultPageButton: HTMLButtonElement = new BaseComponent(
+        this.buttonsContainer,
+        'button',
+        ['game__answer', 'game__answer_result'],
+        'Результат игры'
+      ).element as HTMLButtonElement;
+      renderResultPageButton.onclick = (): void => {
         new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router);
       };
     }
@@ -233,15 +238,13 @@ export class SprintGamePage {
 
   private async getAdditionalGameWords(): Promise<void> {
     if (this.page > 0) {
-      console.log(this.page, this.gameWords.length);
       this.page -= 1;
       this.gameWords = this.gameWords.concat(await this.getGameWords());
-      console.log(this.page, this.gameWords.length);
     }
   }
 
   private handleKeyEvent(e: KeyboardEvent): void {
-    switch(e.code) {
+    switch (e.code) {
       case 'Enter':
       case 'NumpadEnter':
         if (this.isGameEnded) {
@@ -261,7 +264,7 @@ export class SprintGamePage {
     while (this.parent.firstChild) {
       this.parent.removeChild(this.parent.firstChild);
     }
-    this.gameWords = new Array().concat(await this.getGameWords());
+    this.gameWords = this.gameWords.concat(await this.getGameWords());
     this.timer.startTimer();
     this.addEventListenersToButtons();
     this.updateGameWord();
@@ -276,10 +279,13 @@ export class SprintGamePage {
     return words;
   }
 
-  private filterLearntWords = async (arr: IWord[]): Promise<IWord[]> => Promise.all(arr.map(async (word: IWord): Promise<boolean> => {
-    const item: IUserWord | null = await getOneUserWord(getUserId(), word.id);
-    return item?.optional.isLearned === true ? false : true;
-  })).then((results) => arr.filter((_, index) => results[index]));
+  private filterLearntWords = async (arr: IWord[]): Promise<IWord[]> =>
+    Promise.all(
+      arr.map(async (word: IWord): Promise<boolean> => {
+        const item: IUserWord | null = await getOneUserWord(getUserId(), word.id);
+        return item?.optional.isLearned === true ? false : true;
+      })
+    ).then((results): IWord[] => arr.filter((_, index): boolean => results[index]));
 
   private shuffle = (array: IWord[]): IWord[] => {
     const arraycopy = [...array];
@@ -302,5 +308,5 @@ export class SprintGamePage {
     this.audio.volume = 0.1;
     this.audio.src = PLAYLIST[index].src;
     this.audio.play();
-  };
+  }
 }

@@ -1,10 +1,8 @@
 import { Router } from '../../router/router';
 import { IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
-import Ebook from '../ebook/ebook';
 import { SprintGamePage } from './sprint-game-gaming';
 import { SprintStartPage } from './sprint-game-start';
-import { SprintPage } from './sprint-page';
 
 export class SprintResultPage {
   private correctAnswers: { word: IWord; result: boolean }[] = [];
@@ -13,21 +11,40 @@ export class SprintResultPage {
 
   private audio: HTMLAudioElement = new Audio();
 
-  constructor(private parent: HTMLElement, private results: { word: IWord; result: boolean }[], private score: number, private router: Router) {
+  constructor(
+    private parent: HTMLElement,
+    private results: { word: IWord; result: boolean }[],
+    private score: number,
+    private router: Router
+  ) {
     this.devideResults(this.results);
     this.renderResults();
   }
 
   private renderResults(): void {
-    while (this.parent.firstChild) {
-      this.parent.removeChild(this.parent.firstChild);
-    }
-    const buttonsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_buttons-container']).element;
-    const retryGameButton: HTMLElement = new BaseComponent(buttonsContainer, 'button', ['game__results_button'], 'Играть еще', { id: 'games' }).element;
-    const goToEbookButton: HTMLElement =new BaseComponent(buttonsContainer, 'button', ['game__results_button'], 'Перейти в учебник', { id: 'ebook' }).element;
+    this.cleanParent();
+    const buttonsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_buttons-container'])
+      .element;
+    const retryGameButton: HTMLElement = new BaseComponent(
+      buttonsContainer,
+      'button',
+      ['game__results_button'],
+      'Играть еще'
+    ).element;
+    const goToEbookButton: HTMLElement = new BaseComponent(
+      buttonsContainer,
+      'button',
+      ['game__results_button'],
+      'Перейти в учебник',
+      { id: 'ebook' }
+    ).element;
     new BaseComponent(this.parent, 'p', ['game__results_score'], `Набрано ${this.score} очков`);
-    const correctAnswersContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_answers-container']).element;
-    const wrongAnswersContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_answers-container']).element;
+    const correctAnswersContainer: HTMLElement = new BaseComponent(this.parent, 'div', [
+      'game__results_answers-container',
+    ]).element;
+    const wrongAnswersContainer: HTMLElement = new BaseComponent(this.parent, 'div', [
+      'game__results_answers-container',
+    ]).element;
     if (this.correctAnswers.length) {
       new BaseComponent(correctAnswersContainer, 'p', ['game__results_answer-title'], 'Правильные ответы');
       this.renderWordResults(this.correctAnswers, correctAnswersContainer);
@@ -36,13 +53,17 @@ export class SprintResultPage {
       new BaseComponent(wrongAnswersContainer, 'p', ['game__results_answer-title'], 'Ошибочные ответы');
       this.renderWordResults(this.wrongAnswers, wrongAnswersContainer);
     }
-    retryGameButton.addEventListener('click', () => {
-      while (this.parent.firstChild) {
-        this.parent.removeChild(this.parent.firstChild);
-      }
+    retryGameButton.addEventListener('click', (): void => {
+      this.cleanParent();
       new SprintStartPage(this.parent, SprintGamePage, this.router);
     });
     this.router.navigateApp([goToEbookButton]);
+  }
+
+  private cleanParent(): void {
+    while (this.parent.firstChild) {
+      this.parent.removeChild(this.parent.firstChild);
+    }
   }
 
   private devideResults(results: { word: IWord; result: boolean }[]): void {
@@ -57,7 +78,7 @@ export class SprintResultPage {
       new BaseComponent(wordContainer, 'span', [], `${result.word.word}`);
       new BaseComponent(wordContainer, 'span', [], `${result.word.transcription}`);
       new BaseComponent(wordContainer, 'span', [], `${result.word.wordTranslate}`);
-      soundIcon.addEventListener('click', () => {
+      soundIcon.addEventListener('click', (): void => {
         this.playAudio(result.word.audio, soundIcon);
         soundIcon.classList.add('active');
       });
@@ -68,6 +89,6 @@ export class SprintResultPage {
     this.audio.volume = 0.1;
     this.audio.src = src;
     this.audio.play();
-    this.audio.addEventListener('ended', () => element.classList.remove('active'));
-  };
+    this.audio.addEventListener('ended', (): void => element.classList.remove('active'));
+  }
 }
