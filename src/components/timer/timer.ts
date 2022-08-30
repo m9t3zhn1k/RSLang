@@ -27,7 +27,7 @@ export class Timer extends BaseComponent {
     this.renderTimerIcon(timerIcon, this.element);
   }
 
-  private onTimesUp(): void {
+  public onTimesUp(): void {
     clearInterval(this.timerInterval as number);
   }
 

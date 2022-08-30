@@ -191,6 +191,12 @@
       visibility: hidden;
       opacity: 0;
     }
+
+    &.transformed {
+      transition: all 0s;
+      color: $text-light;
+      font-size: 2rem;
+    }
   }
 
   &__answer {
@@ -201,19 +207,20 @@
 
     &_true {
       border-radius: 23px 0 0 23px;
-
-      &:hover {
-        background-color: $blue-darkest;
-      }
     }
 
     &_false {
       border-radius: 0 23px 23px 0;
       border-left: none;
+    }
 
-      &:hover {
-        background-color: $blue-darkest;
-      }
+    &_result {
+      min-width: 16rem;
+      border-radius: 23px;
+    }
+
+    &:hover {
+      background-color: $blue-darkest;
     }
 
     &:active {

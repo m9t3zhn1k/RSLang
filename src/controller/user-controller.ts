@@ -1,5 +1,6 @@
 import { BASE_URL } from '../constants/constants';
 import { IGetAllUsersWords, IUser, IUserWord, RequestBody } from '../types/types';
+
 export const getToken: () => string | null = (): string | null => {
   if (window.localStorage.getItem('rslang-team58-user')) {
     return JSON.parse(window.localStorage.getItem('rslang-team58-user') ?? ' ').token;
