@@ -1,5 +1,5 @@
 import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
-import { getOneUserWord, getUserId } from '../../controller/user-controller';
+import { /* createUserWord, */ getOneUserWord, getUserId /* updateUserWord */ } from '../../controller/user-controller';
 import { getWords } from '../../controller/words-controller';
 import { Router } from '../../router/router';
 import { IUserWord, IWord } from '../../types/types';
@@ -103,6 +103,15 @@ export class SprintGamePage {
     }, 150);
   }
 
+  /* private async updateWordStatistic(wordId: string, result: boolean): Promise<void> {
+    const item: IUserWord | null = await getOneUserWord(getUserId(), wordId);
+    if (item) {
+      updateUserWord(getUserId(), wordId, );
+    } else {
+      createUserWord();
+    }
+  } */
+
   private isAnswerCorrect(e: Event): boolean {
     let isCorrect: boolean = false;
     if ((e as KeyboardEvent).code === 'ArrowLeft' || (e as KeyboardEvent).code === 'ArrowRight') {
@@ -115,6 +124,9 @@ export class SprintGamePage {
         (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
     }
+    /* if (this.currentWord?.id) {
+      this.updateWordStatistic(this.currentWord.id, isCorrect);
+    } */
     this.handleAnswer(isCorrect);
     this.paintAnswer(isCorrect);
     return isCorrect;
