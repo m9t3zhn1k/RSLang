@@ -245,11 +245,34 @@
     }
   }
 
+  &__results_buttons-container {
+    display: flex;
+    gap: 1rem;
+  }
+
+  &__results_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    border: 2px solid $text-light;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    min-width: 16rem;
+
+    &:hover {
+      border: 2px solid $blue-light;
+      color: $text-black;
+      background-color: $text-light;
+    }
+  }
+
   &__results_score {
     font-size: 2.5rem;
     font-weight: 600;
     padding: 0.5rem 1rem;
     padding-top: 0;
+    border-bottom: 2px solid #02bfdf;
   }
 
   &__results_answer {

@@ -1,6 +1,7 @@
 import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
 import { getOneUserWord, getUserId } from '../../controller/user-controller';
 import { getWords } from '../../controller/words-controller';
+import { Router } from '../../router/router';
 import { IUserWord, IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Timer } from '../timer/timer';
@@ -43,9 +44,9 @@ export class SprintGamePage {
 
   private isGameEnded: boolean = false;
 
-  constructor(private parent: HTMLElement, private group: number, private page: number) {
+  constructor(private parent: HTMLElement, private group: number, private page: number, private router: Router) {
     this.initGame();
-    this.timer = new Timer(this.parent, ['timer'], SPRINT_DURATION);
+    this.timer = new Timer(this.parent, ['timer'], SPRINT_DURATION, this.router);
     const pointsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__points']).element;
     const pointsAnswerIndicators: HTMLElement = new BaseComponent(pointsContainer, 'div', ['game__points_indicators'])
       .element;
@@ -225,7 +226,7 @@ export class SprintGamePage {
       this.answerFalseButton.remove();
       const renderResultPageButton: HTMLButtonElement = new BaseComponent(this.buttonsContainer, 'button', ['game__answer', 'game__answer_result'], 'Результат игры').element as HTMLButtonElement;
       renderResultPageButton.onclick = () => {
-        new SprintResultPage(this.parent, this.gameResults, this.timer.score);
+        new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router);
       };
     }
   }
@@ -244,7 +245,7 @@ export class SprintGamePage {
       case 'Enter':
       case 'NumpadEnter':
         if (this.isGameEnded) {
-          new SprintResultPage(this.parent, this.gameResults, this.timer.score);
+          new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router);
         }
         break;
       case 'ArrowLeft':

@@ -1,5 +1,10 @@
+import { Router } from '../../router/router';
 import { IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
+import Ebook from '../ebook/ebook';
+import { SprintGamePage } from './sprint-game-gaming';
+import { SprintStartPage } from './sprint-game-start';
+import { SprintPage } from './sprint-page';
 
 export class SprintResultPage {
   private correctAnswers: { word: IWord; result: boolean }[] = [];
@@ -8,7 +13,7 @@ export class SprintResultPage {
 
   private audio: HTMLAudioElement = new Audio();
 
-  constructor(private parent: HTMLElement, private results: { word: IWord; result: boolean }[], private score: number) {
+  constructor(private parent: HTMLElement, private results: { word: IWord; result: boolean }[], private score: number, private router: Router) {
     this.devideResults(this.results);
     this.renderResults();
   }
@@ -17,13 +22,27 @@ export class SprintResultPage {
     while (this.parent.firstChild) {
       this.parent.removeChild(this.parent.firstChild);
     }
+    const buttonsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_buttons-container']).element;
+    const retryGameButton: HTMLElement = new BaseComponent(buttonsContainer, 'button', ['game__results_button'], 'Играть еще', { id: 'games' }).element;
+    const goToEbookButton: HTMLElement =new BaseComponent(buttonsContainer, 'button', ['game__results_button'], 'Перейти в учебник', { id: 'ebook' }).element;
     new BaseComponent(this.parent, 'p', ['game__results_score'], `Набрано ${this.score} очков`);
     const correctAnswersContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_answers-container']).element;
     const wrongAnswersContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_answers-container']).element;
-    new BaseComponent(correctAnswersContainer, 'p', ['game__results_answer-title'], 'Правильные ответы');
-    new BaseComponent(wrongAnswersContainer, 'p', ['game__results_answer-title'], 'Ошибочные ответы');
-    this.renderWordResults(this.correctAnswers, correctAnswersContainer);
-    this.renderWordResults(this.wrongAnswers, wrongAnswersContainer);
+    if (this.correctAnswers.length) {
+      new BaseComponent(correctAnswersContainer, 'p', ['game__results_answer-title'], 'Правильные ответы');
+      this.renderWordResults(this.correctAnswers, correctAnswersContainer);
+    }
+    if (this.wrongAnswers.length) {
+      new BaseComponent(wrongAnswersContainer, 'p', ['game__results_answer-title'], 'Ошибочные ответы');
+      this.renderWordResults(this.wrongAnswers, wrongAnswersContainer);
+    }
+    retryGameButton.addEventListener('click', () => {
+      while (this.parent.firstChild) {
+        this.parent.removeChild(this.parent.firstChild);
+      }
+      new SprintStartPage(this.parent, SprintGamePage, this.router);
+    });
+    this.router.navigateApp([goToEbookButton]);
   }
 
   private devideResults(results: { word: IWord; result: boolean }[]): void {

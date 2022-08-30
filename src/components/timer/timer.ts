@@ -3,6 +3,7 @@ import timer_icon from '../../assets/icons/timer.svg';
 import './timer.scss';
 import { SprintResultPage } from '../sprint-page/sprint-game-results';
 import { IWord } from '../../types/types';
+import { Router } from '../../router/router';
 
 export class Timer extends BaseComponent {
   private timePassed: number = 0;
@@ -17,7 +18,7 @@ export class Timer extends BaseComponent {
 
   public score: number = 0;
 
-  constructor(private parent: HTMLElement, className: string[], private timeLimit: number) {
+  constructor(private parent: HTMLElement, className: string[], private timeLimit: number, private router: Router) {
     super(parent, 'div', className);
     const timerIcon: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.timeLeft = this.timeLimit;
@@ -38,7 +39,7 @@ export class Timer extends BaseComponent {
       this.timerInput.value = `${this.timeLeft}`;
       if (this.timeLeft === 0) {
         this.onTimesUp();
-        new SprintResultPage(this.parent, this.results, this.score);
+        new SprintResultPage(this.parent, this.results, this.score, this.router);
       }
     }, 1000);
   }

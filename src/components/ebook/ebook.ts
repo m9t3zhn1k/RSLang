@@ -17,7 +17,7 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private sectionPagination: Pagination;
 
-  public pagePagination;
+  public pagePagination: Pagination;
 
   private audioGame: HTMLElement;
 

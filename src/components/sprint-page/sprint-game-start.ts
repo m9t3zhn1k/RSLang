@@ -1,3 +1,4 @@
+import { Router } from '../../router/router';
 import { BaseComponent } from '../base-component/base-component';
 import { SprintGamePage } from './sprint-game-gaming';
 
@@ -6,7 +7,7 @@ export class SprintStartPage {
 
   private page: number = 0;
 
-  constructor(private parent: HTMLElement, private nextPage: typeof SprintGamePage) {
+  constructor(private parent: HTMLElement, private nextPage: typeof SprintGamePage, private router: Router) {
     this.renderStartPage();
   }
 
@@ -70,7 +71,7 @@ export class SprintStartPage {
     );
     startGameButton.addEventListener(
       'click',
-      (): SprintGamePage => new this.nextPage(this.parent, this.group, this.page)
+      (): SprintGamePage => new this.nextPage(this.parent, this.group, this.page, this.router)
     );
   }
 
