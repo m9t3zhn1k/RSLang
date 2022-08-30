@@ -143,6 +143,7 @@ export type Optional = {
 export interface IEbook {
   pagePagination: Pagination;
   numOfLearnedOrDifCards: number;
+  audioFlag: boolean;
   drawCards: () => Promise<void>;
   addLearnedStyleToPage: () => void;
 }

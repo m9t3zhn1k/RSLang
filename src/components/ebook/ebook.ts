@@ -16,16 +16,19 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private sectionPagination: Pagination;
 
-  public pagePagination;
-
-  public numOfLearnedOrDifCards;
-
   private audioGame: HTMLButtonElement;
 
   private sprintGame: HTMLButtonElement;
 
+  public audioFlag;
+
+  public pagePagination;
+
+  public numOfLearnedOrDifCards;
+
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
+    this.audioFlag = true;
     new BaseComponent(this.element, 'div', ['title'], 'Учебник');
     this.controls = new BaseComponent(this.element, 'div', ['controls']).element;
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;

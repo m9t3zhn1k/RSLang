@@ -80,7 +80,10 @@ export default class WordCards extends BaseComponent implements IWordCards {
         audio.pause();
         audio.currentTime = 0;
       });
-    } else {
+      this.ebook.audioFlag = true;
+    } else if (this.ebook.audioFlag) {
+      this.ebook.audioFlag = false;
+      this.audioButton.classList.add('stop-audio');
       this.audioArr[0].play();
       this.audioArr[0].addEventListener('ended', (): void => {
         this.audioArr[1].play();
@@ -88,6 +91,7 @@ export default class WordCards extends BaseComponent implements IWordCards {
           this.audioArr[2].play();
           this.audioArr[2].addEventListener('ended', (): void => {
             this.audioButton.classList.remove('stop-audio');
+            this.ebook.audioFlag = true;
           });
         });
       });
