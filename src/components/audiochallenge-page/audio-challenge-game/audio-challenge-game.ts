@@ -1,7 +1,7 @@
-import { BASE_URL } from '../../../constants/constants';
 import { IWord } from '../../../types/types';
 import { BaseComponent } from '../../base-component/base-component';
 import imgSound from '../../../assets/sound.svg';
+import { COUNT_WORDS } from '../../../constants/constants';
 
 class AudioChallengeGame extends BaseComponent {
   private audio: HTMLAudioElement;
@@ -46,8 +46,8 @@ class AudioChallengeGame extends BaseComponent {
 
   private getRandomNum(): number[] {
     const arr: number[] = [this.counterWord];
-    while (arr.length < 5) {
-      const num = Math.floor(Math.random() * this.dataWords.length);
+    while (arr.length < COUNT_WORDS) {
+      const num: number = Math.floor(Math.random() * this.dataWords.length);
       if (!arr.includes(num) && !this.currentWords.includes(num)) {
         arr.push(num);
         this.currentWords.push(num);
