@@ -1,7 +1,7 @@
 import './ebook.scss';
 import '../word-card/word-card.scss';
 import { IWord, IUserWord, IEbook } from '../../types/types';
-import { getOneUserWord, getAllUsersWords, getUserId } from '../../controller/user-controller';
+import { getAllUsersWords, getUserId, getUserAgrWords } from '../../controller/user-controller';
 import { getWords, getOneWord } from '../../controller/words-controller';
 import { BaseComponent } from '../base-component/base-component';
 import Button from '../button/button';
@@ -28,10 +28,8 @@ export default class Ebook extends BaseComponent implements IEbook {
     new BaseComponent(this.element, 'div', ['title'], 'Учебник');
     this.controls = new BaseComponent(this.element, 'div', ['controls']).element;
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
-
     this.sectionPagination = new Pagination(this.controls, 'section', this);
     this.pagePagination = new Pagination(this.controls, 'page', this);
-    this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
     this.audioGame = new Button(this.controls, 'Аудиовызов').element;
     this.sprintGame = new Button(this.controls, 'Спринт').element;
     this.audioGame.id = 'audiochallenge';
@@ -44,13 +42,18 @@ export default class Ebook extends BaseComponent implements IEbook {
   public drawCards = async (): Promise<void> => {
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
-    const wordsArr: IWord[] = await getWords(sectionNumForApi, pageNumForApi);
+    let words: IWord[];
+    if (getUserId()) {
+      words = await getUserAgrWords(sectionNumForApi, pageNumForApi);
+    } else {
+      words = await getWords(sectionNumForApi, pageNumForApi);
+    }
     this.cardsView.classList.remove('learned-page');
     this.pagePagination.label.classList.remove('learned-page-label');
     this.cardsView.innerHTML = '';
 
     if (sectionNumForApi !== MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED) {
-      this.drawRegularSection(wordsArr, sectionNumForApi);
+      this.drawRegularSection(words, sectionNumForApi);
     } else {
       this.drawDifWordsSection();
     }
@@ -63,29 +66,27 @@ export default class Ebook extends BaseComponent implements IEbook {
     });
   };
 
-  private drawRegularSection = (wordsArr: IWord[], sectionNumForApi: number): void => {
-    const userId: string | null = getUserId();
+  private drawRegularSection = (words: IWord[], sectionNumForApi: number): void => {
     this.audioGame.classList.remove('non-active-button');
     this.sprintGame.classList.remove('non-active-button');
-    const wordsCardsArr: Promise<HTMLElement>[] = wordsArr.map(async (wordData: IWord): Promise<HTMLElement> => {
+    const wordsCards: HTMLElement[] = words.map((wordData: IWord): HTMLElement => {
       const wordCard: WordCards = new WordCards(
         this.cardsView,
         wordData,
         `${sectionNumForApi}` as keyof typeof SECTIONS_COLORS
       );
-      const options: IUserWord | null = await getOneUserWord(userId, wordData.id);
-      if (options?.optional.isLearned) {
+      if (wordData.userWord?.optional?.isLearnt) {
         wordCard.addtoLearnedButton.classList.add('active-button');
         wordCard.addToDifButton.style.visibility = 'hidden';
         wordCard.element.classList.add('learned-word');
-      } else if (options?.optional.isDif) {
+      } else if (wordData.userWord?.optional?.isDif) {
         wordCard.addToDifButton.classList.add('active-button');
         wordCard.element.classList.add('difficult-word');
       }
       return wordCard.element;
     });
     this.pagePagination.element.style.display = 'flex';
-    Promise.all(wordsCardsArr).then((res: HTMLElement[]): void => {
+    Promise.all(wordsCards).then((res: HTMLElement[]): void => {
       if (res.every((card: HTMLElement): boolean => card.classList.contains('learned-word'))) {
         this.cardsView.classList.add('learned-page');
         this.pagePagination.label.classList.add('learned-page-label');

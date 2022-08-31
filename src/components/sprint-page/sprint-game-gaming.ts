@@ -294,7 +294,7 @@ export class SprintGamePage {
   private filterLearntWords = async (arr: IWord[]): Promise<IWord[]> =>
     Promise.all(
       arr.map(async (word: IWord): Promise<boolean> => {
-        const item: IUserWord | null = await getOneUserWord(getUserId(), word.id);
+        const item: IUserWord | null = await getOneUserWord(word.id);
         return item?.optional.isLearned === true ? false : true;
       })
     ).then((results): IWord[] => arr.filter((_, index): boolean => results[index]));

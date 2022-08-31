@@ -107,15 +107,35 @@ export interface IWord {
   transcription: string;
   word: string;
   wordTranslate: string;
+  userWord?: { difficulty: string; optional?: { isDif: boolean; isLearnt?: boolean } };
 }
 
+export interface IResponseWord {
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  _id: string;
+  image: string;
+  page: number;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+  textExample: string;
+}
+
+export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCount: [{ count: number }] };
+
 export interface IUserWord {
-  id: 'string';
+  id: string;
   optional: {
     isDif: boolean;
     isLearned: boolean;
   };
-  wordId: 'string';
+  wordId: string;
 }
 
 export interface IQueryParam {

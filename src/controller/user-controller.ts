@@ -1,5 +1,13 @@
 import { BASE_URL } from '../constants/constants';
-import { IGetAllUsersWords, IUser, IUserWord, RequestBody } from '../types/types';
+import {
+  IAggregatedResponse,
+  IGetAllUsersWords,
+  IResponseWord,
+  IUser,
+  IUserWord,
+  IWord,
+  RequestBody,
+} from '../types/types';
 
 export const getToken: () => string | null = (): string | null => {
   if (window.localStorage.getItem('rslang-team58-user')) {
@@ -68,11 +76,10 @@ export const createToken: (userId: string, refreshToken: string) => Promise<void
   await rawResponse.json();
 };
 
-export const getOneUserWord: (userId: string | null, wordId: string) => Promise<IUserWord | null> = async (
-  userId: string | null,
+export const getOneUserWord: (wordId: string) => Promise<IUserWord | null> = async (
   wordId: string
 ): Promise<IUserWord | null> => {
-  const resp: Response = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
+  const resp: Response = await fetch(`${BASE_URL}/users/${getUserId()}/words/${wordId}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -80,6 +87,78 @@ export const getOneUserWord: (userId: string | null, wordId: string) => Promise<
     },
   });
   return resp.ok ? resp.json() : null;
+};
+
+export const getUserAgrWord = async (wordId: string): Promise<IUserWord[]> => {
+  const resp: Response = await fetch(`${BASE_URL}/users/${getUserId()}/aggregatedWords/${wordId}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+      Accept: 'application/json',
+    },
+  });
+  return resp.json().then((item): IUserWord[] =>
+    item[0].paginatedResults.map(
+      (i: IResponseWord): IWord => ({
+        ...i,
+        id: i._id,
+        image: `${BASE_URL}/${i.image}`,
+        audio: `${BASE_URL}/${i.audio}`,
+        audioMeaning: `${BASE_URL}/${i.audioMeaning}`,
+        audioExample: `${BASE_URL}/${i.audioExample}`,
+      })
+    )
+  );
+};
+
+export const getUserAgrWords = async (group: number, page: number): Promise<IWord[]> => {
+  const resp: Response = await fetch(
+    `${BASE_URL}/users/${getUserId()}/aggregatedWords?group=${group}&wordsPerPage=600&filter={"page":${page}}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        Accept: 'application/json',
+      },
+    }
+  );
+  return resp.json().then((item: IAggregatedResponse[]): IWord[] =>
+    item[0].paginatedResults.map(
+      (i: IResponseWord): IWord => ({
+        ...i,
+        id: i._id,
+        image: `${BASE_URL}/${i.image}`,
+        audio: `${BASE_URL}/${i.audio}`,
+        audioMeaning: `${BASE_URL}/${i.audioMeaning}`,
+        audioExample: `${BASE_URL}/${i.audioExample}`,
+      })
+    )
+  );
+};
+
+export const getHardUserWords = async (): Promise<IWord[]> => {
+  const resp: Response = await fetch(
+    `${BASE_URL}/users/${getUserId()}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.isDif":"true"}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        Accept: 'application/json',
+      },
+    }
+  );
+  return resp.json().then((item: IAggregatedResponse[]): IWord[] =>
+    item[0].paginatedResults.map(
+      (i: IResponseWord): IWord => ({
+        ...i,
+        id: i._id,
+        image: `${BASE_URL}/${i.image}`,
+        audio: `${BASE_URL}/${i.audio}`,
+        audioMeaning: `${BASE_URL}/${i.audioMeaning}`,
+        audioExample: `${BASE_URL}/${i.audioExample}`,
+      })
+    )
+  );
 };
 
 export const updateUserWord = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
@@ -109,7 +188,7 @@ export const addOptional = async (type: 'dif' | 'learned', wordId: string): Prom
   if (!userId) {
     return;
   }
-  const userWordData = await getOneUserWord(userId, wordId);
+  const userWordData = await getOneUserWord(wordId);
   if (userWordData) {
     const requestBody: RequestBody = { optional: userWordData.optional };
     type === 'dif'
