@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   color: $text-light;
-  height: 100vh;
+  height: 100%;
   background: $background-gradient-game;
 
   &__start,
@@ -29,7 +29,6 @@
     padding: 1rem 1.5rem;
     border: 2px solid $text-light;
     font-size: 1.25rem;
-    margin-top: 2.5rem;
     cursor: pointer;
 
     &.start-game,
@@ -145,16 +144,7 @@
   }
 
   &__result {
-    width: 100%;
-    height: 60vh;
-    border: 1px solid $grey-dark;
-    margin: 0 auto 1rem;
-    padding: 30px 50px;
-    overflow: auto;
-    max-width: 650px;
-    border-radius: 10px;
-    background-color: $text-light;
-    color: $text-black;
+    padding: 150px 0px 0px 0px;
   }
 }
 
@@ -217,7 +207,6 @@
     border-radius: 10px;
     transform: scale(0);
     transition: transform 0.22s ease-out;
-
 
     &.active {
       transform: scale(1);
@@ -367,10 +356,11 @@
 }
 
 .word-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 2rem repeat(3, 200px);
+  grid-gap: 1rem;
   align-items: center;
-  padding: 10px 0px;
-  color: $text-black;
+  justify-content: center;
 
   &__sound {
     margin: 0px 30px 0px 0px;
@@ -400,7 +390,6 @@
       transform: scale(1)
     }
 
-
     img {
       display: block;
       width: 50%;
@@ -417,12 +406,6 @@
 
   &__word {
     font-weight: 700;
-    color: $text-black;
-  }
-
-  &__word-translate {
-    color: $text-black;
-    opacity: .7;
   }
 }
 
@@ -432,10 +415,9 @@
       content: '';
       display: block;
       width: 100%;
-      height: 1px;
-      background: $text-black;
+      height: 2px;
+      background: $text-light;
       opacity: .2;
-      color: $blue-darkest;
       margin: 30px 0px;
     }
   }
@@ -443,10 +425,13 @@
   &__title {
     text-transform: uppercase;
     font-weight: 700;
+    padding: 0px 0px 20px 0px;
   }
 
   &__buttons {
     display: flex;
+    justify-content: center;
     gap: 30px;
+    padding: 0px 0px 30px 0px;
   }
 }
