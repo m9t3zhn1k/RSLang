@@ -1,5 +1,8 @@
 import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
-import { /* createUserWord, */ getUserAgrGameWords, getUserId /* updateUserWord */ } from '../../controller/user-controller';
+import {
+  /* createUserWord, */ getUserAgrGameWords,
+  getUserId /* updateUserWord */,
+} from '../../controller/user-controller';
 import { getWords } from '../../controller/words-controller';
 import { Router } from '../../router/router';
 import { IWord } from '../../types/types';
@@ -277,7 +280,9 @@ export class SprintGamePage {
   private async getGameWords(): Promise<IWord[]> {
     let words: IWord[] = [];
     if (getUserId()) {
-      words = (await getUserAgrGameWords(this.group)).filter((words: IWord): boolean => !words.userWord?.optional?.isLearned && words.page <= this.page);
+      words = (await getUserAgrGameWords(this.group)).filter(
+        (word: IWord): boolean => !word.userWord?.optional?.isLearned && word.page <= this.page
+      );
     } else {
       while (this.page >= 0) {
         words = words.concat(await getWords(this.group, this.page));

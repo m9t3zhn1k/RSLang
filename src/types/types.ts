@@ -176,3 +176,5 @@ export interface IPlayList {
 }
 
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
+
+export type WordResult = { word: IWord; result: boolean };

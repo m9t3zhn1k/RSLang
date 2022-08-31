@@ -1,19 +1,23 @@
 import { Router } from '../../router/router';
-import { IWord } from '../../types/types';
+import { IWord, WordResult } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import { SprintGamePage } from './sprint-game-gaming';
 import { SprintStartPage } from './sprint-game-start';
 
 export class SprintResultPage {
-  private correctAnswers: { word: IWord; result: boolean }[] = [];
+  private correctAnswers: WordResult[] = [];
 
-  private wrongAnswers: { word: IWord; result: boolean }[] = [];
+  private wrongAnswers: WordResult[] = [];
 
-  private audio: HTMLAudioElement = new Audio();
+  private audio?: HTMLAudioElement;
+
+  private isPlaying: boolean = false;
+
+  private soundButtons: HTMLElement[] = [];
 
   constructor(
     private parent: HTMLElement,
-    private results: { word: IWord; result: boolean }[],
+    private results: WordResult[],
     private score: number,
     private router: Router
   ) {
@@ -80,15 +84,30 @@ export class SprintResultPage {
       new BaseComponent(wordContainer, 'span', [], `${result.word.wordTranslate}`);
       soundIcon.addEventListener('click', (): void => {
         this.playAudio(result.word.audio, soundIcon);
-        soundIcon.classList.add('active');
+        this.soundButtons.push(soundIcon);
       });
     });
   }
 
   private playAudio(src: string, element: HTMLElement): void {
-    this.audio.volume = 0.1;
-    this.audio.src = src;
-    this.audio.play();
-    this.audio.addEventListener('ended', (): void => element.classList.remove('active'));
+    if (!this.isPlaying || this.audio?.ended) {
+      this.audio = new Audio();
+      this.audio.volume = 0.1;
+      this.audio.src = src;
+      this.audio.play();
+      this.isPlaying = true;
+      element.classList.add('active');
+    } else if (this.isPlaying) {
+      const activeButton: HTMLElement = this.soundButtons.filter((button: HTMLElement): boolean =>
+        button.classList.contains('active')
+      )[0];
+      this.audio?.pause();
+      this.isPlaying = false;
+      element.classList.remove('active');
+      this.soundButtons.forEach((button: HTMLElement): void => button.classList.remove('active'));
+      if (element !== activeButton) {
+        this.playAudio(src, element);
+      }
+    }
   }
 }
