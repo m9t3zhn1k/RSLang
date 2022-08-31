@@ -109,7 +109,7 @@ export default class WordCards extends BaseComponent implements IWordCards {
       } else {
         this.addToDifButton.style.visibility = 'visible';
         if (getUserId()) {
-          getOneUserWord(getUserId(), this.wordData.id).then((res: IUserWord | null): void => {
+          getOneUserWord(this.wordData.id).then((res: IUserWord | null): void => {
             if (res?.optional.isDif) {
               this.addToDifButton.classList.add('active-button');
               this.element.classList.add('difficult-word');
