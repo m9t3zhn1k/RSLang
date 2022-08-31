@@ -1,4 +1,4 @@
-import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
+import { AudioChallengePage } from '../components/audiochallenge-page/audiochallenge-page';
 import Ebook from '../components/ebook/ebook';
 import { Footer } from '../components/footer/footer';
 import { Games } from '../components/games/games';
@@ -51,7 +51,7 @@ export class Router implements IRouter {
         this.header.element.classList.remove('opaque');
         this.header.wave.classList.add('hidden');
         this.footer.element.classList.add('hidden');
-        return AudiochallengePage;
+        return AudioChallengePage;
       case this.mainPage:
       default:
         this.header.element.classList.remove('opaque');
@@ -71,7 +71,7 @@ export class Router implements IRouter {
     if (
       this.currentPage instanceof MainPage ||
       this.currentPage instanceof SprintPage ||
-      this.currentPage instanceof AudiochallengePage
+      this.currentPage instanceof AudioChallengePage
     ) {
       this.header.wave.classList.add('hidden');
       this.header.element.classList.remove('opaque');
@@ -79,11 +79,9 @@ export class Router implements IRouter {
       this.header.wave.classList.remove('hidden');
       this.header.element.classList.add('opaque');
     }
-    if (this.currentPage instanceof SprintPage || this.currentPage instanceof AudiochallengePage) {
-      //this.header.element.classList.add('hidden');
+    if (this.currentPage instanceof SprintPage || this.currentPage instanceof AudioChallengePage) {
       this.footer.element.classList.add('hidden');
     } else {
-      //this.header.element.classList.remove('hidden');
       this.footer.element.classList.remove('hidden');
     }
   }

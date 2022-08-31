@@ -1,4 +1,4 @@
-import { IPlayList } from '../types/types';
+import { IPlayList, ILanguageLevels } from '../types/types';
 
 export const DEFAULT_PAGE: string = 'main';
 
@@ -34,6 +34,7 @@ export const SECTIONS_COLORS: {
   '6': '#190af2',
 };
 
+
 export const PLAYLIST: IPlayList[] = [
   {
     title: 'right-answer',
@@ -44,3 +45,14 @@ export const PLAYLIST: IPlayList[] = [
     src: '../assets/sounds/wrong_answer.mp3',
   },
 ];
+
+export const LANGUAGE_LEVELS: ILanguageLevels = {
+  A1: 0,
+  A2: 1,
+  B1: 2,
+  B2: 3,
+  C1: 4,
+  C2: 5,
+};
+
+export const COUNT_WORDS = 5;

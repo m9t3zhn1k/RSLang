@@ -206,11 +206,7 @@ export const updateUserWord: (userId: string, wordId: string, requestBody: Reque
   });
 };
 
-export const createUserWord: (userId: string, wordId: string, requestBody: RequestBody) => Promise<void> = async (
-  userId: string,
-  wordId: string,
-  requestBody: RequestBody
-): Promise<void> => {
+export const createUserWord = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
   await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     headers: {
@@ -221,10 +217,7 @@ export const createUserWord: (userId: string, wordId: string, requestBody: Reque
   });
 };
 
-export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<void> = async (
-  type: 'dif' | 'learned',
-  wordId: string
-): Promise<void> => {
+export const addOptional = async (type: 'dif' | 'learned', wordId: string): Promise<void> => {
   const userId: string | null = getUserId();
   if (!userId) {
     return;
@@ -258,4 +251,38 @@ export const getAllUsersWords: IGetAllUsersWords = async (): Promise<IUserWord[]
     },
   });
   return resp.ok ? resp.json() : null;
+};
+
+export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<void> = async (
+  wordId: string,
+  isCorrect: boolean
+): Promise<void> => {
+  const userId: string | null = getUserId();
+  if (!userId) {
+    return;
+  }
+  const userWordData: IUserWord | null = await getOneUserWord(userId, wordId);
+  const optional: Optional = userWordData?.optional ? userWordData.optional : { isDif: false, isLearned: false };
+  if (isCorrect) {
+    optional.correctAnswers = optional.correctAnswers ? (optional.correctAnswers += 1) : 1;
+    optional.seriesOfCorrectAnswers = optional.seriesOfCorrectAnswers ? (optional.seriesOfCorrectAnswers += 1) : 1;
+    if (
+      (optional.isDif && optional.seriesOfCorrectAnswers >= 5) ||
+      (!optional.isDif && optional.seriesOfCorrectAnswers >= 3)
+    ) {
+      optional.isLearned = true;
+      optional.isDif = false;
+    }
+  } else {
+    optional.incorrectAnswers = optional.incorrectAnswers ? (optional.incorrectAnswers += 1) : 1;
+    optional.seriesOfCorrectAnswers = 0;
+    if (optional.isLearned) {
+      optional.isLearned = false;
+    }
+  }
+  if (userWordData) {
+    updateUserWord(userId, wordId, { optional });
+  } else {
+    createUserWord(userId, wordId, { optional });
+  }
 };

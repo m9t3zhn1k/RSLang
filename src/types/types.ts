@@ -1,4 +1,4 @@
-import { AudiochallengePage } from '../components/audiochallenge-page/audiochallenge-page';
+import { AudioChallengePage } from '../components/audiochallenge-page/audiochallenge-page';
 import Ebook from '../components/ebook/ebook';
 import { Games } from '../components/games/games';
 import { MainPage } from '../components/main-page/main-page';
@@ -64,7 +64,7 @@ export type PageType =
   | typeof MainPage
   | typeof Statistics
   | typeof SprintPage
-  | typeof AudiochallengePage;
+  | typeof AudioChallengePage;
 
 export interface IUser {
   email: string;
@@ -126,6 +126,15 @@ export interface IResponseWord {
   wordTranslate: string;
   textExample: string;
 }
+  
+export interface ILanguageLevels {
+  A1: number;
+  A2: number;
+  B1: number;
+  B2: number;
+  C1: number;
+  C2: number;
+}
 
 export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCount: [{ count: number }] };
 
@@ -134,6 +143,9 @@ export interface IUserWord {
   optional: {
     isDif: boolean;
     isLearned: boolean;
+    correctAnswers?: number;
+    incorrectAnswers?: number;
+    seriesOfCorrectAnswers?: number;
   };
   wordId: string;
 }
@@ -147,12 +159,26 @@ export type RequestBody = {
   optional: {
     isDif: boolean;
     isLearned: boolean;
+    correctAnswers?: number;
+    incorrectAnswers?: number;
+    seriesOfCorrectAnswers?: number;
   };
+};
+
+export type Optional = {
+  isDif: boolean;
+  isLearned: boolean;
+  correctAnswers?: number;
+  incorrectAnswers?: number;
+  seriesOfCorrectAnswers?: number;
 };
 
 export interface IEbook {
   pagePagination: Pagination;
+  numOfLearnedOrDifCards: number;
+  audioFlag: boolean;
   drawCards: () => Promise<void>;
+  addLearnedStyleToPage: () => void;
 }
 
 export interface IPagination {
