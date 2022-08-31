@@ -13,12 +13,18 @@ export class AudioChallengePage extends BaseComponent {
 
   private levelGame: null | number = null;
 
-  constructor(protected parentNode: HTMLElement, private router: Router, public data?: IWord[]) {
-    super(parentNode, 'div', ['audio-challenge']);
+  private isPlaying: boolean = false;
 
-    if (data) {
-      this.words = data;
-      this.renderGame();
+  private audio?: HTMLAudioElement;
+
+  private soundButtons: HTMLElement[] = [];
+
+  constructor(protected parentNode: HTMLElement, private router: Router, private data?: IWord[]) {
+    super(parentNode, 'div', ['audio-challenge']);
+    if (this.data) {
+      this.initGame(this.data[0].group, this.data[0].page).then((): void => {
+        this.renderGame();
+      });
     } else {
       this.renderStartGame();
     }
@@ -171,7 +177,8 @@ export class AudioChallengePage extends BaseComponent {
       (new BaseComponent(buttonAudioCard.element, 'img').element as HTMLImageElement).src = imgSound;
 
       soundItem.element.addEventListener('click', (): void => {
-        audio.play();
+        this.playAudio(this.words[word].audio, soundItem.element);
+        this.soundButtons.push(soundItem.element);
       });
       new BaseComponent(itemWrapper.element, 'span', ['word-item__word'], `${this.words[word].word} `);
       new BaseComponent(
@@ -187,5 +194,27 @@ export class AudioChallengePage extends BaseComponent {
         `${this.words[word].wordTranslate}`
       );
     });
+  }
+
+  private playAudio(src: string, element: HTMLElement): void {
+    if (!this.isPlaying || this.audio?.ended) {
+      this.audio = new Audio();
+      this.audio.volume = 0.1;
+      this.audio.src = src;
+      this.audio.play();
+      this.isPlaying = true;
+      element.classList.add('active');
+    } else if (this.isPlaying) {
+      const activeButton: HTMLElement = this.soundButtons.filter((button: HTMLElement): boolean =>
+        button.classList.contains('active')
+      )[0];
+      this.audio?.pause();
+      this.isPlaying = false;
+      element.classList.remove('active');
+      this.soundButtons.forEach((button: HTMLElement): void => button.classList.remove('active'));
+      if (element !== activeButton) {
+        this.playAudio(src, element);
+      }
+    }
   }
 }

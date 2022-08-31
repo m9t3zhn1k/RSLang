@@ -70,7 +70,7 @@ class AudioChallengeGame extends BaseComponent {
         }
         this.setContent();
         this.removeFlagButtons();
-        this.audio.src = `${BASE_URL}/${this.dataWords[this.counterWord].audio}`;
+        this.audio.src = this.dataWords[this.counterWord].audio;
         this.changeStatedBtn(false);
         this.buttonAnswer.element.textContent = 'Не знаю';
         this.descriptionElement.cardWrapper.element.classList.remove('active');
@@ -95,7 +95,7 @@ class AudioChallengeGame extends BaseComponent {
       btnWord.element.textContent = `${++indexWord} ${this.dataWords[wordsNums[i]].wordTranslate}`;
     });
     this.descriptionElement.soundWord.element.textContent = this.dataWords[this.counterWord].word;
-    this.descriptionElement.imgCard.src = `${BASE_URL}/${this.dataWords[this.counterWord].image}`;
+    this.descriptionElement.imgCard.src = this.dataWords[this.counterWord].image;
   }
 
   private renderGameDescription(parentElement: HTMLElement): {
@@ -105,7 +105,7 @@ class AudioChallengeGame extends BaseComponent {
     buttonAudioCard: BaseComponent;
     imgCard: HTMLImageElement;
   } {
-    this.audio.src = `${BASE_URL}/${this.dataWords[this.counterWord].audio}`;
+    this.audio.src = this.dataWords[this.counterWord].audio;
     const descriptionWrapper = new BaseComponent(parentElement, 'div', ['audio-challenge__description']);
     const buttonAudio: BaseComponent = new BaseComponent(descriptionWrapper.element, 'div', [
       'description__sound-button',
@@ -124,7 +124,7 @@ class AudioChallengeGame extends BaseComponent {
       [],
       `${this.dataWords[this.counterWord].word}`
     );
-    imgCard.src = `${BASE_URL}/${this.dataWords[this.counterWord].image}`;
+    imgCard.src = this.dataWords[this.counterWord].image;
     buttonAudio.element.addEventListener('click', (): void => {
       this.addAnimate(buttonAudio.element);
       setTimeout(this.addAnimate, 220, buttonAudio.element);

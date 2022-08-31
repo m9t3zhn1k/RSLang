@@ -9,6 +9,7 @@ import { Router } from '../../router/router';
 import { MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED, SECTIONS_COLORS } from '../../constants/constants';
 import Pagination from '../pagination/pagination';
 import WordCards from '../word-card/word-card';
+import { AudioChallengePage } from '../audiochallenge-page/audiochallenge-page';
 
 export default class Ebook extends BaseComponent implements IEbook {
   private controls: HTMLElement;
