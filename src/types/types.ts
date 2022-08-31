@@ -103,6 +103,7 @@ export interface IWord {
   transcription: string;
   word: string;
   wordTranslate: string;
+  userWord?: { difficulty: string; optional: { isDif: boolean; isLearned: boolean } };
 }
 
 export interface ILanguageLevels {
@@ -156,3 +157,22 @@ export interface IBaseComponentInnerHTML {
 }
 
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
+
+export interface IResponseWord {
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  _id: string;
+  image: string;
+  page: number;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+  textExample: string;
+}
+
+export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCount: [{ count: number }] };
