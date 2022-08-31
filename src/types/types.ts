@@ -120,6 +120,9 @@ export interface IUserWord {
   optional: {
     isDif: boolean;
     isLearned: boolean;
+    correctAnswers?: number;
+    incorrectAnswers?: number;
+    seriesOfCorrectAnswers?: number;
   };
   wordId: 'string';
 }
@@ -133,12 +136,26 @@ export type RequestBody = {
   optional: {
     isDif: boolean;
     isLearned: boolean;
+    correctAnswers?: number;
+    incorrectAnswers?: number;
+    seriesOfCorrectAnswers?: number;
   };
+};
+
+export type Optional = {
+  isDif: boolean;
+  isLearned: boolean;
+  correctAnswers?: number;
+  incorrectAnswers?: number;
+  seriesOfCorrectAnswers?: number;
 };
 
 export interface IEbook {
   pagePagination: Pagination;
+  numOfLearnedOrDifCards: number;
+  audioFlag: boolean;
   drawCards: () => Promise<void>;
+  addLearnedStyleToPage: () => void;
 }
 
 export interface IPagination {
