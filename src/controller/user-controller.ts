@@ -89,7 +89,9 @@ export const getOneUserWord: (wordId: string) => Promise<IUserWord | null> = asy
   return resp.ok ? resp.json() : null;
 };
 
-export const getUserAgrWord = async (wordId: string): Promise<IUserWord[]> => {
+export const getUserAgrWord: (wordId: string) => Promise<IUserWord[]> = async (
+  wordId: string
+): Promise<IUserWord[]> => {
   const resp: Response = await fetch(`${BASE_URL}/users/${getUserId()}/aggregatedWords/${wordId}`, {
     method: 'GET',
     headers: {
@@ -111,7 +113,10 @@ export const getUserAgrWord = async (wordId: string): Promise<IUserWord[]> => {
   );
 };
 
-export const getUserAgrWords = async (group: number, page: number): Promise<IWord[]> => {
+export const getUserAgrWords: (group: number, page: number) => Promise<IWord[]> = async (
+  group: number,
+  page: number
+): Promise<IWord[]> => {
   const resp: Response = await fetch(
     `${BASE_URL}/users/${getUserId()}/aggregatedWords?group=${group}&wordsPerPage=600&filter={"page":${page}}`,
     {
@@ -136,7 +141,7 @@ export const getUserAgrWords = async (group: number, page: number): Promise<IWor
   );
 };
 
-export const getUserAgrGameWords = async (group: number): Promise<IWord[]> => {
+export const getUserAgrGameWords: (group: number) => Promise<IWord[]> = async (group: number): Promise<IWord[]> => {
   const resp: Response = await fetch(
     `${BASE_URL}/users/${getUserId()}/aggregatedWords?group=${group}&wordsPerPage=600`,
     {
@@ -161,7 +166,7 @@ export const getUserAgrGameWords = async (group: number): Promise<IWord[]> => {
   );
 };
 
-export const getHardUserWords = async (): Promise<IWord[]> => {
+export const getHardUserWords: () => Promise<IWord[]> = async (): Promise<IWord[]> => {
   const resp: Response = await fetch(
     `${BASE_URL}/users/${getUserId()}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.isDif":"true"}`,
     {
@@ -186,7 +191,11 @@ export const getHardUserWords = async (): Promise<IWord[]> => {
   );
 };
 
-export const updateUserWord = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
+export const updateUserWord: (userId: string, wordId: string, requestBody: RequestBody) => Promise<void> = async (
+  userId: string,
+  wordId: string,
+  requestBody: RequestBody
+): Promise<void> => {
   await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     headers: {
@@ -197,7 +206,11 @@ export const updateUserWord = async (userId: string, wordId: string, requestBody
   });
 };
 
-export const createUserWord = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
+export const createUserWord: (userId: string, wordId: string, requestBody: RequestBody) => Promise<void> = async (
+  userId: string,
+  wordId: string,
+  requestBody: RequestBody
+): Promise<void> => {
   await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     headers: {
@@ -208,7 +221,10 @@ export const createUserWord = async (userId: string, wordId: string, requestBody
   });
 };
 
-export const addOptional = async (type: 'dif' | 'learned', wordId: string): Promise<void> => {
+export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<void> = async (
+  type: 'dif' | 'learned',
+  wordId: string
+): Promise<void> => {
   const userId: string | null = getUserId();
   if (!userId) {
     return;
