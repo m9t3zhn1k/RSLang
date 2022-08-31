@@ -107,7 +107,7 @@ export interface IWord {
   transcription: string;
   word: string;
   wordTranslate: string;
-  userWord?: { difficulty: string; optional?: { isDif: boolean; isLearnt?: boolean } };
+  userWord?: { difficulty: string; optional: { isDif: boolean; isLearned: boolean } };
 }
 
 export interface IResponseWord {

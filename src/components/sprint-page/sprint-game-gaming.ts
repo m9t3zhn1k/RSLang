@@ -1,8 +1,8 @@
 import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
-import { /* createUserWord, */ getOneUserWord, getUserId /* updateUserWord */ } from '../../controller/user-controller';
+import { /* createUserWord, */ getUserAgrGameWords, getUserId /* updateUserWord */ } from '../../controller/user-controller';
 import { getWords } from '../../controller/words-controller';
 import { Router } from '../../router/router';
-import { IUserWord, IWord } from '../../types/types';
+import { IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Timer } from '../timer/timer';
 import { SprintResultPage } from './sprint-game-results';
@@ -223,7 +223,6 @@ export class SprintGamePage {
   }
 
   private setNextGameWord(): void {
-    this.getAdditionalGameWords();
     this.currentWordIndex += 1;
     if (this.currentWordIndex <= this.gameWords.length - 1) {
       this.updateGameWord();
@@ -248,13 +247,6 @@ export class SprintGamePage {
     }
   }
 
-  private async getAdditionalGameWords(): Promise<void> {
-    if (this.page > 0) {
-      this.page -= 1;
-      this.gameWords = this.gameWords.concat(await this.getGameWords());
-    }
-  }
-
   private handleKeyEvent(e: KeyboardEvent): void {
     switch (e.code) {
       case 'Enter':
@@ -276,37 +268,25 @@ export class SprintGamePage {
     while (this.parent.firstChild) {
       this.parent.removeChild(this.parent.firstChild);
     }
-    this.gameWords = this.gameWords.concat(await this.getGameWords());
+    this.gameWords = await this.getGameWords();
     this.timer.startTimer();
     this.addEventListenersToButtons();
     this.updateGameWord();
   }
 
   private async getGameWords(): Promise<IWord[]> {
-    let words: IWord[] = await getWords(this.group, this.page);
+    let words: IWord[] = [];
     if (getUserId()) {
-      words = await this.filterLearntWords(words);
+      words = (await getUserAgrGameWords(this.group)).filter((words: IWord): boolean => !words.userWord?.optional?.isLearned && words.page <= this.page);
+    } else {
+      while (this.page >= 0) {
+        words = words.concat(await getWords(this.group, this.page));
+        this.page -= 1;
+      }
     }
-    words = this.shuffle(words);
+    words.sort((a: IWord, b: IWord): number => b.page - a.page);
     return words;
   }
-
-  private filterLearntWords = async (arr: IWord[]): Promise<IWord[]> =>
-    Promise.all(
-      arr.map(async (word: IWord): Promise<boolean> => {
-        const item: IUserWord | null = await getOneUserWord(word.id);
-        return item?.optional.isLearned === true ? false : true;
-      })
-    ).then((results): IWord[] => arr.filter((_, index): boolean => results[index]));
-
-  private shuffle = (array: IWord[]): IWord[] => {
-    const arraycopy = [...array];
-    for (let i = arraycopy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arraycopy[i], arraycopy[j]] = [arraycopy[j], arraycopy[i]];
-    }
-    return arraycopy;
-  };
 
   private getRandomNumber(startNumber: number, finishNumber: number, exception?: number): number {
     const number: number = Math.round(Math.random() * (finishNumber - startNumber) + startNumber);

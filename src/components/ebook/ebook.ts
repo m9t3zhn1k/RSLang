@@ -36,7 +36,6 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sprintGame.id = 'sprint';
     router.navigateApp([this.audioGame, this.sprintGame]);
     this.drawCards();
-    this.saveStageToLocalStorage();
   }
 
   public drawCards = async (): Promise<void> => {
@@ -57,13 +56,12 @@ export default class Ebook extends BaseComponent implements IEbook {
     } else {
       this.drawDifWordsSection();
     }
+    this.saveStageToLocalStorage();
   };
 
   private saveStageToLocalStorage = (): void => {
-    window.addEventListener('beforeunload', (): void => {
-      window.localStorage.setItem('sectionNum', `${this.sectionPagination.currentPageNum}`);
-      window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
-    });
+    window.localStorage.setItem('sectionNum', `${this.sectionPagination.currentPageNum}`);
+    window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
   };
 
   private drawRegularSection = (words: IWord[], sectionNumForApi: number): void => {
@@ -75,7 +73,7 @@ export default class Ebook extends BaseComponent implements IEbook {
         wordData,
         `${sectionNumForApi}` as keyof typeof SECTIONS_COLORS
       );
-      if (wordData.userWord?.optional?.isLearnt) {
+      if (wordData.userWord?.optional.isLearned) {
         wordCard.addtoLearnedButton.classList.add('active-button');
         wordCard.addToDifButton.style.visibility = 'hidden';
         wordCard.element.classList.add('learned-word');

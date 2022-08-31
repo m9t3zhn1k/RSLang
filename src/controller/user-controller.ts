@@ -136,6 +136,31 @@ export const getUserAgrWords = async (group: number, page: number): Promise<IWor
   );
 };
 
+export const getUserAgrGameWords = async (group: number): Promise<IWord[]> => {
+  const resp: Response = await fetch(
+    `${BASE_URL}/users/${getUserId()}/aggregatedWords?group=${group}&wordsPerPage=600`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        Accept: 'application/json',
+      },
+    }
+  );
+  return resp.json().then((item: IAggregatedResponse[]): IWord[] =>
+    item[0].paginatedResults.map(
+      (i: IResponseWord): IWord => ({
+        ...i,
+        id: i._id,
+        image: `${BASE_URL}/${i.image}`,
+        audio: `${BASE_URL}/${i.audio}`,
+        audioMeaning: `${BASE_URL}/${i.audioMeaning}`,
+        audioExample: `${BASE_URL}/${i.audioExample}`,
+      })
+    )
+  );
+};
+
 export const getHardUserWords = async (): Promise<IWord[]> => {
   const resp: Response = await fetch(
     `${BASE_URL}/users/${getUserId()}/aggregatedWords?wordsPerPage=3600&filter={"userWord.optional.isDif":"true"}`,
