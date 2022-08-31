@@ -123,7 +123,7 @@ export default class WordCards extends BaseComponent implements IWordCards {
         this.ebook.numOfLearnedOrDifCards -= 1;
         this.addToDifButton.classList.remove('hidden-element');
         if (getUserId()) {
-          getOneUserWord(getUserId(), this.wordData.id).then((res: IUserWord | null): void => {
+          getOneUserWord(this.wordData.id).then((res: IUserWord | null): void => {
             if (res?.optional.isDif) {
               this.addToDifButton.classList.add('active-button');
               this.element.classList.add('difficult-word');

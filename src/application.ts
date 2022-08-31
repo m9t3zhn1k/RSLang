@@ -13,7 +13,8 @@ export class Application {
 
   constructor() {
     this.header = new Header(document.body);
-    this.main = new Main(document.body, this.header.navigation.navigationButtons, this.header);
     this.footer = new Footer(document.body);
+    this.main = new Main(document.body, this.header.navigation.navigationButtons, this.header, this.footer);
+    document.body.appendChild(this.footer.element);
   }
 }
