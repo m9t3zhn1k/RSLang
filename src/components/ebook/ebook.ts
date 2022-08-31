@@ -35,8 +35,10 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sectionPagination = new Pagination(this.controls, 'section', this);
     this.pagePagination = new Pagination(this.controls, 'page', this);
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
-    this.audioGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Аудиовызов').element as HTMLButtonElement;
-    this.sprintGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Спринт').element as HTMLButtonElement;
+    this.audioGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Аудиовызов')
+      .element as HTMLButtonElement;
+    this.sprintGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Спринт')
+      .element as HTMLButtonElement;
     this.audioGame.id = 'audiochallenge';
     this.sprintGame.id = 'sprint';
     this.numOfLearnedOrDifCards = 0;
@@ -62,10 +64,9 @@ export default class Ebook extends BaseComponent implements IEbook {
   };
 
   private saveStageToLocalStorage = (): void => {
-      window.localStorage.setItem('sectionNum', `${this.sectionPagination.currentPageNum}`);
-      window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
+    window.localStorage.setItem('sectionNum', `${this.sectionPagination.currentPageNum}`);
+    window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
   };
-
 
   private drawRegularSection = (wordsArr: IWord[], sectionNumForApi: number): void => {
     const userId: string | null = getUserId();
@@ -81,7 +82,7 @@ export default class Ebook extends BaseComponent implements IEbook {
         false,
         optional
       );
-       
+
       if (optional?.isLearned) {
         this.numOfLearnedOrDifCards += 1;
         wordCard.addtoLearnedButton.classList.add('active-button');
@@ -96,7 +97,7 @@ export default class Ebook extends BaseComponent implements IEbook {
     });
     this.pagePagination.element.classList.remove('display-none');
     Promise.all(wordsCardsArr).then((): void => {
-        this.addLearnedStyleToPage();
+      this.addLearnedStyleToPage();
     });
   };
 
@@ -126,7 +127,6 @@ export default class Ebook extends BaseComponent implements IEbook {
       this.sprintGame.classList.add('non-active-button-game');
       this.audioGame.disabled = true;
       this.sprintGame.disabled = true;
-
     } else {
       this.cardsView.classList.remove('learned-page');
       this.pagePagination.label.classList.remove('learned-page-label');
@@ -135,5 +135,5 @@ export default class Ebook extends BaseComponent implements IEbook {
       this.audioGame.disabled = false;
       this.sprintGame.disabled = false;
     }
-  }
+  };
 }

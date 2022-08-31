@@ -138,7 +138,7 @@ export type Optional = {
   correctAnswers?: number;
   incorrectAnswers?: number;
   seriesOfCorrectAnswers?: number;
-}
+};
 
 export interface IEbook {
   pagePagination: Pagination;

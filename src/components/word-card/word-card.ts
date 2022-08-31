@@ -127,6 +127,8 @@ export default class WordCards extends BaseComponent implements IWordCards {
             if (res?.optional.isDif) {
               this.addToDifButton.classList.add('active-button');
               this.element.classList.add('difficult-word');
+              this.ebook.numOfLearnedOrDifCards += 1;
+              this.ebook.addLearnedStyleToPage();
             }
           });
         }
@@ -146,12 +148,11 @@ export default class WordCards extends BaseComponent implements IWordCards {
     if (this.isDifSection) {
       this.element.classList.add('difficult-word');
       this.addToDifButton.classList.add('active-button');
-    };
-    if (this.optional && Object.hasOwn(this.optional, "correctAnswers")) {
+    }
+    if (this.optional && Object.hasOwn(this.optional, 'correctAnswers')) {
       this.gameResultsWrap.classList.add('visible-element');
       this.gameResultPositive.textContent = `${this.optional.correctAnswers}`;
       this.gameResultNegative.textContent = `${this.optional.incorrectAnswers}`;
     }
-
   };
 }
