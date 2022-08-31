@@ -1,7 +1,7 @@
 import './ebook.scss';
 import '../word-card/word-card.scss';
 import { IWord, IUserWord, IEbook } from '../../types/types';
-import { getOneUserWord, getAllUsersWords, getUserId } from '../../controller/user-controller';
+import { getOneUserWord, getAllUsersWords } from '../../controller/user-controller';
 import { getWords, getOneWord } from '../../controller/words-controller';
 import { BaseComponent } from '../base-component/base-component';
 import Button from '../button/button';
@@ -23,6 +23,8 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private sprintGame: HTMLElement;
 
+  private data: IWord[];
+
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
     new BaseComponent(this.element, 'div', ['title'], 'Учебник');
@@ -36,7 +38,11 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sprintGame = new Button(this.controls, 'Спринт').element;
     this.audioGame.id = 'audiochallenge';
     this.sprintGame.id = 'sprint';
-    router.navigateApp([this.audioGame, this.sprintGame]);
+    this.data = [];
+    this.audioGame.addEventListener('click', (): void => {
+      this.remove();
+      new AudioChallengePage(parent, router, this.data);
+    });
     this.drawCards();
     this.saveStageToLocalStorage();
   }
@@ -45,6 +51,8 @@ export default class Ebook extends BaseComponent implements IEbook {
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
     const wordsArr: IWord[] = await getWords(sectionNumForApi, pageNumForApi);
+    this.data = [];
+    this.data.push(...wordsArr);
     this.cardsView.classList.remove('learned-page');
     this.pagePagination.label.classList.remove('learned-page-label');
     this.cardsView.innerHTML = '';
@@ -64,7 +72,6 @@ export default class Ebook extends BaseComponent implements IEbook {
   };
 
   private drawRegularSection = (wordsArr: IWord[], sectionNumForApi: number): void => {
-    const userId: string | null = getUserId();
     this.audioGame.classList.remove('non-active-button');
     this.sprintGame.classList.remove('non-active-button');
     const wordsCardsArr: Promise<HTMLElement>[] = wordsArr.map(async (wordData: IWord): Promise<HTMLElement> => {
@@ -73,7 +80,7 @@ export default class Ebook extends BaseComponent implements IEbook {
         wordData,
         `${sectionNumForApi}` as keyof typeof SECTIONS_COLORS
       );
-      const options: IUserWord | null = await getOneUserWord(userId, wordData.id);
+      const options: IUserWord | null = await getOneUserWord(wordData.id);
       if (options?.optional.isLearned) {
         wordCard.addtoLearnedButton.classList.add('active-button');
         wordCard.addToDifButton.style.visibility = 'hidden';
