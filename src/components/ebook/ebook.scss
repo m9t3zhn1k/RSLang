@@ -26,10 +26,38 @@
 }
 
 .learned-page {
-   background-color: $grey-light;
+   background-color: $white-green;
 }
 
 .dif-words-title {
     font-size: 2rem;
     color: $blue-darkest;
+}
+
+.button-game {
+    width: fit-content;
+    padding: 0rem 1rem;
+    background-color: $blue-medium;
+    color: $text-light;
+    text-align: center;
+    line-height: 2rem;
+    border-radius: 0.5rem;
+}
+
+.button-game:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.non-active-button-game {
+    opacity: .2;
+}
+
+.non-active-button-game:hover {
+    cursor: default;
+    transform: none;
+}
+
+.display-none {
+    display: none;
 }
