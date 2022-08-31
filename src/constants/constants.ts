@@ -34,7 +34,6 @@ export const SECTIONS_COLORS: {
   '6': '#190af2',
 };
 
-
 export const LANGUAGE_LEVELS: ILanguageLevels = {
   A1: 0,
   A2: 1,
@@ -43,3 +42,5 @@ export const LANGUAGE_LEVELS: ILanguageLevels = {
   C1: 4,
   C2: 5,
 };
+
+export const COUNT_WORDS = 5;
