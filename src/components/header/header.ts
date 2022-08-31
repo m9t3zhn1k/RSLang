@@ -27,12 +27,12 @@ export class Header extends BaseComponent implements IHeader {
     const controlsContainer: HTMLElement = new BaseComponent(container, 'div', ['header__block_controls']).element;
     const waveContainer: HTMLElement = new BaseComponent(this.element, 'div', ['wave', 'header__wave']).element;
     this.navigation = new Navigation(controlsContainer);
-    this.authorizationButton = new BaseComponent(controlsContainer, 'button', ['button', 'header__button'])
+    this.authorizationButton = new BaseComponent(controlsContainer, 'button', ['header__button'])
       .element as HTMLButtonElement;
     this.authorizationButton.textContent = this.storage ? 'Выйти' : 'Войти';
     this.wave = new BaseComponent(waveContainer, 'img', ['wave', 'header__wave'], '', {
       src: './assets/images/waves/header_wave.svg',
-      alt: 'Footer wave',
+      alt: 'Header wave',
     }).element;
     this.renderLogo(logo, logoContainer);
     this.addEventAuthBtn();

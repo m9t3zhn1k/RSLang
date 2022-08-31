@@ -17,13 +17,13 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private sectionPagination: Pagination;
 
+  public pagePagination: Pagination;
+  
   private audioGame: HTMLButtonElement;
 
   private sprintGame: HTMLButtonElement;
 
   public audioFlag;
-
-  public pagePagination;
 
   public numOfLearnedOrDifCards;
 
@@ -57,20 +57,23 @@ export default class Ebook extends BaseComponent implements IEbook {
   public drawCards = async (): Promise<void> => {
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
-    const wordsArr: IWord[] = await getWords(sectionNumForApi, pageNumForApi);
-    this.data = [];
-    this.data.push(...wordsArr);
-    this.saveStageToLocalStorage();
+    let words: IWord[];
+    if (getUserId()) {
+      words = await getUserAgrWords(sectionNumForApi, pageNumForApi);
+    } else {
+      words = await getWords(sectionNumForApi, pageNumForApi);
+    }
     this.cardsView.classList.remove('learned-page');
     this.pagePagination.label.classList.remove('learned-page-label');
     this.numOfLearnedOrDifCards = 0;
     this.cardsView.innerHTML = '';
 
     if (sectionNumForApi !== MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED) {
-      this.drawRegularSection(wordsArr, sectionNumForApi);
+      this.drawRegularSection(words, sectionNumForApi);
     } else {
       this.drawDifWordsSection();
     }
+    this.saveStageToLocalStorage();
   };
 
   private saveStageToLocalStorage = (): void => {
@@ -78,11 +81,10 @@ export default class Ebook extends BaseComponent implements IEbook {
     window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
   };
 
-  private drawRegularSection = (wordsArr: IWord[], sectionNumForApi: number): void => {
+  private drawRegularSection = (words: IWord[], sectionNumForApi: number): void => {
     this.audioGame.classList.remove('non-active-button');
     this.sprintGame.classList.remove('non-active-button');
-    const wordsCardsArr: Promise<HTMLElement>[] = wordsArr.map(async (wordData: IWord): Promise<HTMLElement> => {
-      const optional: Optional | undefined = (await getOneUserWord(userId, wordData.id))?.optional;
+    const wordsCards: HTMLElement[] = words.map((wordData: IWord): HTMLElement => {
       const wordCard: WordCards = new WordCards(
         this.cardsView,
         this,
@@ -91,22 +93,22 @@ export default class Ebook extends BaseComponent implements IEbook {
         false,
         optional
       );
-      const options: IUserWord | null = await getOneUserWord(wordData.id);
-      if (options?.optional.isLearned) {
-        this.numOfLearnedOrDifCards += 1;
+      if (wordData.userWord?.optional.isLearned) {
         wordCard.addtoLearnedButton.classList.add('active-button');
         wordCard.addToDifButton.classList.add('hidden-element');
         wordCard.element.classList.add('learned-word');
-      } else if (optional?.isDif) {
-        this.numOfLearnedOrDifCards += 1;
+      } else if (wordData.userWord?.optional?.isDif) {
         wordCard.addToDifButton.classList.add('active-button');
         wordCard.element.classList.add('difficult-word');
       }
       return wordCard.element;
     });
-    this.pagePagination.element.classList.remove('display-none');
-    Promise.all(wordsCardsArr).then((): void => {
-      this.addLearnedStyleToPage();
+    this.pagePagination.element.style.display = 'flex';
+    Promise.all(wordsCards).then((res: HTMLElement[]): void => {
+      if (res.every((card: HTMLElement): boolean => card.classList.contains('learned-word'))) {
+        this.cardsView.classList.add('learned-page');
+        this.pagePagination.label.classList.add('learned-page-label');
+      }
     });
   };
 

@@ -1,20 +1,20 @@
-import { IConstants, ILanguageLevels } from '../types/types';
+import { IPlayList, ILanguageLevels } from '../types/types';
 
-export const constants: IConstants = {
-  DEFAULT_PAGE: 'main',
-};
+export const DEFAULT_PAGE: string = 'main';
 
 export const BASE_URL: string = 'https://app-rslang-exsample.herokuapp.com';
 
 export const MAX_COUNT_OF_SYMBOLS: number = 8;
 
-export const MAX_COUNT_OF_SECTIONS_FOR_AUTHORIZED = 7;
+export const MAX_COUNT_OF_SECTIONS_FOR_AUTHORIZED: number = 7;
 
-export const MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED = 6;
+export const MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED: number = 6;
 
-export const MAX_COUNT_OF_PAGES = 30;
+export const MAX_COUNT_OF_PAGES: number = 30;
 
-export const START_PAGINATION_PAGE = 1;
+export const START_PAGINATION_PAGE: number = 1;
+
+export const SPRINT_DURATION: number = 30;
 
 export const SECTIONS_COLORS: {
   '0': string;
@@ -33,6 +33,18 @@ export const SECTIONS_COLORS: {
   '5': '#f20acb',
   '6': '#190af2',
 };
+
+
+export const PLAYLIST: IPlayList[] = [
+  {
+    title: 'right-answer',
+    src: '../assets/sounds/right_answer.mp3',
+  },
+  {
+    title: 'wrong-answer',
+    src: '../assets/sounds/wrong_answer.mp3',
+  },
+];
 
 export const LANGUAGE_LEVELS: ILanguageLevels = {
   A1: 0,

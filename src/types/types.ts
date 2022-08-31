@@ -32,6 +32,10 @@ export interface IRouter {
   navigateApp(buttons: HTMLElement[]): void;
 }
 
+export interface IMain {
+  currentPageID: string;
+}
+
 export type Advantage = {
   imageSource: string;
   imageAlt: string;
@@ -106,6 +110,23 @@ export interface IWord {
   userWord?: { difficulty: string; optional: { isDif: boolean; isLearned: boolean } };
 }
 
+export interface IResponseWord {
+  audio: string;
+  audioExample: string;
+  audioMeaning: string;
+  group: number;
+  _id: string;
+  image: string;
+  page: number;
+  textExampleTranslate: string;
+  textMeaning: string;
+  textMeaningTranslate: string;
+  transcription: string;
+  word: string;
+  wordTranslate: string;
+  textExample: string;
+}
+  
 export interface ILanguageLevels {
   A1: number;
   A2: number;
@@ -115,8 +136,10 @@ export interface ILanguageLevels {
   C2: number;
 }
 
+export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCount: [{ count: number }] };
+
 export interface IUserWord {
-  id: 'string';
+  id: string;
   optional: {
     isDif: boolean;
     isLearned: boolean;
@@ -124,7 +147,7 @@ export interface IUserWord {
     incorrectAnswers?: number;
     seriesOfCorrectAnswers?: number;
   };
-  wordId: 'string';
+  wordId: string;
 }
 
 export interface IQueryParam {
@@ -173,23 +196,11 @@ export interface IBaseComponentInnerHTML {
   remove: () => void;
 }
 
-export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
-
-export interface IResponseWord {
-  audio: string;
-  audioExample: string;
-  audioMeaning: string;
-  group: number;
-  _id: string;
-  image: string;
-  page: number;
-  textExampleTranslate: string;
-  textMeaning: string;
-  textMeaningTranslate: string;
-  transcription: string;
-  word: string;
-  wordTranslate: string;
-  textExample: string;
+export interface IPlayList {
+  title: string;
+  src: string;
 }
 
-export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCount: [{ count: number }] };
+export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
+
+export type WordResult = { word: IWord; result: boolean };
