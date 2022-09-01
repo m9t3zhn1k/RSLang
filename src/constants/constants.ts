@@ -34,7 +34,6 @@ export const SECTIONS_COLORS: {
   '6': '#190af2',
 };
 
-
 export const PLAYLIST: IPlayList[] = [
   {
     title: 'right-answer',

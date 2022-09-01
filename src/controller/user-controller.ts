@@ -6,6 +6,7 @@ import {
   IUser,
   IUserWord,
   IWord,
+  Optional,
   RequestBody,
 } from '../types/types';
 
@@ -89,9 +90,7 @@ export const getOneUserWord: (wordId: string) => Promise<IUserWord | null> = asy
   return resp.ok ? resp.json() : null;
 };
 
-export const getUserAgrWord: (wordId: string) => Promise<IUserWord[]> = async (
-  wordId: string
-): Promise<IUserWord[]> => {
+export const getUserAgrWord: (wordId: string) => Promise<IWord> = async (wordId: string): Promise<IWord> => {
   const resp: Response = await fetch(`${BASE_URL}/users/${getUserId()}/aggregatedWords/${wordId}`, {
     method: 'GET',
     headers: {
@@ -99,18 +98,7 @@ export const getUserAgrWord: (wordId: string) => Promise<IUserWord[]> = async (
       Accept: 'application/json',
     },
   });
-  return resp.json().then((item): IUserWord[] =>
-    item[0].paginatedResults.map(
-      (i: IResponseWord): IWord => ({
-        ...i,
-        id: i._id,
-        image: `${BASE_URL}/${i.image}`,
-        audio: `${BASE_URL}/${i.audio}`,
-        audioMeaning: `${BASE_URL}/${i.audioMeaning}`,
-        audioExample: `${BASE_URL}/${i.audioExample}`,
-      })
-    )
-  );
+  return resp.json().then((item: IWord[]): IWord => item[0]);
 };
 
 export const getUserAgrWords: (group: number, page: number) => Promise<IWord[]> = async (
@@ -261,11 +249,14 @@ export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<voi
   if (!userId) {
     return;
   }
-  const userWordData: IUserWord | null = await getOneUserWord(userId, wordId);
-  const optional: Optional = userWordData?.optional ? userWordData.optional : { isDif: false, isLearned: false };
+  const userWordData: IWord = await getUserAgrWord(wordId);
+  const optional: Optional = userWordData.userWord?.optional
+    ? userWordData.userWord.optional
+    : { isDif: false, isLearned: false };
   if (isCorrect) {
     optional.correctAnswers = optional.correctAnswers ? (optional.correctAnswers += 1) : 1;
     optional.seriesOfCorrectAnswers = optional.seriesOfCorrectAnswers ? (optional.seriesOfCorrectAnswers += 1) : 1;
+    optional.incorrectAnswers = optional.incorrectAnswers ?? 0;
     if (
       (optional.isDif && optional.seriesOfCorrectAnswers >= 5) ||
       (!optional.isDif && optional.seriesOfCorrectAnswers >= 3)
@@ -274,13 +265,14 @@ export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<voi
       optional.isDif = false;
     }
   } else {
+    optional.correctAnswers = optional.correctAnswers ?? 0;
     optional.incorrectAnswers = optional.incorrectAnswers ? (optional.incorrectAnswers += 1) : 1;
     optional.seriesOfCorrectAnswers = 0;
     if (optional.isLearned) {
       optional.isLearned = false;
     }
   }
-  if (userWordData) {
+  if (userWordData.userWord?.optional) {
     updateUserWord(userId, wordId, { optional });
   } else {
     createUserWord(userId, wordId, { optional });
