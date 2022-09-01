@@ -126,7 +126,7 @@ export interface IResponseWord {
   wordTranslate: string;
   textExample: string;
 }
-  
+
 export interface ILanguageLevels {
   A1: number;
   A2: number;

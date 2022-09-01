@@ -1,7 +1,7 @@
 import './ebook.scss';
 import '../word-card/word-card.scss';
-import { IWord, IUserWord, IEbook, Optional } from '../../types/types';
-import { getOneUserWord, getAllUsersWords, getUserId } from '../../controller/user-controller';
+import { IWord, IUserWord, IEbook } from '../../types/types';
+import { getAllUsersWords, getUserId, getUserAgrWords } from '../../controller/user-controller';
 import { getWords, getOneWord } from '../../controller/words-controller';
 import { BaseComponent } from '../base-component/base-component';
 import { Router } from '../../router/router';
@@ -18,7 +18,7 @@ export default class Ebook extends BaseComponent implements IEbook {
   private sectionPagination: Pagination;
 
   public pagePagination: Pagination;
-  
+
   private audioGame: HTMLButtonElement;
 
   private sprintGame: HTMLButtonElement;
@@ -91,7 +91,7 @@ export default class Ebook extends BaseComponent implements IEbook {
         wordData,
         `${sectionNumForApi}` as keyof typeof SECTIONS_COLORS,
         false,
-        optional
+        wordData.userWord?.optional
       );
       if (wordData.userWord?.optional.isLearned) {
         wordCard.addtoLearnedButton.classList.add('active-button');
