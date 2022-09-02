@@ -74,7 +74,7 @@ export default class Ebook extends BaseComponent implements IEbook {
     window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
   };
 
-  private drawRegularSection = (words: IWord[], sectionNumForApi: number): void => {
+  private drawRegularSection = async (words: IWord[], sectionNumForApi: number): Promise<void> => {
     this.audioGame.classList.remove('non-active-button');
     this.sprintGame.classList.remove('non-active-button');
     const wordsCards: HTMLElement[] = words.map((wordData: IWord): HTMLElement => {
@@ -87,22 +87,19 @@ export default class Ebook extends BaseComponent implements IEbook {
         wordData.userWord?.optional
       );
       if (wordData.userWord?.optional.isLearned) {
+        this.numOfLearnedOrDifCards += 1;
         wordCard.addtoLearnedButton.classList.add('active-button');
         wordCard.addToDifButton.classList.add('hidden-element');
         wordCard.element.classList.add('learned-word');
       } else if (wordData.userWord?.optional?.isDif) {
+        this.numOfLearnedOrDifCards += 1;
         wordCard.addToDifButton.classList.add('active-button');
         wordCard.element.classList.add('difficult-word');
       }
       return wordCard.element;
     });
     this.pagePagination.element.classList.remove('display-none');
-    Promise.all(wordsCards).then((res: HTMLElement[]): void => {
-      if (res.every((card: HTMLElement): boolean => card.classList.contains('learned-word'))) {
-        this.cardsView.classList.add('learned-page');
-        this.pagePagination.label.classList.add('learned-page-label');
-      }
-    });
+    this.addLearnedStyleToPage();
   };
 
   private drawDifWordsSection = async (): Promise<void> => {
