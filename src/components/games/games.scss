@@ -22,7 +22,7 @@
 .game-button {
   position: relative;
   border-radius: 25px;
-  background: $blue-darkest;
+  background: $blue-dark;
   flex: 0 1 30%;
   display: flex;
   flex-direction: column;
@@ -60,12 +60,14 @@
   &__wrapper-img {
     position: relative;
     background-color: $text-light;
-    animation: pulse-audio 1s infinite alternate;
     display: flex;
     margin: 0px 0px 40px 0px;
-    
     max-width: 300px;
     border-radius: 10px;
+
+    &.animation-game {
+      animation: pulse-audio 1s infinite alternate;
+    }
   }
 
   &__img {
@@ -75,13 +77,15 @@
     display: block;
     width: 100%;
     padding: 0px 10px;
+
     &.active {
       transform: scale(0);
     }
   }
 
   &.active-background {
-    background-color: $blue-dark;
+    background-color: $blue-darkest;
+    
   }
 }
 

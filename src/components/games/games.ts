@@ -1,7 +1,7 @@
 import { BaseComponent } from '../base-component/base-component';
 import { Router } from '../../router/router';
-import audioCallImg from '../../assets/images/game/audio-call.jpg';
-import sprintImg from '../../assets/images/game/sprint.jpg';
+import audioCallImg from '../../assets/images/game/audio-call.webp';
+import sprintImg from '../../assets/images/game/sprint.webp';
 import './games.scss';
 
 export class Games extends BaseComponent {
@@ -16,25 +16,34 @@ export class Games extends BaseComponent {
     const descriptionSprint: string = `Тренирует навык быстрого перевода с английского языка на русский.
      Вам нужно выбрать соответствует ли перевод предложенному слову.`;
 
-    const audioCallButton: HTMLElement = this.renderButtonsForGame(
-      wrapperButton,
-      audioCallImg,
-      descriptionAudioCall,
-      'Аудиовызов'
-    );
-    const sprintButton: HTMLElement = this.renderButtonsForGame(wrapperButton, sprintImg, descriptionSprint, 'Спринт');
-
-    audioCallButton.id = 'audiochallenge';
-    sprintButton.id = 'sprint';
-    router.navigateApp([audioCallButton, sprintButton]);
+    const audioObj: {
+      gameButton: HTMLElement;
+      containerImg: HTMLElement;
+    } = this.renderButtonsForGame(wrapperButton, audioCallImg, descriptionAudioCall, 'Аудиовызов');
+    audioObj.containerImg.classList.add('animation-game')
+    const sprintObj: {
+      gameButton: HTMLElement;
+      containerImg: HTMLElement;
+    } = this.renderButtonsForGame(wrapperButton, sprintImg, descriptionSprint, 'Спринт');
+    setTimeout((): void => {
+      sprintObj.containerImg.classList.add('animation-game');
+    }, 400);
+    audioObj.gameButton.id = 'audiochallenge';
+    sprintObj.gameButton.id = 'sprint';
+    router.navigateApp([audioObj.gameButton, sprintObj.gameButton]);
   }
 
-  renderButtonsForGame(parentElement: HTMLElement, img: string, description: string, title: string): HTMLElement {
+  private renderButtonsForGame(
+    parentElement: HTMLElement,
+    img: string,
+    description: string,
+    title: string
+  ): { gameButton: HTMLElement; containerImg: HTMLElement } {
     const gameButton: HTMLElement = new BaseComponent(parentElement, 'div', ['game-button']).element;
-    const containerImg = new BaseComponent(gameButton, 'div', ['game-button__wrapper-img']).element;
-    const imgForBtn = new BaseComponent(containerImg, 'img', ['game-button__img']).element;
+    const containerImg: HTMLElement = new BaseComponent(gameButton, 'div', ['game-button__wrapper-img']).element;
+    const imgForBtn: HTMLElement = new BaseComponent(containerImg, 'img', ['game-button__img']).element;
     (imgForBtn as HTMLImageElement).src = img;
-    const descriptionGame = new BaseComponent(containerImg, 'p', ['game-button__text'], `${description}`).element;
+    const descriptionGame: HTMLElement = new BaseComponent(containerImg, 'p', ['game-button__text'], `${description}`).element;
     new BaseComponent(gameButton, 'h3', ['game-button__title'], `${title}`).element;
     gameButton.addEventListener('mouseenter', (): void => {
       descriptionGame.classList.add('active');
@@ -47,6 +56,6 @@ export class Games extends BaseComponent {
       gameButton.classList.remove('active-background');
     });
 
-    return gameButton;
+    return { gameButton, containerImg };
   }
 }
