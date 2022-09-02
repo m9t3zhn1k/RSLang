@@ -2,6 +2,7 @@ import { IWord } from '../../../types/types';
 import { BaseComponent } from '../../base-component/base-component';
 import imgSound from '../../../assets/sound.svg';
 import { COUNT_WORDS } from '../../../constants/constants';
+import { addGameResults } from '../../../controller/user-controller';
 
 class AudioChallengeGame extends BaseComponent {
   private audio: HTMLAudioElement;
@@ -79,6 +80,7 @@ class AudioChallengeGame extends BaseComponent {
         break;
       case 'Не знаю':
         this.wrongWord.push(this.counterWord);
+        addGameResults(this.dataWords[this.counterWord].id, false);
         this.findRightWord();
         this.changeStatedBtn(true);
         this.buttonAnswer.element.textContent = 'Дальше';
@@ -164,14 +166,18 @@ class AudioChallengeGame extends BaseComponent {
   }
 
   private addHandlerForWords(btnWord: BaseComponent): void {
+    let isCorrect: boolean = false;
     if (btnWord.element.textContent?.includes(this.dataWords[this.counterWord].wordTranslate)) {
       btnWord.element.classList.add('right-word');
       this.rightWord.push(this.counterWord);
+      isCorrect = true;
     } else {
       btnWord.element.classList.add('wrong-word');
       this.wrongWord.push(this.counterWord);
       this.findRightWord();
+      isCorrect = false;
     }
+    addGameResults(this.dataWords[this.counterWord].id, isCorrect);
     this.descriptionElement.buttonAudio.element.classList.add('inactive');
     this.descriptionElement.cardWrapper.element.classList.add('active');
     this.buttonAnswer.element.textContent = 'Дальше';
