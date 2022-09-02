@@ -1,5 +1,4 @@
 import './ebook.scss';
-import '../word-card/word-card.scss';
 import { IWord, IUserWord, IEbook } from '../../types/types';
 import { getAllUsersWords, getUserId, getUserAgrWords } from '../../controller/user-controller';
 import { getWords, getOneWord } from '../../controller/words-controller';
@@ -22,9 +21,9 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private sprintGame: HTMLButtonElement;
 
-  public audioFlag;
+  public audioFlag: boolean;
 
-  public numOfLearnedOrDifCards;
+  public numOfLearnedOrDifCards: number;
 
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
@@ -34,7 +33,6 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
     this.sectionPagination = new Pagination(this.controls, 'section', this);
     this.pagePagination = new Pagination(this.controls, 'page', this);
-    this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
     this.audioGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Аудиовызов')
       .element as HTMLButtonElement;
     this.sprintGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Спринт')
@@ -76,7 +74,8 @@ export default class Ebook extends BaseComponent implements IEbook {
   private drawRegularSection = (words: IWord[], sectionNumForApi: number): void => {
     this.audioGame.classList.remove('non-active-button');
     this.sprintGame.classList.remove('non-active-button');
-    const wordsCards: HTMLElement[] = words.map((wordData: IWord): HTMLElement => {
+
+    words.map((wordData: IWord): HTMLElement => {
       const wordCard: WordCards = new WordCards(
         this.cardsView,
         this,
@@ -85,23 +84,22 @@ export default class Ebook extends BaseComponent implements IEbook {
         false,
         wordData.userWord?.optional
       );
+
       if (wordData.userWord?.optional.isLearned) {
+        this.numOfLearnedOrDifCards += 1;
         wordCard.addtoLearnedButton.classList.add('active-button');
         wordCard.addToDifButton.classList.add('hidden-element');
         wordCard.element.classList.add('learned-word');
       } else if (wordData.userWord?.optional?.isDif) {
+        this.numOfLearnedOrDifCards += 1;
         wordCard.addToDifButton.classList.add('active-button');
         wordCard.element.classList.add('difficult-word');
       }
+
       return wordCard.element;
     });
-    this.pagePagination.element.style.display = 'flex';
-    Promise.all(wordsCards).then((res: HTMLElement[]): void => {
-      if (res.every((card: HTMLElement): boolean => card.classList.contains('learned-word'))) {
-        this.cardsView.classList.add('learned-page');
-        this.pagePagination.label.classList.add('learned-page-label');
-      }
-    });
+    
+    this.addLearnedStyleToPage();
   };
 
   private drawDifWordsSection = async (): Promise<void> => {
