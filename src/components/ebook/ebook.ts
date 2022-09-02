@@ -8,7 +8,6 @@ import { Router } from '../../router/router';
 import { MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED, SECTIONS_COLORS } from '../../constants/constants';
 import Pagination from '../pagination/pagination';
 import WordCards from '../word-card/word-card';
-import { AudioChallengePage } from '../audiochallenge-page/audiochallenge-page';
 
 export default class Ebook extends BaseComponent implements IEbook {
   private controls: HTMLElement;
@@ -27,8 +26,6 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   public numOfLearnedOrDifCards;
 
-  private data: IWord[];
-
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
     this.audioFlag = true;
@@ -44,13 +41,8 @@ export default class Ebook extends BaseComponent implements IEbook {
       .element as HTMLButtonElement;
     this.audioGame.id = 'audiochallenge';
     this.sprintGame.id = 'sprint';
-    this.data = [];
-    this.audioGame.addEventListener('click', (): void => {
-      this.remove();
-      new AudioChallengePage(parent, router, this.data);
-    });
     this.numOfLearnedOrDifCards = 0;
-    router.navigateApp([this.sprintGame]);
+    router.navigateApp([this.audioGame, this.sprintGame]);
     this.drawCards();
   }
 

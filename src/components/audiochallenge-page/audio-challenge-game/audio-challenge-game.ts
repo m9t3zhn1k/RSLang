@@ -29,7 +29,8 @@ class AudioChallengeGame extends BaseComponent {
   constructor(
     protected parentNode: HTMLElement,
     private dataWords: IWord[],
-    private renderResultGame: (rightWord: number[], wrongWord: number[]) => void
+    private renderResultGame: (rightWord: number[], wrongWord: number[]) => void,
+    private countRound: number
   ) {
     super(parentNode, 'div', ['audio-challenge__game']);
     this.audio = document.createElement('audio');
@@ -53,7 +54,6 @@ class AudioChallengeGame extends BaseComponent {
         this.currentWords.push(num);
       }
     }
-
     this.currentWords = arr;
     return arr.sort((): number => Math.random() - 0.5);
   }
@@ -62,7 +62,7 @@ class AudioChallengeGame extends BaseComponent {
     switch (this.buttonAnswer.element.textContent) {
       case 'Дальше':
         this.counterWord++;
-        if (this.counterWord === this.dataWords.length) {
+        if (this.counterWord === this.countRound) {
           this.remove();
           document.onkeydown = null;
           this.renderResultGame(this.rightWord, this.wrongWord);

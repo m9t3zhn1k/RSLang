@@ -1,4 +1,4 @@
-import { LANGUAGE_LEVELS } from '../../constants/constants';
+import { COUNT_OF_WORDS_ON_PAGE, LANGUAGE_LEVELS, MAX_COUNT_OF_PAGES } from '../../constants/constants';
 import { getWords } from '../../controller/words-controller';
 import { IWord } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
@@ -7,6 +7,8 @@ import './audiochallenge-page.scss';
 import { Router } from '../../router/router';
 import AudioChallengeGame from './audio-challenge-game/audio-challenge-game';
 import { getUserAgrGameWords, getUserId } from '../../controller/user-controller';
+import Loader from '../loader/loader';
+import { getLastPageFromLocalStorage } from '../../utils/storage/storage';
 
 export class AudioChallengePage extends BaseComponent {
   private words: IWord[] = [];
@@ -19,15 +21,28 @@ export class AudioChallengePage extends BaseComponent {
 
   private soundButtons: HTMLElement[] = [];
 
+  private countRound: number = COUNT_OF_WORDS_ON_PAGE;
+
+  private loader: Loader;
+
   constructor(protected parentNode: HTMLElement, private router: Router, private data?: IWord[]) {
     super(parentNode, 'div', ['audio-challenge']);
-    if (this.data) {
-      this.initGame(this.data[0].group, this.data[0].page).then((): void => {
+    this.loader = new Loader();
+    const previousPage: string | null = getLastPageFromLocalStorage();
+
+    if (previousPage === 'ebook') {
+      this.loader.createLoader(document.body);
+      const group: number = Number(localStorage.getItem('sectionNum') ?? 1) - 1;
+      const page: number = Number(localStorage.getItem('pageNum') ?? 1) - 1;
+
+      this.initGame(group, page).then((): void => {
         this.renderGame();
+        this.loader.destroy();
       });
     } else {
       this.renderStartGame();
     }
+
     this.renderLights();
   }
 
@@ -48,12 +63,19 @@ export class AudioChallengePage extends BaseComponent {
   }
 
   private async initGame(group: number, page: number): Promise<void> {
-    this.words = await this.getGameWords(group, page);
-    this.words = this.words.slice(0, 20);
+    const words: IWord[] = await this.getGameWords(group, page);
+    if (words.length < COUNT_OF_WORDS_ON_PAGE) {
+      this.countRound = words.length;
+      const newWord = await getWords(group + 1, page + 1);
+      this.words = words.concat(newWord);
+    } else {
+      this.words = words.slice(0, COUNT_OF_WORDS_ON_PAGE);
+      this.countRound = this.words.length;
+    }
   }
 
   private generateRandomNum(): number {
-    return Math.floor(Math.random() * 30);
+    return Math.floor(Math.random() * MAX_COUNT_OF_PAGES);
   }
 
   private renderLights(): void {
@@ -118,6 +140,7 @@ export class AudioChallengePage extends BaseComponent {
         const data: IWord[] = await getWords(this.levelGame, page);
         this.words = [];
         this.words.push(...data);
+        this.countRound = this.words.length;
         wrapperStart.remove();
         this.renderGame();
       }
@@ -125,7 +148,7 @@ export class AudioChallengePage extends BaseComponent {
   }
 
   private renderGame(): void {
-    new AudioChallengeGame(this.element, this.words, this.renderResultGame.bind(this));
+    new AudioChallengeGame(this.element, this.words, this.renderResultGame.bind(this), this.countRound);
   }
 
   private renderResultGame(arrRightWord: number[], arrWrongWord: number[]): void {
