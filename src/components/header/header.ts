@@ -56,6 +56,7 @@ export class Header extends BaseComponent implements IHeader {
         case 'Выйти':
           localStorage.removeItem('rslang-team58-user');
           this.changeContentForButtonLogin('Войти');
+          document.location.reload();
           break;
       }
     });
