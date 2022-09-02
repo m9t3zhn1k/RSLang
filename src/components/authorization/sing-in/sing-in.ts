@@ -36,19 +36,22 @@ class SingIn extends BaseComponent {
     this.button = new BaseComponent(this.element, 'button', ['form__button'], 'Войти');
     (this.button.element as HTMLButtonElement).type = 'submit';
 
-    this.button.element.addEventListener('click', (): void => {
-      this.formRemoveError(this.inputEmail, this.inputPassword);
-      if (!this.isValidateEmail(this.inputEmail)) {
-        this.formAddError(this.inputEmail);
-      } else if (!this.isValidatePassword(this.inputPassword)) {
-        this.formAddError(this.inputPassword);
-      } else {
-        this.loginUser(this.inputEmail.value, this.inputPassword.value);
-      }
-    });
+    this.button.element.addEventListener('click', this.handlerLoginForm.bind(this));
   }
 
-  async loginUser(email: string, password: string): Promise<void> {
+  public handlerLoginForm(e: Event): void {
+    e.preventDefault();
+    this.formRemoveError(this.inputEmail, this.inputPassword);
+    if (!this.isValidateEmail(this.inputEmail)) {
+      this.formAddError(this.inputEmail);
+    } else if (!this.isValidatePassword(this.inputPassword)) {
+      this.formAddError(this.inputPassword);
+    } else {
+      this.loginUser(this.inputEmail.value, this.inputPassword.value);
+    }
+  }
+
+  private async loginUser(email: string, password: string): Promise<void> {
     const response: Response = await loginUser({ email: email, password: password });
     switch (response.status) {
       case 200: {
@@ -73,24 +76,24 @@ class SingIn extends BaseComponent {
     }
   }
 
-  formAddError(input: HTMLInputElement): void {
+  private formAddError(input: HTMLInputElement): void {
     input.parentElement?.classList.add('error');
     input.classList.add('error');
     input.focus();
   }
 
-  formRemoveError(...inputs: HTMLInputElement[]): void {
+  private formRemoveError(...inputs: HTMLInputElement[]): void {
     inputs.forEach((input: HTMLInputElement): void => {
       input.parentElement?.classList.remove('error');
       input.classList.remove('error');
     });
   }
 
-  addContentForMessage(content: string): void {
+  private addContentForMessage(content: string): void {
     this.message.element.textContent = content;
   }
 
-  resetForm(): void {
+  private resetForm(): void {
     this.inputEmail.value = '';
     this.inputPassword.value = '';
   }

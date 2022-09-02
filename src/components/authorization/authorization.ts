@@ -7,11 +7,13 @@ import { MAX_COUNT_OF_SYMBOLS } from '../../constants/constants';
 class Authorization extends BaseComponent {
   private wrapperAuthorization: BaseComponent;
 
-  private login: SingIn | undefined;
+  private login: SingIn;
 
-  private singUp: SingUp | undefined;
+  private singUp: SingUp;
 
   private wrapperForm: BaseComponent;
+
+  private formSlider: BaseComponent;
 
   constructor(protected parentNode: HTMLElement, public contentForButton: (content: string) => void) {
     super(document.body, 'div', ['authorization']);
@@ -32,65 +34,73 @@ class Authorization extends BaseComponent {
       ['nav-authorization__button'],
       'Вход'
     );
+
+    this.formSlider = new BaseComponent(this.wrapperForm.element, 'div', ['form__slider']);
+    setTimeout((): void => {
+      this.element.classList.add('open-auth');
+      this.wrapperAuthorization.element.classList.add('open-auth');
+    }, 0);
+
     const cross: BaseComponent = new BaseComponent(navigation.element, 'div', ['nav-authorization__cross']);
     this.addEvent(buttonSingUp, buttonSingIn, cross);
 
-    this.renderSingUn();
+    document.onkeyup = this.addKeyEventForm.bind(this);
+    this.singUp = this.renderSingUp();
+    this.login = this.renderSingIn();
   }
 
-  addEvent(buttonSingUp: BaseComponent, buttonSingIn: BaseComponent, cross: BaseComponent): void {
+  private addEvent(buttonSingUp: BaseComponent, buttonSingIn: BaseComponent, cross: BaseComponent): void {
     buttonSingUp.element.addEventListener('click', (): void => {
       buttonSingUp.element.classList.add('active-btn');
       buttonSingIn.element.classList.remove('active-btn');
-      this.renderSingUn();
+      this.formSlider.element.classList.remove('active-slider');
     });
     buttonSingIn.element.addEventListener('click', (): void => {
       buttonSingIn.element.classList.add('active-btn');
       buttonSingUp.element.classList.remove('active-btn');
-      this.renderSingIn();
+      this.formSlider.element.classList.add('active-slider');
     });
     cross.element.addEventListener('click', (): void => {
-      this.remove();
-      this.element.classList.remove('active-authorization');
+      this.closeAuthorization();
     });
     this.element.addEventListener('click', (event: MouseEvent): void => {
       const { target } = event;
       if (!(target as HTMLElement)?.closest('.authorization__wrapper')) {
-        this.remove();
+        this.closeAuthorization();
       }
     });
   }
 
-  renderSingIn(): void {
-    this.singUp?.remove();
-    this.login?.remove();
-    this.login = new SingIn(
-      this.wrapperForm.element,
+  private renderSingIn(): SingIn {
+    return new SingIn(
+      this.formSlider.element,
       this.createItemForForm.bind(this),
       this.isValidateEmail.bind(this),
       this.isValidatePassword.bind(this),
-      this.remove.bind(this),
+      this.closeAuthorization.bind(this),
       this.contentForButton
     );
   }
 
-  renderSingUn(): void {
-    this.login?.remove();
-    this.singUp?.remove();
-    this.singUp = new SingUp(
-      this.wrapperForm.element,
+  private renderSingUp(): SingUp {
+    return new SingUp(
+      this.formSlider.element,
       this.createItemForForm.bind(this),
       this.isValidateEmail.bind(this),
       this.isValidatePassword.bind(this),
-      this.remove.bind(this)
+      this.closeAuthorization.bind(this),
+      this.contentForButton
     );
   }
 
-  signOut(): void {
-    localStorage.removeItem('rslang-team58-user');
+  private closeAuthorization(): void {
+    this.element.classList.remove('open-auth');
+    this.wrapperAuthorization.element.classList.remove('open-auth');
+    setTimeout(this.remove.bind(this), 150);
+    document.onkeyup = null;
   }
 
-  createItemForForm(
+  private createItemForForm(
     parentElement: HTMLElement,
     contentLabel: string,
     inputType: string,
@@ -101,7 +111,6 @@ class Authorization extends BaseComponent {
     const inputNode: BaseComponent = new BaseComponent(formItem.element, 'input', ['form__input']);
     const inputElement = inputNode.element as HTMLInputElement;
     inputElement.type = `${inputType}`;
-
     switch (inputType) {
       case 'text':
         inputElement.setAttribute('name', 'name');
@@ -120,14 +129,26 @@ class Authorization extends BaseComponent {
     return inputElement;
   }
 
-  isValidateEmail(inputEmail: HTMLInputElement): boolean {
+  private isValidateEmail(inputEmail: HTMLInputElement): boolean {
     const emailRegExp: RegExp =
       /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
     return emailRegExp.test(inputEmail.value.toLowerCase());
   }
 
-  isValidatePassword(inputPassword: HTMLInputElement): boolean {
+  private isValidatePassword(inputPassword: HTMLInputElement): boolean {
     return inputPassword.value.length >= MAX_COUNT_OF_SYMBOLS;
+  }
+
+  private addKeyEventForm(e: KeyboardEvent): void {
+    const flag: boolean = this.formSlider.element.classList.value.includes('active-slider');
+    switch (e.key) {
+      case 'Enter':
+        flag ? this.login.handlerLoginForm(e) : this.singUp.handlerRegForm(e);
+        break;
+      case 'Escape':
+        this.closeAuthorization();
+        break;
+    }
   }
 }
 

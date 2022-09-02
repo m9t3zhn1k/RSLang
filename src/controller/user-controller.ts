@@ -26,7 +26,7 @@ export const getUserId: () => string | null = (): string | null => {
   }
 };
 
-export const createUser: (user: IUser) => Promise<void> = async (user: IUser): Promise<void> => {
+export const createUser: (user: IUser) => Promise<Response> = async (user: IUser): Promise<Response> => {
   const rawResponse: Response = await fetch(`${BASE_URL}/users`, {
     method: 'POST',
     headers: {
@@ -36,6 +36,8 @@ export const createUser: (user: IUser) => Promise<void> = async (user: IUser): P
     body: JSON.stringify(user),
   });
   await rawResponse.json();
+
+  return rawResponse;
 };
 
 export const loginUser: (user: IUser) => Promise<Response> = async (user: IUser): Promise<Response> => {
