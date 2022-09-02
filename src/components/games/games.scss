@@ -1,5 +1,7 @@
 @import "../../styles/pallete.scss";
 
+$background-gradient-game: linear-gradient(-120deg, $blue-dark, $blue-medium);
+
 .game {
   display: flex;
   align-items: center;
@@ -22,7 +24,7 @@
 .game-button {
   position: relative;
   border-radius: 25px;
-  background: $blue-dark;
+  background: linear-gradient(-120deg, $blue-dark, $blue-medium);
   flex: 0 1 30%;
   display: flex;
   flex-direction: column;
@@ -84,8 +86,7 @@
   }
 
   &.active-background {
-    background-color: $blue-darkest;
-    
+    background: linear-gradient(-120deg, $blue-medium, $blue-dark);
   }
 }
 

@@ -66,7 +66,7 @@ export class AudioChallengePage extends BaseComponent {
     const words: IWord[] = await this.getGameWords(group, page);
     if (words.length < COUNT_OF_WORDS_ON_PAGE) {
       this.countRound = words.length;
-      const newWord = await getWords(group + 1, page + 1);
+      const newWord = await getWords(group, page + 1);
       this.words = words.concat(newWord);
     } else {
       this.words = words.slice(0, COUNT_OF_WORDS_ON_PAGE);
