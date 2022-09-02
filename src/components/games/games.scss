@@ -1,0 +1,96 @@
+@import "../../styles/pallete.scss";
+
+.game {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.game-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+}
+
+.game-button {
+  position: relative;
+  border-radius: 25px;
+  background: $blue-darkest;
+  flex: 0 1 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 10px;
+  cursor: pointer;
+  transition: all linear 0.2s;
+  box-shadow: 0px 2px 12px $blue-dark;
+
+  &__title {
+    display: block;
+    font-size: 24px;
+    font-weight: 500;
+    text-align: center;
+    color: $text-light;
+  }
+
+  &__text {
+    position: absolute;
+    font-size: 18px;
+    text-align: center;
+    top: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: all 0.25s linear;
+    padding: 0px 5px 0px;
+
+    &.active {
+      top: 25%;
+      overflow: visible;
+      opacity: 1;
+    }
+  }
+
+  &__wrapper-img {
+    position: relative;
+    background-color: $text-light;
+    animation: pulse-audio 1s infinite alternate;
+    display: flex;
+    margin: 0px 0px 40px 0px;
+    
+    max-width: 300px;
+    border-radius: 10px;
+  }
+
+  &__img {
+    transition: all 0.3s linear;
+    transform: scale(1);
+    object-fit: fill;
+    display: block;
+    width: 100%;
+    padding: 0px 10px;
+    &.active {
+      transform: scale(0);
+    }
+  }
+
+  &.active-background {
+    background-color: $blue-dark;
+  }
+}
+
+@keyframes pulse-audio {
+  0% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(0.98);
+  }
+}
