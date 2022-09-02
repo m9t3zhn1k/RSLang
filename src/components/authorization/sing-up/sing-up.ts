@@ -84,6 +84,7 @@ class SingUp extends BaseComponent {
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
         getUser(content.userId, content.token);
         this.contentForButton('Выйти');
+        document.location.reload();
       }
     }
     this.loader.destroy();

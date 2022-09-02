@@ -62,6 +62,7 @@ class SingIn extends BaseComponent {
         this.resetForm();
         this.destroyAuthorization();
         this.contentForButton('Выйти');
+        document.location.reload();
         break;
       }
       case 403:
