@@ -14,15 +14,33 @@
 
 .controls {
     display: flex;
+    position: sticky;
+    top: -1px;
+    width: 99vw;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
     gap: 2rem;
     margin-bottom: 3rem;
     margin-top: 6rem;
+    background-color: $text-light;
+    z-index: 2;
 }
 
 .cards-view {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+.isSticky {
+    background: $background-gradient-game;
+    box-shadow: 10px 10px 5px $gradient-light-blue;
+}
+
+.isSticky > div > div,
+.isSticky > button {
+    border: .05rem solid $text-light;
 }
 
 .learned-page {
@@ -40,7 +58,7 @@
     background-color: $blue-medium;
     color: $text-light;
     text-align: center;
-    line-height: 2rem;
+    line-height: 3rem;
     border-radius: 0.5rem;
 }
 

@@ -44,6 +44,7 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.numOfLearnedOrDifCards = 0;
     router.navigateApp([this.audioGame, this.sprintGame]);
     this.drawCards();
+    this.addControlsObserver();
   }
 
   public drawCards = async (): Promise<void> => {
@@ -139,4 +140,13 @@ export default class Ebook extends BaseComponent implements IEbook {
       this.sprintGame.disabled = false;
     }
   };
+
+  private addControlsObserver = (): void => {
+    const observer: IntersectionObserver = new IntersectionObserver( 
+      ([e]) => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
+      {threshold: 1.0}
+    );
+    
+    observer.observe(this.controls)
+  }
 }
