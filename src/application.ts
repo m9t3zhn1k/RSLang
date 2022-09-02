@@ -3,6 +3,7 @@ import { Header } from './components/header/header';
 import { Main } from './components/main/main';
 import { IBaseComponent, IHeader } from './types/types';
 import './styles/global.scss';
+import ButtonBack from './components/back-top/back-top';
 
 export class Application {
   private header: IHeader;
