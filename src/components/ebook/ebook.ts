@@ -96,7 +96,7 @@ export default class Ebook extends BaseComponent implements IEbook {
       }
       return wordCard.element;
     });
-    this.pagePagination.element.style.display = 'flex';
+    this.pagePagination.element.classList.remove('display-none');
     Promise.all(wordsCards).then((res: HTMLElement[]): void => {
       if (res.every((card: HTMLElement): boolean => card.classList.contains('learned-word'))) {
         this.cardsView.classList.add('learned-page');
@@ -109,9 +109,7 @@ export default class Ebook extends BaseComponent implements IEbook {
     const allUsersWords: IUserWord[] | null | void = await getAllUsersWords();
     new BaseComponent(this.cardsView, 'p', ['dif-words-title'], 'Сложные слова');
     this.pagePagination.element.classList.add('display-none');
-    this.audioGame.classList.add('non-active-button');
-    this.sprintGame.classList.add('non-active-button');
-
+    
     if (allUsersWords) {
       allUsersWords
         .filter((userWord: IUserWord): boolean => userWord.optional.isDif && !userWord.optional.isLearned)
