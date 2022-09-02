@@ -98,7 +98,7 @@ export default class Ebook extends BaseComponent implements IEbook {
 
       return wordCard.element;
     });
-    
+
     this.addLearnedStyleToPage();
   };
 

@@ -2,7 +2,7 @@ import { BaseComponent } from '../base-component/base-component';
 import timer_icon from '../../assets/icons/timer.svg';
 import './timer.scss';
 import { SprintResultPage } from '../sprint-page/sprint-game-results';
-import { IWord } from '../../types/types';
+import { IWord, WordResult } from '../../types/types';
 import { Router } from '../../router/router';
 
 export class Timer extends BaseComponent {
@@ -14,11 +14,11 @@ export class Timer extends BaseComponent {
 
   public timerInput: HTMLInputElement;
 
-  public results: { word: IWord; result: boolean }[] = [];
+  public results: WordResult[] = [];
 
   public score: number = 0;
 
-  constructor(private parent: HTMLElement, className: string[], private timeLimit: number, private router: Router) {
+  constructor(private parent: HTMLElement, className: string[], private timeLimit: number, private router: Router, public longestSeries: number) {
     super(parent, 'div', className);
     const timerIcon: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     this.timeLeft = this.timeLimit;
@@ -39,7 +39,7 @@ export class Timer extends BaseComponent {
       this.timerInput.value = `${this.timeLeft}`;
       if (this.timeLeft === 0) {
         this.onTimesUp();
-        new SprintResultPage(this.parent, this.results, this.score, this.router);
+        new SprintResultPage(this.parent, this.results, this.score, this.router, this.longestSeries);
       }
     }, 1000);
   }

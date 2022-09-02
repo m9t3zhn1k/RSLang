@@ -1,8 +1,8 @@
 import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
-import { addGameResults, getUserAgrGameWords, getUserId } from '../../controller/user-controller';
+import { addGameResults, getUserAgrGameWords, getUserId, updateGameStatistics } from '../../controller/user-controller';
 import { getWords } from '../../controller/words-controller';
 import { Router } from '../../router/router';
-import { IWord } from '../../types/types';
+import { IWord, WordResult } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import { Timer } from '../timer/timer';
 import { SprintResultPage } from './sprint-game-results';
@@ -12,9 +12,13 @@ export class SprintGamePage {
 
   private currentWordIndex: number = 0;
 
+  private currentCorrectSeries: number = 0;
+
+  private longestCorrectSeries: number = 0;
+
   private currentWord: IWord | null = null;
 
-  private gameResults: { word: IWord; result: boolean }[] = [];
+  private gameResults: WordResult[] = [];
 
   private timer: Timer;
 
@@ -46,7 +50,7 @@ export class SprintGamePage {
 
   constructor(private parent: HTMLElement, private group: number, private page: number, private router: Router) {
     this.initGame();
-    this.timer = new Timer(this.parent, ['timer'], SPRINT_DURATION, this.router);
+    this.timer = new Timer(this.parent, ['timer'], SPRINT_DURATION, this.router, this.longestCorrectSeries);
     const pointsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__points']).element;
     const pointsAnswerIndicators: HTMLElement = new BaseComponent(pointsContainer, 'div', ['game__points_indicators'])
       .element;
@@ -207,8 +211,13 @@ export class SprintGamePage {
     }
     const result: boolean = this.isAnswerCorrect(e);
     if (this.currentWord) {
-      this.gameResults.push({ word: this.currentWord, result: result });
-      this.timer.results.push({ word: this.currentWord, result: result });
+      this.gameResults.push({ word: this.currentWord, result: result, initDate: new Date().toLocaleDateString() });
+      this.timer.results.push({ word: this.currentWord, result: result, initDate: new Date().toLocaleDateString() });
+      this.currentCorrectSeries = result ? this.currentCorrectSeries + 1 : 0;
+      if (this.currentCorrectSeries > this.longestCorrectSeries) {
+        this.longestCorrectSeries = this.currentCorrectSeries;
+        this.timer.longestSeries = this.currentCorrectSeries;
+      }
     }
     this.setNextGameWord();
   }
@@ -233,7 +242,7 @@ export class SprintGamePage {
         'Результат игры'
       ).element as HTMLButtonElement;
       renderResultPageButton.onclick = (): void => {
-        new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router);
+        new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router, this.longestCorrectSeries);
       };
     }
   }
@@ -243,7 +252,7 @@ export class SprintGamePage {
       case 'Enter':
       case 'NumpadEnter':
         if (this.isGameEnded) {
-          new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router);
+          new SprintResultPage(this.parent, this.gameResults, this.timer.score, this.router, this.longestCorrectSeries);
         }
         break;
       case 'ArrowLeft':

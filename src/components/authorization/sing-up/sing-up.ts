@@ -1,5 +1,5 @@
 import { BaseComponent } from '../../base-component/base-component';
-import { createUser, getUser, loginUser } from '../../../controller/user-controller';
+import { createUser, getUser, loginUser, putUserStatistic } from '../../../controller/user-controller';
 import { ILoginUser } from '../../../types/types';
 import Loader from '../../loader/loader';
 
@@ -82,6 +82,13 @@ class SingUp extends BaseComponent {
       if (responseLogin.status === 200) {
         const content: ILoginUser = await responseLogin.json();
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
+        putUserStatistic({
+          optional: {
+            date: new Date().toLocaleDateString(),
+            sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
+            audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
+          },
+        });
         getUser(content.userId, content.token);
         this.contentForButton('Выйти');
         document.location.reload();

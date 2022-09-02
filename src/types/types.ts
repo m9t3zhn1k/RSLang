@@ -146,6 +146,8 @@ export interface IUserWord {
     correctAnswers?: number;
     incorrectAnswers?: number;
     seriesOfCorrectAnswers?: number;
+    initDate?: string;
+    learntDate?: string;
   };
   wordId: string;
 }
@@ -162,6 +164,8 @@ export type RequestBody = {
     correctAnswers?: number;
     incorrectAnswers?: number;
     seriesOfCorrectAnswers?: number;
+    initDate?: string;
+    learntDate?: string;
   };
 };
 
@@ -171,6 +175,8 @@ export type Optional = {
   correctAnswers?: number;
   incorrectAnswers?: number;
   seriesOfCorrectAnswers?: number;
+  initDate?: string;
+  learntDate?: string;
 };
 
 export interface IEbook {
@@ -201,6 +207,23 @@ export interface IPlayList {
   src: string;
 }
 
+export interface IStatistics {
+  optional: {
+    date: string;
+    sprint: IGameStatistics;
+    audioChallenge: IGameStatistics;
+  };
+}
+
+export interface IGameStatistics {
+  answers: number;
+  newWords: string;
+  correctAnswers: number;
+  longestCorrectSeries: number;
+}
+
+export type StatisticsData = [statistics: IStatistics | void, userWords: IUserWord[] | null | void];
+
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
 
-export type WordResult = { word: IWord; result: boolean };
+export type WordResult = { word: IWord; result: boolean, initDate: string };
