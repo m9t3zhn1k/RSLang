@@ -2,8 +2,6 @@ import { BaseComponent } from '../base-component/base-component';
 import './loader.scss';
 
 class Loader {
-  public isFetching: boolean = false;
-
   private preloaderWrapper?: BaseComponent;
 
   public createLoader(parentElement: HTMLElement): void {
