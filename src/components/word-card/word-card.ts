@@ -1,6 +1,6 @@
 import { SECTIONS_COLORS } from '../../constants/constants';
-import { addOptional, getUserId, getOneUserWord, getToken } from '../../controller/user-controller';
-import { IWord, IUserWord, IWordCards, Optional } from '../../types/types';
+import { addOptional, getUserId, getToken, getUserAgrWord } from '../../controller/user-controller';
+import { IWord, IWordCards, Optional } from '../../types/types';
 import { BaseComponentInnerHTML } from '../base-component-inner-HTML/base-component-inner-HTML';
 import { BaseComponent } from '../base-component/base-component';
 import Ebook from '../ebook/ebook';
@@ -123,8 +123,8 @@ export default class WordCards extends BaseComponent implements IWordCards {
         this.ebook.numOfLearnedOrDifCards -= 1;
         this.addToDifButton.classList.remove('hidden-element');
         if (getUserId()) {
-          getOneUserWord(this.wordData.id).then((res: IUserWord | null): void => {
-            if (res?.optional.isDif) {
+          getUserAgrWord(this.wordData.id).then((res: IWord): void => {
+            if (res.userWord?.optional.isDif) {
               this.addToDifButton.classList.add('active-button');
               this.element.classList.add('difficult-word');
               this.ebook.numOfLearnedOrDifCards += 1;

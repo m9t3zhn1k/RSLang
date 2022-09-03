@@ -8,13 +8,6 @@ export class Statistics extends BaseComponent {
   private loader: Loader;
 
   constructor(parent: HTMLElement) {
-    /* putUserStatistic({
-      optional: {
-        date: new Date().toLocaleDateString(),
-        sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
-        audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
-      },
-    }); */
     super(parent, 'div', ['wrapper']);
     this.loader = new Loader();
     this.loader.createLoader(document.body);

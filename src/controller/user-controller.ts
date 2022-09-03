@@ -173,7 +173,7 @@ export const updateUserWord: (userId: string, wordId: string, requestBody: Reque
   });
 };
 
-export const createUserWord = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
+export const createUserWord: (userId: string, wordId: string, requestBody: RequestBody) => Promise<void> = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
   await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     headers: {
@@ -184,14 +184,17 @@ export const createUserWord = async (userId: string, wordId: string, requestBody
   });
 };
 
-export const addOptional = async (type: 'dif' | 'learned', wordId: string): Promise<void> => {
+export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<void> = async (type: 'dif' | 'learned', wordId: string): Promise<void> => {
   const userId: string | null = getUserId();
   if (!userId) {
     return;
   }
-  const userWordData: IUserWord | null = await getOneUserWord(wordId);
-  if (userWordData) {
-    const requestBody: RequestBody = { optional: userWordData.optional };
+  const userWordData: IWord | null = await getUserAgrWord(wordId);
+  if (userWordData.userWord?.optional) {
+    let requestBody: RequestBody = { optional: { isDif: false, isLearned: false }};
+    if (userWordData.userWord?.optional) {
+      requestBody = { optional: userWordData.userWord?.optional }
+    }
     type === 'dif'
       ? (requestBody.optional.isDif = !requestBody.optional.isDif)
       : (requestBody.optional.isLearned = !requestBody.optional.isLearned);

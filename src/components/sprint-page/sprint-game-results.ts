@@ -26,6 +26,7 @@ export class SprintResultPage {
     private router: Router,
     private longestSeries: number
   ) {
+    this.cleanParent();
     this.loader = new Loader();
     this.loader.createLoader(document.body);
     this.updateStatistics().then((): void => {
@@ -40,7 +41,6 @@ export class SprintResultPage {
   }
 
   private renderResults(): void {
-    this.cleanParent();
     const buttonsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_buttons-container'])
       .element;
     const retryGameButton: HTMLElement = new BaseComponent(

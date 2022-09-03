@@ -7,6 +7,7 @@ import { Router } from '../../router/router';
 import { MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED, SECTIONS_COLORS } from '../../constants/constants';
 import Pagination from '../pagination/pagination';
 import WordCards from '../word-card/word-card';
+import Loader from '../loader/loader';
 
 export default class Ebook extends BaseComponent implements IEbook {
   private controls: HTMLElement;
@@ -25,6 +26,8 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   public numOfLearnedOrDifCards: number;
 
+  private loader?: Loader;
+
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
     this.audioFlag = true;
@@ -41,10 +44,19 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sprintGame.id = 'sprint';
     this.numOfLearnedOrDifCards = 0;
     router.navigateApp([this.audioGame, this.sprintGame]);
-    this.drawCards();
+    this.updateCards();
   }
 
-  public drawCards = async (): Promise<void> => {
+  public updateCards() {
+    this.loader = new Loader();
+    this.loader.createLoader(document.body);
+    this.getWords().then((data: IWord[]) => {
+      this.drawCards(data);
+      this.loader?.destroy();
+    });
+  }
+
+  private async getWords(): Promise<IWord[]> {
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
     let words: IWord[];
@@ -53,6 +65,12 @@ export default class Ebook extends BaseComponent implements IEbook {
     } else {
       words = await getWords(sectionNumForApi, pageNumForApi);
     }
+    return words;
+  }
+
+  private drawCards = async (words: IWord[]): Promise<void> => {
+    const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
+
     this.cardsView.classList.remove('learned-page');
     this.pagePagination.label.classList.remove('learned-page-label');
     this.numOfLearnedOrDifCards = 0;

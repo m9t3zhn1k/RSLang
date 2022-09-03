@@ -82,15 +82,15 @@ class SingUp extends BaseComponent {
       if (responseLogin.status === 200) {
         const content: ILoginUser = await responseLogin.json();
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
-        putUserStatistic({
+        getUser(content.userId, content.token);
+        this.contentForButton('Выйти');
+        await putUserStatistic({
           optional: {
             date: new Date().toLocaleDateString(),
             sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
             audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
           },
         });
-        getUser(content.userId, content.token);
-        this.contentForButton('Выйти');
         document.location.reload();
       }
     }

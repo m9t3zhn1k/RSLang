@@ -4,6 +4,7 @@ import { getWords } from '../../controller/words-controller';
 import { Router } from '../../router/router';
 import { IWord, WordResult } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
+import Loader from '../loader/loader';
 import { Timer } from '../timer/timer';
 import { SprintResultPage } from './sprint-game-results';
 
@@ -48,7 +49,12 @@ export class SprintGamePage {
 
   private isGameEnded: boolean = false;
 
+  private loader: Loader;
+
   constructor(private parent: HTMLElement, private group: number, private page: number, private router: Router) {
+    this.parent.classList.add('hidden');
+    this.loader = new Loader();
+    this.loader.createLoader(document.body);
     this.initGame();
     this.timer = new Timer(this.parent, ['timer'], SPRINT_DURATION, this.router, this.longestCorrectSeries);
     const pointsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__points']).element;
@@ -269,6 +275,8 @@ export class SprintGamePage {
       this.parent.removeChild(this.parent.firstChild);
     }
     this.gameWords = await this.getGameWords();
+    this.parent.classList.remove('hidden');
+    this.loader.destroy();
     this.timer.startTimer();
     this.addEventListenersToButtons();
     this.updateGameWord();

@@ -14,7 +14,7 @@ export const MAX_COUNT_OF_PAGES: number = 30;
 
 export const START_PAGINATION_PAGE: number = 1;
 
-export const SPRINT_DURATION: number = 30;
+export const SPRINT_DURATION: number = 3;
 
 export const SECTIONS_COLORS: {
   '0': string;
