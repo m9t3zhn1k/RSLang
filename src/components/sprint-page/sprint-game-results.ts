@@ -1,6 +1,7 @@
-import { updateGameStatistics } from '../../controller/user-controller';
+import { updateGameStatistics } from '../../controller/statistics-controller';
+import { addGameResults } from '../../controller/user-controller';
 import { Router } from '../../router/router';
-import { IWord, WordResult } from '../../types/types';
+import { IUserWord, WordResult, WordResultSynch } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import Loader from '../loader/loader';
 import { SprintGamePage } from './sprint-game-gaming';
@@ -33,11 +34,20 @@ export class SprintResultPage {
       this.loader.destroy();
       this.devideResults(this.results);
       this.renderResults();
-    })
+    });
   }
 
   private async updateStatistics(): Promise<void> {
-    await updateGameStatistics(this.results, this.longestSeries, 'sprint');
+    Promise.all(
+      this.results.map(async (item: WordResult): Promise<WordResultSynch | undefined> => {
+        const word: IUserWord | void = await addGameResults(item.word.id, item.result);
+        if (word) {
+          return { word, result: item.result };
+        }
+      })
+    ).then(async (data: (WordResultSynch | undefined)[]): Promise<void> => {
+      await updateGameStatistics(data, this.longestSeries, 'sprint');
+    });
   }
 
   private renderResults(): void {

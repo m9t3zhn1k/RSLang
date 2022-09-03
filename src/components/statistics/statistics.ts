@@ -1,4 +1,5 @@
-import { getAllUsersWords, getUserStatistic, putUserStatistic } from '../../controller/user-controller';
+import { getUserStatistic } from '../../controller/statistics-controller';
+import { getAllUsersWords } from '../../controller/user-controller';
 import { IStatistics, IUserWord, StatisticsData } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import Loader from '../loader/loader';
@@ -73,8 +74,7 @@ export class Statistics extends BaseComponent {
     ]).element;
     new BaseComponent(shortTermRightProcent, 'span', ['statistics__words-item_description'], 'правильных ответов');
     new BaseComponent(shortTermGamesAudioChallenge, 'p', ['statistics__games-item_title'], 'Аудиовызов');
-    const newAudioChallengeWordsCounter: HTMLElement = new BaseComponent(shortTermGamesAudioChallenge, 'p', [])
-      .element;
+    const newAudioChallengeWordsCounter: HTMLElement = new BaseComponent(shortTermGamesAudioChallenge, 'p', []).element;
     const rightAnswersAudioChallengeCounter: HTMLElement = new BaseComponent(shortTermGamesAudioChallenge, 'p', [])
       .element;
     const longestSeriesAudioChallengeCounter: HTMLElement = new BaseComponent(shortTermGamesAudioChallenge, 'p', [])
@@ -86,34 +86,43 @@ export class Statistics extends BaseComponent {
     //new BaseComponent(longTermContainer, 'h2', ['statistics__title'], 'Статистика за всё время');
 
     if (statistics) {
-      const newWordsSprint: string[] = statistics.optional.sprint.newWords === 'null' ? [] : statistics.optional.sprint.newWords.split(' ');
-      const newWordsAudioChallenge: string[] = statistics.optional.audioChallenge.newWords === 'null' ? [] : statistics.optional.audioChallenge.newWords.split(' ');
-      const newWords: string[] = [...new Set(new Array().concat(newWordsSprint, newWordsAudioChallenge))];
-      newAllWordsCounter.textContent = 
+      const newWordsSprint: string[] =
+        statistics.optional.sprint.newWords === 'null' ? [] : statistics.optional.sprint.newWords.split(' ');
+      const newWordsAudioChallenge: string[] =
+        statistics.optional.audioChallenge.newWords === 'null'
+          ? []
+          : statistics.optional.audioChallenge.newWords.split(' ');
+      newAllWordsCounter.textContent =
         `${
-          userWords?.filter(
-            (word: IUserWord): boolean => word.optional.initDate === new Date().toLocaleDateString()
-          ).length
+          userWords?.filter((word: IUserWord): boolean => word.optional.initDate === new Date().toLocaleDateString())
+            .length
         }` || '0';
-      learntAllWordsCounter.textContent = 
+      learntAllWordsCounter.textContent =
         `${
-          userWords?.filter(
-            (word: IUserWord): boolean => word.optional.learntDate === new Date().toLocaleDateString()
-          ).length
+          userWords?.filter((word: IUserWord): boolean => word.optional.learntDate === new Date().toLocaleDateString())
+            .length
         }` || '0';
       const rightAnswersAllValue: number = Math.round(
         ((statistics.optional.audioChallenge.correctAnswers + statistics.optional.sprint.correctAnswers) /
           (statistics.optional.audioChallenge.answers + statistics.optional.sprint.answers)) *
           100
       );
-      const rightAnswersSprintValue: number = Math.round(statistics.optional.sprint.correctAnswers / statistics.optional.sprint.answers * 100);
-      const rightAnswersAudioChallengeValue: number = Math.round(statistics.optional.audioChallenge.correctAnswers / statistics.optional.audioChallenge.answers * 100);
+      const rightAnswersSprintValue: number = Math.round(
+        (statistics.optional.sprint.correctAnswers / statistics.optional.sprint.answers) * 100
+      );
+      const rightAnswersAudioChallengeValue: number = Math.round(
+        (statistics.optional.audioChallenge.correctAnswers / statistics.optional.audioChallenge.answers) * 100
+      );
       rightAnswersAllCounter.textContent = `${isNaN(rightAnswersAllValue) ? 0 : rightAnswersAllValue}%`;
       newSprintWordsCounter.textContent = `Новых слов: ${newWordsSprint.length}`;
-      rightAnswersSprintCounter.textContent = isNaN(rightAnswersSprintValue) ? 'Правильных ответов: 0%' : `Правильных ответов: ${rightAnswersSprintValue}%`;
+      rightAnswersSprintCounter.textContent = isNaN(rightAnswersSprintValue)
+        ? 'Правильных ответов: 0%'
+        : `Правильных ответов: ${rightAnswersSprintValue}%`;
       longestSeriesSprintCounter.textContent = `Самая длинная серия правильных ответов: ${statistics.optional.sprint.longestCorrectSeries}`;
       newAudioChallengeWordsCounter.textContent = `Новых слов: ${newWordsAudioChallenge.length}`;
-      rightAnswersAudioChallengeCounter.textContent = isNaN(rightAnswersAudioChallengeValue) ? 'Правильных ответов: 0%' : `Правильных ответов: ${rightAnswersAudioChallengeValue}%`;
+      rightAnswersAudioChallengeCounter.textContent = isNaN(rightAnswersAudioChallengeValue)
+        ? 'Правильных ответов: 0%'
+        : `Правильных ответов: ${rightAnswersAudioChallengeValue}%`;
       longestSeriesAudioChallengeCounter.textContent = `Самая длинная серия правильных ответов: ${statistics.optional.audioChallenge.longestCorrectSeries}`;
     }
   }

@@ -47,10 +47,10 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.updateCards();
   }
 
-  public updateCards() {
+  public updateCards(): void {
     this.loader = new Loader();
     this.loader.createLoader(document.body);
-    this.getWords().then((data: IWord[]) => {
+    this.getWords().then((data: IWord[]): void => {
       this.drawCards(data);
       this.loader?.destroy();
     });

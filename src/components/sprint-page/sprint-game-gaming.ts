@@ -1,5 +1,5 @@
 import { PLAYLIST, SPRINT_DURATION } from '../../constants/constants';
-import { addGameResults, getUserAgrGameWords, getUserId, updateGameStatistics } from '../../controller/user-controller';
+import { getUserAgrGameWords, getUserId } from '../../controller/user-controller';
 import { getWords } from '../../controller/words-controller';
 import { Router } from '../../router/router';
 import { IWord, WordResult } from '../../types/types';
@@ -92,7 +92,7 @@ export class SprintGamePage {
   private addEventListenersToButtons(): void {
     this.answerTrueButton.addEventListener('click', this.addWordResult.bind(this));
     this.answerFalseButton.addEventListener('click', this.addWordResult.bind(this));
-    window.addEventListener('keyup', this.handleKeyEvent.bind(this));
+    window.onkeyup = this.handleKeyEvent.bind(this);
   }
 
   private updateGameWord(): void {
@@ -113,7 +113,7 @@ export class SprintGamePage {
     }, 150);
   }
 
-  private isAnswerCorrect(e: Event): boolean {
+  private async isAnswerCorrect(e: Event): Promise<boolean> {
     let isCorrect: boolean = false;
     if ((e as KeyboardEvent).code === 'ArrowLeft' || (e as KeyboardEvent).code === 'ArrowRight') {
       isCorrect =
@@ -125,9 +125,9 @@ export class SprintGamePage {
         (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
     }
-    if (this.currentWord?.id) {
-      addGameResults(this.currentWord.id, isCorrect);
-    }
+    /* if (this.currentWord?.id) {
+      await addGameResults(this.currentWord.id, isCorrect);
+    } */
     this.handleAnswer(isCorrect);
     this.paintAnswer(isCorrect);
     return isCorrect;
@@ -211,14 +211,14 @@ export class SprintGamePage {
     }
   }
 
-  private addWordResult(e: Event): void {
+  private async addWordResult(e: Event): Promise<void> {
     if (this.isGameEnded) {
       return;
     }
-    const result: boolean = this.isAnswerCorrect(e);
+    const result: boolean = await this.isAnswerCorrect(e);
     if (this.currentWord) {
-      this.gameResults.push({ word: this.currentWord, result: result, initDate: new Date().toLocaleDateString() });
-      this.timer.results.push({ word: this.currentWord, result: result, initDate: new Date().toLocaleDateString() });
+      this.gameResults.push({ word: this.currentWord, result: result });
+      this.timer.results.push({ word: this.currentWord, result: result });
       this.currentCorrectSeries = result ? this.currentCorrectSeries + 1 : 0;
       if (this.currentCorrectSeries > this.longestCorrectSeries) {
         this.longestCorrectSeries = this.currentCorrectSeries;

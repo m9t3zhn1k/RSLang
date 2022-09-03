@@ -3,13 +3,11 @@ import {
   IAggregatedResponse,
   IGetAllUsersWords,
   IResponseWord,
-  IStatistics,
   IUser,
   IUserWord,
   IWord,
   Optional,
   RequestBody,
-  WordResult,
 } from '../types/types';
 
 export const getToken: () => string | null = (): string | null => {
@@ -158,12 +156,16 @@ export const getUserAgrGameWords: (group: number) => Promise<IWord[]> = async (g
   );
 };
 
-export const updateUserWord: (userId: string, wordId: string, requestBody: RequestBody) => Promise<void> = async (
+export const updateUserWord: (
   userId: string,
   wordId: string,
   requestBody: RequestBody
-): Promise<void> => {
-  await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
+) => Promise<IUserWord | void> = async (
+  userId: string,
+  wordId: string,
+  requestBody: RequestBody
+): Promise<IUserWord | void> => {
+  const res = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -171,10 +173,19 @@ export const updateUserWord: (userId: string, wordId: string, requestBody: Reque
     },
     body: JSON.stringify(requestBody),
   });
+  return res.ok ? res.json() : undefined;
 };
 
-export const createUserWord: (userId: string, wordId: string, requestBody: RequestBody) => Promise<void> = async (userId: string, wordId: string, requestBody: RequestBody): Promise<void> => {
-  await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
+export const createUserWord: (
+  userId: string,
+  wordId: string,
+  requestBody: RequestBody
+) => Promise<IUserWord | void> = async (
+  userId: string,
+  wordId: string,
+  requestBody: RequestBody
+): Promise<IUserWord | void> => {
+  const res = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -182,18 +193,22 @@ export const createUserWord: (userId: string, wordId: string, requestBody: Reque
     },
     body: JSON.stringify(requestBody),
   });
+  return res.ok ? res.json() : undefined;
 };
 
-export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<void> = async (type: 'dif' | 'learned', wordId: string): Promise<void> => {
+export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<void> = async (
+  type: 'dif' | 'learned',
+  wordId: string
+): Promise<void> => {
   const userId: string | null = getUserId();
   if (!userId) {
     return;
   }
   const userWordData: IWord | null = await getUserAgrWord(wordId);
   if (userWordData.userWord?.optional) {
-    let requestBody: RequestBody = { optional: { isDif: false, isLearned: false }};
+    let requestBody: RequestBody = { optional: { isDif: false, isLearned: false } };
     if (userWordData.userWord?.optional) {
-      requestBody = { optional: userWordData.userWord?.optional }
+      requestBody = { optional: userWordData.userWord?.optional };
     }
     type === 'dif'
       ? (requestBody.optional.isDif = !requestBody.optional.isDif)
@@ -226,48 +241,15 @@ export const getAllUsersWords: IGetAllUsersWords = async (): Promise<IUserWord[]
   return resp.ok ? resp.json() : null;
 };
 
-export const getUserStatistic: () => Promise<IStatistics | void> = async (): Promise<IStatistics | void> => {
-  const userId: string | null = getUserId();
-  if (!userId) {
-    return;
-  }
-  const resp: Response = await fetch(`${BASE_URL}/users/${userId}/statistics`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-      Accept: 'application/json',
-    },
-  });
-  return resp.ok ? resp.json() : null;
-};
-
-export const putUserStatistic: (statistics: IStatistics) => Promise<void> = async (
-  statistics: IStatistics
-): Promise<void> => {
-  const userId: string | null = getUserId();
-  if (!userId) {
-    return;
-  }
-  await fetch(`${BASE_URL}/users/${userId}/statistics`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(statistics),
-  });
-};
-
-export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<void> = async (
+export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<IUserWord | void> = async (
   wordId: string,
   isCorrect: boolean
-): Promise<void> => {
+): Promise<IUserWord | void> => {
   const userId: string | null = getUserId();
   if (!userId) {
     return;
   }
-  const userWordData: IWord = await getUserAgrWord(wordId);
+  const userWordData: IWord | void = await getUserAgrWord(wordId);
   const optional: Optional = userWordData.userWord?.optional
     ? userWordData.userWord.optional
     : { isDif: false, isLearned: false };
@@ -290,50 +272,10 @@ export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<voi
       optional.isLearned = false;
     }
   }
-  if (userWordData.userWord?.optional) {
-    updateUserWord(userId, wordId, { optional });
+  if (userWordData.userWord?.optional.initDate) {
+    return updateUserWord(userId, wordId, { optional });
   } else {
     optional.initDate = new Date().toLocaleDateString();
-    createUserWord(userId, wordId, { optional });
-  }
-};
-
-export const updateGameStatistics = async (
-  gameResults: WordResult[],
-  longestSeries: number,
-  game: 'sprint' | 'audioChallenge'
-): Promise<void> => {
-  const userStatistics: IStatistics | void = await getUserStatistic();
-  if (userStatistics) {
-    if (userStatistics.optional.date !== new Date().toLocaleDateString()) {
-      userStatistics.optional.date = new Date().toLocaleDateString();
-      userStatistics.optional.sprint.correctAnswers = 0;
-      userStatistics.optional.sprint.answers = 0;
-      userStatistics.optional.sprint.longestCorrectSeries = 0;
-      userStatistics.optional.sprint.newWords = 'null';
-      userStatistics.optional.audioChallenge.correctAnswers = 0;
-      userStatistics.optional.audioChallenge.answers = 0;
-      userStatistics.optional.audioChallenge.longestCorrectSeries = 0;
-      userStatistics.optional.audioChallenge.newWords = 'null';
-    }
-    if (userStatistics.optional[game].longestCorrectSeries < longestSeries) {
-      userStatistics.optional[game].longestCorrectSeries = longestSeries;
-    }
-    userStatistics.optional[game].answers += gameResults.length;
-    if (userStatistics.optional[game].newWords === 'null') {
-      userStatistics.optional[game].newWords = '';
-    }
-    gameResults.forEach((word: WordResult): void => {
-      if (word.result) {
-        userStatistics.optional[game].correctAnswers += 1;
-      }
-      if (word.initDate === new Date().toLocaleDateString() && !~userStatistics.optional[game].newWords.indexOf(word.word.word)) {
-        userStatistics.optional[game].newWords += ` ${word.word.word}`;
-      }
-    });
-    if (!userStatistics.optional[game].newWords) {
-      userStatistics.optional[game].newWords = 'null';
-    }
-    await putUserStatistic({ optional: userStatistics.optional });
+    return createUserWord(userId, wordId, { optional });
   }
 };

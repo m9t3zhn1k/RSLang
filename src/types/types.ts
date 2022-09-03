@@ -150,7 +150,7 @@ export interface IQueryParam {
 }
 
 export type RequestBody = {
-  optional: Optional
+  optional: Optional;
 };
 
 export type Optional = {
@@ -209,4 +209,6 @@ export type StatisticsData = [statistics: IStatistics | void, userWords: IUserWo
 
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
 
-export type WordResult = { word: IWord; result: boolean, initDate: string };
+export type WordResult = { word: IWord; result: boolean };
+
+export type WordResultSynch = { word: IUserWord; result: boolean };

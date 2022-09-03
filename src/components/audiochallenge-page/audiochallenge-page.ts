@@ -25,7 +25,7 @@ export class AudioChallengePage extends BaseComponent {
 
   private loader: Loader;
 
-  constructor(protected parentNode: HTMLElement, private router: Router, private data?: IWord[]) {
+  constructor(protected parentNode: HTMLElement, private router: Router) {
     super(parentNode, 'div', ['audio-challenge']);
     this.loader = new Loader();
     const previousPage: string | null = getLastPageFromLocalStorage();

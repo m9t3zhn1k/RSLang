@@ -1,7 +1,8 @@
 import { BaseComponent } from '../../base-component/base-component';
-import { createUser, getUser, loginUser, putUserStatistic } from '../../../controller/user-controller';
+import { createUser, getUser, loginUser } from '../../../controller/user-controller';
 import { ILoginUser } from '../../../types/types';
 import Loader from '../../loader/loader';
+import { putUserStatistic } from '../../../controller/statistics-controller';
 
 class SingUp extends BaseComponent {
   private button: BaseComponent;
