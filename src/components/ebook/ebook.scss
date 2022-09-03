@@ -16,7 +16,7 @@
     display: flex;
     position: sticky;
     top: -1px;
-    width: 99vw;
+    width: 99.5vw;
     justify-content: center;
     align-items: center;
     height: 5rem;
@@ -74,5 +74,22 @@
 .non-active-button-game:hover {
     cursor: default;
     transform: none;
+}
+
+.games-wrap {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 1000px) {
+    .controls {
+        flex-wrap: wrap;
+        gap: .5rem 1rem;
+        height: auto;
+    }
+
+    .isSticky {
+        padding: 1rem 0;
+    }
 }
 

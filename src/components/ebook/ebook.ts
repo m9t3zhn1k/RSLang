@@ -40,9 +40,10 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sectionPagination = new Pagination(this.controls, 'section', this);
     this.pagePagination = new Pagination(this.controls, 'page', this);
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
-    this.audioGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Аудиовызов')
+    const gamesWrap: HTMLElement = new BaseComponent(this.controls, 'div', ['games-wrap']).element;
+    this.audioGame = new BaseComponent(gamesWrap, 'button', ['button-game'], 'Аудиовызов')
       .element as HTMLButtonElement;
-    this.sprintGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Спринт')
+    this.sprintGame = new BaseComponent(gamesWrap, 'button', ['button-game'], 'Спринт')
       .element as HTMLButtonElement;
     this.audioGame.id = 'audiochallenge';
     this.sprintGame.id = 'sprint';
