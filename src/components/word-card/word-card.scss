@@ -6,10 +6,11 @@
     box-shadow: 0px 0px 5px $blue-light;
     padding: 1rem;
     gap: 1rem;
-    width: 100%;
+    width: calc(100% - 1rem);
     max-width: 70rem;
     border-radius: .5rem;
     box-sizing: border-box;
+    margin: 0 .5rem;
 }
 
 .img {
