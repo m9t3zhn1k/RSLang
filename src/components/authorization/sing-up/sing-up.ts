@@ -88,6 +88,7 @@ class SingUp extends BaseComponent {
         await putUserStatistic({
           optional: {
             date: new Date().toLocaleDateString(),
+            newWords: 'null',
             sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
             audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
           },

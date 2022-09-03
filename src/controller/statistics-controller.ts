@@ -75,9 +75,10 @@ export const updateGameStatistics = async (
         }
         if (
           word.word.optional.initDate === new Date().toLocaleDateString() &&
-          !~userStatistics.optional[game].newWords.indexOf(word.word.id)
+          !~userStatistics.optional.newWords.indexOf(word.word.id)
         ) {
           userStatistics.optional[game].newWords += ` ${word.word.id}`;
+          userStatistics.optional.newWords += ` ${word.word.id}`;
         }
       }
     });
@@ -85,6 +86,7 @@ export const updateGameStatistics = async (
       userStatistics.optional[game].newWords = 'null';
     }
     userStatistics.optional[game].newWords = userStatistics.optional[game].newWords.trim();
+    userStatistics.optional.newWords = userStatistics.optional.newWords.trim();
     await putUserStatistic({ optional: userStatistics.optional });
   }
 };

@@ -193,6 +193,7 @@ export interface IPlayList {
 export interface IStatistics {
   optional: {
     date: string;
+    newWords: string;
     sprint: IGameStatistics;
     audioChallenge: IGameStatistics;
   };
