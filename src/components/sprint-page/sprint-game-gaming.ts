@@ -125,9 +125,6 @@ export class SprintGamePage {
         (activeButton.textContent === 'Верно' && this.currentWord?.wordTranslate === this.wordRU.textContent) ||
         (activeButton.textContent === 'Неверно' && this.currentWord?.wordTranslate !== this.wordRU.textContent);
     }
-    /* if (this.currentWord?.id) {
-      await addGameResults(this.currentWord.id, isCorrect);
-    } */
     this.handleAnswer(isCorrect);
     this.paintAnswer(isCorrect);
     return isCorrect;

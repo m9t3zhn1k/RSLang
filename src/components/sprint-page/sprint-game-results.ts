@@ -38,7 +38,7 @@ export class SprintResultPage {
   }
 
   private async updateStatistics(): Promise<void> {
-    Promise.all(
+    await Promise.all(
       this.results.map(async (item: WordResult): Promise<WordResultSynch | undefined> => {
         const word: IUserWord | void = await addGameResults(item.word.id, item.result);
         if (word) {
