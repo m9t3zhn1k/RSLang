@@ -8,6 +8,7 @@ import { Router } from '../../router/router';
 import { MAX_COUNT_OF_SECTIONS_FOR_UNAUTHORIZED, SECTIONS_COLORS } from '../../constants/constants';
 import Pagination from '../pagination/pagination';
 import WordCards from '../word-card/word-card';
+import Loader from '../loader/loader';
 
 export default class Ebook extends BaseComponent implements IEbook {
   private controls: HTMLElement;
@@ -26,9 +27,13 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   public numOfLearnedOrDifCards;
 
+  private loader: Loader;
+
+
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
     this.audioFlag = true;
+    this.loader = new Loader();
     new BaseComponent(this.element, 'div', ['title'], 'Учебник');
     this.controls = new BaseComponent(this.element, 'div', ['controls']).element;
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
@@ -43,11 +48,12 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sprintGame.id = 'sprint';
     this.numOfLearnedOrDifCards = 0;
     router.navigateApp([this.audioGame, this.sprintGame]);
-    this.drawCards();
+    this.drawCards().then((): void => this.loader.destroy())
     this.addControlsObserver();
   }
 
   public drawCards = async (): Promise<void> => {
+    this.loader.createLoader(this.cardsView);
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
     let words: IWord[];
