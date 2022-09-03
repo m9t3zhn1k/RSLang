@@ -68,8 +68,8 @@ export class AudioChallengePage extends BaseComponent {
       this.countRound = words.length;
       let newWord = await getWords(group, page + 1);
       if (!newWord.length) {
-        newWord = await getWords(0, 0)
-      };
+        newWord = await getWords(0, 0);
+      }
       this.words = words.concat(newWord);
     } else {
       this.words = words.slice(0, COUNT_OF_WORDS_ON_PAGE);
