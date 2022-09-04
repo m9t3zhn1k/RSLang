@@ -2,7 +2,7 @@
 
 .authorization {
   position: fixed;
-  z-index: 100;
+  z-index: 30;
   width: 100vw;
   height: 100vh;
   top: 0;
@@ -169,6 +169,9 @@
   &__message {
     color: $color-wrong-form;
     opacity: 1;
+    height: 20px;
+    text-align: center;
+    transition: all 0.2s linear;
   }
 
   &__message.message-active {

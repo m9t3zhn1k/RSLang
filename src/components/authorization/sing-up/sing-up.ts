@@ -1,5 +1,5 @@
 import { BaseComponent } from '../../base-component/base-component';
-import { createUser, getUser, loginUser } from '../../../controller/user-controller';
+import { createUser, getUser, loginUser, updateToken } from '../../../controller/user-controller';
 import { ILoginUser } from '../../../types/types';
 import Loader from '../../loader/loader';
 import { putUserStatistic } from '../../../controller/statistics-controller';
@@ -41,8 +41,9 @@ class SingUp extends BaseComponent {
     this.inputLogin = createItemForForm(this.form.element, 'Имя пользователя', 'text', 'Введите имя');
     this.inputEmail = createItemForForm(this.form.element, 'Адрес электронной почты', 'email', 'Введите адрес почты');
     this.inputPassword = createItemForForm(this.form.element, 'Пароль', 'password', 'Введите пароль');
+    this.inputPassword.name = 'password';
     this.confirmPassword = createItemForForm(this.form.element, 'Подтвердите пароль', 'password', 'Подтвердите пароль');
-    this.confirmPassword.name = 'password';
+    this.confirmPassword.name = 'confirm password';
     this.messageForPass = new BaseComponent(
       this.confirmPassword.parentElement as HTMLElement,
       'p',
@@ -50,7 +51,8 @@ class SingUp extends BaseComponent {
       'Пароли, которые Вы ввели, не совпадают'
     );
     this.button = new BaseComponent(this.form.element, 'button', ['form__button'], 'Регистрация');
-    this.button.element.addEventListener('click', this.handlerRegForm.bind(this));
+    (this.button.element as HTMLButtonElement).type = 'submit';
+    this.form.element.addEventListener('submit', this.handlerRegForm.bind(this));
   }
 
   public handlerRegForm(e: Event): void {
@@ -84,6 +86,7 @@ class SingUp extends BaseComponent {
         const content: ILoginUser = await responseLogin.json();
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
         getUser(content.userId, content.token);
+        updateToken();
         this.contentForButton('Выйти');
         await putUserStatistic({
           optional: {

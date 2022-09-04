@@ -26,6 +26,14 @@ export const getUserId: () => string | null = (): string | null => {
   }
 };
 
+export const getRefreshToken: () => string | null = (): string | null => {
+  if (window.localStorage.getItem('rslang-team58-user')) {
+    return JSON.parse(window.localStorage.getItem('rslang-team58-user') ?? ' ').refreshToken;
+  } else {
+    return null;
+  }
+};
+
 export const createUser: (user: IUser) => Promise<Response> = async (user: IUser): Promise<Response> => {
   const rawResponse: Response = await fetch(`${BASE_URL}/users`, {
     method: 'POST',
@@ -66,17 +74,25 @@ export const getUser: (userId: string, token: string) => Promise<void> = async (
   await rawResponse.json();
 };
 
-export const createToken: (userId: string, refreshToken: string) => Promise<void> = async (
-  userId: string,
-  refreshToken: string
-): Promise<void> => {
-  const rawResponse: Response = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  });
-  await rawResponse.json();
+export const updateToken: () => Promise<void> = async (): Promise<void> => {
+  const userId = getUserId();
+  const refreshToken = getRefreshToken();
+  if (userId && refreshToken) {
+    const rawResponse: Response = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+    const storage = JSON.parse(window.localStorage.getItem('rslang-team58-user') ?? ' ');
+    const data = await rawResponse.json();
+    storage.refreshToken = data.refreshToken;
+    window.localStorage.setItem('rslang-team58-user', JSON.stringify(storage));
+    if (rawResponse.status === 200) {
+      const date = Date.now().toString();
+      window.localStorage.setItem('rslang-team58-user-time', date);
+    }
+  }
 };
 
 export const getOneUserWord: (wordId: string) => Promise<IUserWord | null> = async (
@@ -117,6 +133,7 @@ export const getUserAgrWords: (group: number, page: number) => Promise<IWord[]> 
       },
     }
   );
+  updateToken();
   return resp.json().then((item: IAggregatedResponse[]): IWord[] =>
     item[0].paginatedResults.map(
       (i: IResponseWord): IWord => ({
@@ -143,7 +160,6 @@ export const getUserAgrGameWords: (group: number) => Promise<IWord[]> = async (g
       Accept: 'application/json',
     },
   });
-
   return resp.json().then((item: IAggregatedResponse[]): IWord[] =>
     item[0].paginatedResults.map(
       (i: IResponseWord): IWord => ({
@@ -227,6 +243,7 @@ export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<v
     requestBody.optional.initDate = new Date().toLocaleDateString();
     createUserWord(userId, wordId, requestBody);
   }
+  updateToken();
 };
 
 export const getAllUsersWords: IGetAllUsersWords = async (): Promise<IUserWord[] | null | void> => {

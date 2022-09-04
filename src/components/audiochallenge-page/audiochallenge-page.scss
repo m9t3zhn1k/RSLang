@@ -139,6 +139,10 @@
     background-color: $hover-button-right;
   }
 
+  &__word-btn.right-word.green {
+    background-color: $soft-green;
+  }
+
   &__word-btn.wrong-word {
     background-color: $hover-button-wrong;
   }
