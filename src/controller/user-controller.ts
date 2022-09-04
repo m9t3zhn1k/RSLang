@@ -2,6 +2,8 @@ import { BASE_URL } from '../constants/constants';
 import {
   IAggregatedResponse,
   IGetAllUsersWords,
+  ILoginUser,
+  IRefreshToken,
   IResponseWord,
   IUser,
   IUserWord,
@@ -75,8 +77,8 @@ export const getUser: (userId: string, token: string) => Promise<void> = async (
 };
 
 export const updateToken: () => Promise<void> = async (): Promise<void> => {
-  const userId = getUserId();
-  const refreshToken = getRefreshToken();
+  const userId: string | null = getUserId();
+  const refreshToken: string | null = getRefreshToken();
   if (userId && refreshToken) {
     const rawResponse: Response = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
       method: 'GET',
@@ -84,12 +86,12 @@ export const updateToken: () => Promise<void> = async (): Promise<void> => {
         Authorization: `Bearer ${refreshToken}`,
       },
     });
-    const storage = JSON.parse(window.localStorage.getItem('rslang-team58-user') ?? ' ');
-    const data = await rawResponse.json();
+    const storage: ILoginUser = JSON.parse(window.localStorage.getItem('rslang-team58-user') ?? ' ');
+    const data: IRefreshToken = await rawResponse.json();
     storage.refreshToken = data.refreshToken;
     window.localStorage.setItem('rslang-team58-user', JSON.stringify(storage));
     if (rawResponse.status === 200) {
-      const date = Date.now().toString();
+      const date: string = Date.now().toString();
       window.localStorage.setItem('rslang-team58-user-time', date);
     }
   }
@@ -184,7 +186,7 @@ export const updateUserWord: (
   wordId: string,
   requestBody: RequestBody
 ): Promise<IUserWord | void> => {
-  const res = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
+  const res: Response = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -204,7 +206,7 @@ export const createUserWord: (
   wordId: string,
   requestBody: RequestBody
 ): Promise<IUserWord | void> => {
-  const res = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
+  const res: Response = await fetch(`${BASE_URL}/users/${userId}/words/${wordId}`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${getToken()}`,

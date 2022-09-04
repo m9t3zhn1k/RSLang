@@ -3,23 +3,23 @@
     "imageSource": "./assets/images/developers/pavel_korshunov.webp",
     "name": "Pavel Korshunov",
     "title": "Team Lead, Developer",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit ipsam fuga minima odio id saepe ea delectus eum nisi, repellendus atque possimus sint quos aperiam, at earum? Quae, non.",
+    "description": "Распределение задач, структура приложения, главная страница, игра «Спринт», краткосрочная статистика.",
     "github": "https://github.com/m9t3zhn1k",
     "className": "developers__left"
   },
   {
-    "imageSource": "./assets/images/developers/test.jpg",
+    "imageSource": "./assets/images/developers/anton_kochetov.webp",
     "name": "Anton Kochetov",
     "title": "Developer",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit ipsam fuga minima odio id saepe ea delectus eum nisi, repellendus atque possimus sint quos aperiam, at earum? Quae, non.",
+    "description": "Авторизация, игра «Аудиовызов», страница «Игры» и разные отдельные фичи.",
     "github": "https://github.com/Anton13602",
     "className": "developers__right"
   },
   {
-    "imageSource": "./assets/images/developers/test.jpg",
+    "imageSource": "./assets/images/developers/maxim_omelchuk.webp",
     "name": "Maksim Amialchuk",
     "title": "Developer",
-    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur suscipit ipsam fuga minima odio id saepe ea delectus eum nisi, repellendus atque possimus sint quos aperiam, at earum? Quae, non.",
+    "description": "Электронный учебник, список слов, изученные слова, прогресс изучения.",
     "github": "https://github.com/MaximOmelchuk",
     "className": "developers__left"
   }

@@ -66,4 +66,17 @@
       font-weight: 700;
     }
   }
+
+  &__graphic {
+    height: 444px;
+    width: 888px;
+    display: block;
+    background: $grey-light;
+    border-radius: 1rem;
+
+    &-container {
+      display: flex;
+      justify-content: center;
+    }
+  }
 }

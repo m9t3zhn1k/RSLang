@@ -80,6 +80,11 @@ export interface ILoginUser {
   name: string;
 }
 
+export interface IRefreshToken {
+  refreshToken: string;
+  token: string;
+}
+
 export interface IGetUserWord {
   userId: string;
   wordId: string;
@@ -213,3 +218,15 @@ export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
 export type WordResult = { word: IWord; result: boolean };
 
 export type WordResultSynch = { word: IUserWord; result: boolean };
+
+export type ShortTermStatisticsElements = {
+  newAllWordsCounter: HTMLElement;
+  learntAllWordsCounter: HTMLElement;
+  rightAnswersAllCounter: HTMLElement;
+  newAudioChallengeWordsCounter: HTMLElement;
+  rightAnswersAudioChallengeCounter: HTMLElement;
+  longestSeriesAudioChallengeCounter: HTMLElement;
+  newSprintWordsCounter: HTMLElement;
+  rightAnswersSprintCounter: HTMLElement;
+  longestSeriesSprintCounter: HTMLElement;
+};
