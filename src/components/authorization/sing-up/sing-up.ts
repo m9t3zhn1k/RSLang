@@ -41,8 +41,9 @@ class SingUp extends BaseComponent {
     this.inputLogin = createItemForForm(this.form.element, 'Имя пользователя', 'text', 'Введите имя');
     this.inputEmail = createItemForForm(this.form.element, 'Адрес электронной почты', 'email', 'Введите адрес почты');
     this.inputPassword = createItemForForm(this.form.element, 'Пароль', 'password', 'Введите пароль');
+    this.inputPassword.name = 'password';
     this.confirmPassword = createItemForForm(this.form.element, 'Подтвердите пароль', 'password', 'Подтвердите пароль');
-    this.confirmPassword.name = 'password';
+    this.confirmPassword.name = 'confirm password';
     this.messageForPass = new BaseComponent(
       this.confirmPassword.parentElement as HTMLElement,
       'p',
@@ -50,7 +51,8 @@ class SingUp extends BaseComponent {
       'Пароли, которые Вы ввели, не совпадают'
     );
     this.button = new BaseComponent(this.form.element, 'button', ['form__button'], 'Регистрация');
-    this.button.element.addEventListener('click', this.handlerRegForm.bind(this));
+    (this.button.element as HTMLButtonElement).type = 'submit';
+    this.form.element.addEventListener('submit', this.handlerRegForm.bind(this));
   }
 
   public handlerRegForm(e: Event): void {

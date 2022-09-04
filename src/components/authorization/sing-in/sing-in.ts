@@ -1,6 +1,7 @@
 import { BaseComponent } from '../../base-component/base-component';
-import { createToken, loginUser, getUser } from '../../../controller/user-controller';
+import { updateToken, loginUser, getUser } from '../../../controller/user-controller';
 import { ILoginUser } from '../../../types/types';
+import Loader from '../../loader/loader';
 
 class SingIn extends BaseComponent {
   private button: BaseComponent;
@@ -12,6 +13,8 @@ class SingIn extends BaseComponent {
   private form: BaseComponent;
 
   private message: BaseComponent;
+
+  private loader: Loader;
 
   constructor(
     protected parentNode: HTMLElement,
@@ -27,6 +30,7 @@ class SingIn extends BaseComponent {
     public contentForButton: (content: string) => void
   ) {
     super(parentNode, 'div', ['sing-in__wrapper']);
+    this.loader = new Loader();
     this.form = new BaseComponent(this.element, 'form', ['form__body']);
 
     this.inputEmail = createItemForForm(this.form.element, 'Адрес электронной почты', 'email', 'Введите адрес почты');
@@ -47,18 +51,21 @@ class SingIn extends BaseComponent {
     } else if (!this.isValidatePassword(this.inputPassword)) {
       this.formAddError(this.inputPassword);
     } else {
+      this.loader.createLoader(document.body);
       this.loginUser(this.inputEmail.value, this.inputPassword.value);
     }
   }
 
   private async loginUser(email: string, password: string): Promise<void> {
+    const date = Date.now().toString();
     const response: Response = await loginUser({ email: email, password: password });
     switch (response.status) {
       case 200: {
         const content: ILoginUser = await response.json();
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
-        getUser(content.userId, content.token);
-        createToken(content.userId, content.refreshToken);
+        localStorage.setItem('rslang-team58-user-time', date);
+        await getUser(content.userId, content.token);
+        updateToken();
         this.resetForm();
         this.destroyAuthorization();
         this.contentForButton('Выйти');
@@ -75,6 +82,7 @@ class SingIn extends BaseComponent {
         break;
       }
     }
+    this.loader.destroy();
   }
 
   private formAddError(input: HTMLInputElement): void {

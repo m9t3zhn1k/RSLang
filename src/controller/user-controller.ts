@@ -26,6 +26,14 @@ export const getUserId: () => string | null = (): string | null => {
   }
 };
 
+export const getRefreshToken: () => string | null = (): string | null => {
+  if (window.localStorage.getItem('rslang-team58-user')) {
+    return JSON.parse(window.localStorage.getItem('rslang-team58-user') ?? ' ').refreshToken;
+  } else {
+    return null;
+  }
+};
+
 export const createUser: (user: IUser) => Promise<Response> = async (user: IUser): Promise<Response> => {
   const rawResponse: Response = await fetch(`${BASE_URL}/users`, {
     method: 'POST',
@@ -66,17 +74,21 @@ export const getUser: (userId: string, token: string) => Promise<void> = async (
   await rawResponse.json();
 };
 
-export const createToken: (userId: string, refreshToken: string) => Promise<void> = async (
-  userId: string,
-  refreshToken: string
-): Promise<void> => {
-  const rawResponse: Response = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${refreshToken}`,
-    },
-  });
-  await rawResponse.json();
+export const updateToken: () => Promise<void> = async (): Promise<void> => {
+  const userId = getUserId();
+  const refreshToken = getRefreshToken();
+  if (userId && refreshToken) {
+    const rawResponse: Response = await fetch(`${BASE_URL}/users/${userId}/tokens`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${refreshToken}`,
+      },
+    });
+
+    if (rawResponse.status === 200) {
+      
+    }
+  }
 };
 
 export const getOneUserWord: (wordId: string) => Promise<IUserWord | null> = async (
