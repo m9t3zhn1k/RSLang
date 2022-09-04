@@ -32,9 +32,13 @@
 
 .arrow-button:hover {
     cursor: pointer;
-    opacity: .8;
+    opacity: .7;
 }
 
 .learned-page-label {
     background-color: $soft-green;
- }
+}
+
+.display-none {
+    display: none;
+}

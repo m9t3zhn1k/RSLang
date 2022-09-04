@@ -1,7 +1,6 @@
 @import "../../styles/pallete.scss";
 
 .ebook {
-    padding: 1rem;
     background-color: $text-light;
     display: flex;
     flex-direction: column;
@@ -14,15 +13,32 @@
 
 .controls {
     display: flex;
+    position: sticky;
+    top: -1px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
     gap: 2rem;
     margin-bottom: 3rem;
     margin-top: 6rem;
+    background-color: $text-light;
+    z-index: 2;
 }
 
 .cards-view {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+.isSticky {
+    background: $background-gradient-game;
+}
+
+.isSticky > div > div,
+.isSticky > button {
+    border: .05rem solid $text-light;
 }
 
 .learned-page {
@@ -40,7 +56,7 @@
     background-color: $blue-medium;
     color: $text-light;
     text-align: center;
-    line-height: 2rem;
+    line-height: 3rem;
     border-radius: 0.5rem;
 }
 
@@ -58,6 +74,21 @@
     transform: none;
 }
 
-.display-none {
-    display: none;
+.games-wrap {
+    display: flex;
+    gap: 1rem;
 }
+
+@media (max-width: 1000px) {
+    .controls {
+        flex-wrap: wrap;
+        gap: .5rem 1rem;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+
+    .isSticky {
+        padding: 1rem 0;
+    }
+}
+

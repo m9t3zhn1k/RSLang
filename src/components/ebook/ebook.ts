@@ -28,22 +28,31 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private loader?: Loader;
 
+  private loader: Loader;
+
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
     this.audioFlag = true;
+    this.loader = new Loader();
     new BaseComponent(this.element, 'div', ['title'], 'Учебник');
     this.controls = new BaseComponent(this.element, 'div', ['controls']).element;
     this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
     this.sectionPagination = new Pagination(this.controls, 'section', this);
     this.pagePagination = new Pagination(this.controls, 'page', this);
-    this.audioGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Аудиовызов')
-      .element as HTMLButtonElement;
-    this.sprintGame = new BaseComponent(this.controls, 'button', ['button-game'], 'Спринт')
-      .element as HTMLButtonElement;
+    this.cardsView = new BaseComponent(this.element, 'div', ['cards-view']).element;
+    const gamesWrap: HTMLElement = new BaseComponent(this.controls, 'div', ['games-wrap']).element;
+    this.audioGame = new BaseComponent(gamesWrap, 'button', ['button-game'], 'Аудиовызов').element as HTMLButtonElement;
+    this.sprintGame = new BaseComponent(gamesWrap, 'button', ['button-game'], 'Спринт').element as HTMLButtonElement;
     this.audioGame.id = 'audiochallenge';
     this.sprintGame.id = 'sprint';
     this.numOfLearnedOrDifCards = 0;
     router.navigateApp([this.audioGame, this.sprintGame]);
+    this.drawCards();
+    this.addControlsObserver();
+  }
+
+  public drawCards = async (): Promise<void> => {
+    this.loader.createLoader(this.cardsView);
     this.updateCards();
   }
 
@@ -70,7 +79,6 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private drawCards = async (words: IWord[]): Promise<void> => {
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
-
     this.cardsView.classList.remove('learned-page');
     this.pagePagination.label.classList.remove('learned-page-label');
     this.numOfLearnedOrDifCards = 0;
@@ -89,11 +97,10 @@ export default class Ebook extends BaseComponent implements IEbook {
     window.localStorage.setItem('pageNum', `${this.pagePagination.currentPageNum}`);
   };
 
-  private drawRegularSection = (words: IWord[], sectionNumForApi: number): void => {
+  private drawRegularSection = async (words: IWord[], sectionNumForApi: number): Promise<void> => {
     this.audioGame.classList.remove('non-active-button');
     this.sprintGame.classList.remove('non-active-button');
-
-    words.map((wordData: IWord): HTMLElement => {
+    words.forEach((wordData: IWord): HTMLElement => {
       const wordCard: WordCards = new WordCards(
         this.cardsView,
         this,
@@ -116,7 +123,7 @@ export default class Ebook extends BaseComponent implements IEbook {
 
       return wordCard.element;
     });
-
+    this.pagePagination.element.classList.remove('display-none');
     this.addLearnedStyleToPage();
   };
 
@@ -124,8 +131,6 @@ export default class Ebook extends BaseComponent implements IEbook {
     const allUsersWords: IUserWord[] | null | void = await getAllUsersWords();
     new BaseComponent(this.cardsView, 'p', ['dif-words-title'], 'Сложные слова');
     this.pagePagination.element.classList.add('display-none');
-    this.audioGame.classList.add('non-active-button');
-    this.sprintGame.classList.add('non-active-button');
 
     if (allUsersWords) {
       allUsersWords
@@ -154,5 +159,13 @@ export default class Ebook extends BaseComponent implements IEbook {
       this.audioGame.disabled = false;
       this.sprintGame.disabled = false;
     }
+  };
+
+  private addControlsObserver = (): void => {
+    const observer: IntersectionObserver = new IntersectionObserver(
+      ([e]: IntersectionObserverEntry[]): boolean => e.target.classList.toggle('isSticky', e.intersectionRatio < 1),
+      { threshold: 1.0 }
+    );
+    observer.observe(this.controls);
   };
 }

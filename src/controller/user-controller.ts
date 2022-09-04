@@ -132,16 +132,18 @@ export const getUserAgrWords: (group: number, page: number) => Promise<IWord[]> 
 };
 
 export const getUserAgrGameWords: (group: number) => Promise<IWord[]> = async (group: number): Promise<IWord[]> => {
-  const resp: Response = await fetch(
-    `${BASE_URL}/users/${getUserId()}/aggregatedWords?group=${group}&wordsPerPage=600`,
-    {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-        Accept: 'application/json',
-      },
-    }
-  );
+  const url: string =
+    group === 6
+      ? `${BASE_URL}/users/${getUserId()}/aggregatedWords?wordsPerPage=3600&filter=%7B%22userWord.optional.isDif%22%3A%20true%7D`
+      : `${BASE_URL}/users/${getUserId()}/aggregatedWords?group=${group}&wordsPerPage=600`;
+  const resp: Response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+      Accept: 'application/json',
+    },
+  });
+
   return resp.json().then((item: IAggregatedResponse[]): IWord[] =>
     item[0].paginatedResults.map(
       (i: IResponseWord): IWord => ({
@@ -151,6 +153,7 @@ export const getUserAgrGameWords: (group: number) => Promise<IWord[]> = async (g
         audio: `${BASE_URL}/${i.audio}`,
         audioMeaning: `${BASE_URL}/${i.audioMeaning}`,
         audioExample: `${BASE_URL}/${i.audioExample}`,
+        page: group === 6 ? 0 : i.page,
       })
     )
   );
