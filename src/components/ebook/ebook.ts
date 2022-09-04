@@ -28,8 +28,6 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private loader?: Loader;
 
-  private loader: Loader;
-
   constructor(parent: HTMLElement, router: Router) {
     super(parent, 'div', ['ebook']);
     this.audioFlag = true;
@@ -47,13 +45,8 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sprintGame.id = 'sprint';
     this.numOfLearnedOrDifCards = 0;
     router.navigateApp([this.audioGame, this.sprintGame]);
-    this.drawCards();
-    this.addControlsObserver();
-  }
-
-  public drawCards = async (): Promise<void> => {
-    this.loader.createLoader(this.cardsView);
     this.updateCards();
+    this.addControlsObserver();
   }
 
   public updateCards(): void {
