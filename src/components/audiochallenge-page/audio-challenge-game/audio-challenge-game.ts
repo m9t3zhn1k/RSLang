@@ -1,8 +1,10 @@
-import { IWord } from '../../../types/types';
+import { IUserWord, IWord, WordResult, WordResultSynch } from '../../../types/types';
 import { BaseComponent } from '../../base-component/base-component';
 import imgSound from '../../../assets/sound.svg';
 import { COUNT_WORDS } from '../../../constants/constants';
 import { addGameResults } from '../../../controller/user-controller';
+import { updateGameStatistics } from '../../../controller/statistics-controller';
+import Loader from '../../loader/loader';
 
 class AudioChallengeGame extends BaseComponent {
   private audio: HTMLAudioElement;
@@ -15,6 +17,12 @@ class AudioChallengeGame extends BaseComponent {
 
   private rightWord: number[] = [];
 
+  private results: WordResult[] = [];
+
+  private currentCorrectSeries: number = 0;
+
+  private longestCorrectSeries: number = 0;
+
   private descriptionElement: {
     cardWrapper: BaseComponent;
     soundWord: BaseComponent;
@@ -26,6 +34,8 @@ class AudioChallengeGame extends BaseComponent {
   private buttonsWord: BaseComponent[];
 
   private buttonAnswer: BaseComponent;
+
+  private loader?: Loader;
 
   constructor(
     protected parentNode: HTMLElement,
@@ -59,14 +69,19 @@ class AudioChallengeGame extends BaseComponent {
     return arr.sort((): number => Math.random() - 0.5);
   }
 
-  private addEventForAnswer(): void {
+  private async addEventForAnswer(): Promise<void> {
     switch (this.buttonAnswer.element.textContent) {
       case 'Дальше':
         this.counterWord++;
         if (this.counterWord === this.countRound) {
           this.remove();
           document.onkeydown = null;
-          this.renderResultGame(this.rightWord, this.wrongWord);
+          this.loader = new Loader();
+          this.loader.createLoader(document.body);
+          await this.updateStatistics().then((): void => {
+            this.loader?.destroy();
+            this.renderResultGame(this.rightWord, this.wrongWord);
+          });
           break;
         }
         this.setContent();
@@ -80,7 +95,7 @@ class AudioChallengeGame extends BaseComponent {
         break;
       case 'Не знаю':
         this.wrongWord.push(this.counterWord);
-        addGameResults(this.dataWords[this.counterWord].id, false);
+        this.results.push({ word: this.dataWords[this.counterWord], result: false });
         this.findRightWord();
         this.changeStatedBtn(true);
         this.buttonAnswer.element.textContent = 'Дальше';
@@ -108,7 +123,7 @@ class AudioChallengeGame extends BaseComponent {
     imgCard: HTMLImageElement;
   } {
     this.audio.src = this.dataWords[this.counterWord].audio;
-    const descriptionWrapper = new BaseComponent(parentElement, 'div', ['audio-challenge__description']);
+    const descriptionWrapper: BaseComponent = new BaseComponent(parentElement, 'div', ['audio-challenge__description']);
     const buttonAudio: BaseComponent = new BaseComponent(descriptionWrapper.element, 'div', [
       'description__sound-button',
     ]);
@@ -116,7 +131,7 @@ class AudioChallengeGame extends BaseComponent {
     imgForBtn.src = imgSound;
 
     const cardWrapper: BaseComponent = new BaseComponent(descriptionWrapper.element, 'div', ['description__card']);
-    const imgCard = new BaseComponent(cardWrapper.element, 'img', ['card__img']).element as HTMLImageElement;
+    const imgCard: HTMLImageElement = new BaseComponent(cardWrapper.element, 'img', ['card__img']).element as HTMLImageElement;
     const wordSound: BaseComponent = new BaseComponent(cardWrapper.element, 'div', ['card__sound']);
     const buttonAudioCard: BaseComponent = new BaseComponent(wordSound.element, 'div', ['card__sound-button']);
     (new BaseComponent(buttonAudioCard.element, 'img').element as HTMLImageElement).src = imgSound;
@@ -177,7 +192,11 @@ class AudioChallengeGame extends BaseComponent {
       this.findRightWord();
       isCorrect = false;
     }
-    addGameResults(this.dataWords[this.counterWord].id, isCorrect);
+    this.results.push({ word: this.dataWords[this.counterWord], result: isCorrect });
+    this.currentCorrectSeries = isCorrect ? this.currentCorrectSeries + 1 : 0;
+    if (this.currentCorrectSeries > this.longestCorrectSeries) {
+      this.longestCorrectSeries = this.currentCorrectSeries;
+    }
     this.descriptionElement.buttonAudio.element.classList.add('inactive');
     this.descriptionElement.cardWrapper.element.classList.add('active');
     this.buttonAnswer.element.textContent = 'Дальше';
@@ -223,6 +242,19 @@ class AudioChallengeGame extends BaseComponent {
       if (word.element.textContent?.includes(this.dataWords[this.counterWord].wordTranslate)) {
         word.element.classList.add('right-word');
       }
+    });
+  }
+
+  private async updateStatistics(): Promise<void> {
+    await Promise.all(
+      this.results.map(async (item: WordResult): Promise<WordResultSynch | undefined> => {
+        const word: IUserWord | void = await addGameResults(item.word.id, item.result);
+        if (word) {
+          return { word, result: item.result };
+        }
+      })
+    ).then(async (data: (WordResultSynch | undefined)[]): Promise<void> => {
+      await updateGameStatistics(data, this.longestCorrectSeries, 'audioChallenge');
     });
   }
 }

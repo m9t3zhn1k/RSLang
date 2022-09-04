@@ -11,10 +11,10 @@ export class Games extends BaseComponent {
     const wrapper: HTMLElement = new BaseComponent(container, 'div', ['game__body']).element;
     const wrapperButton: HTMLElement = new BaseComponent(wrapper, 'div', ['game-wrapper']).element;
     const descriptionAudioCall: string = `Тренировка Аудиовызов развивает словарный запас.
-     Вы должны выбрать перевод услышанного слова.`;
+      Вы должны выбрать перевод услышанного слова.`;
 
     const descriptionSprint: string = `Тренирует навык быстрого перевода с английского языка на русский.
-     Вам нужно выбрать соответствует ли перевод предложенному слову.`;
+      Вам нужно выбрать соответствует ли перевод предложенному слову.`;
 
     const audioObj: {
       gameButton: HTMLElement;

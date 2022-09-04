@@ -1,5 +1,4 @@
 import './ebook.scss';
-import '../word-card/word-card.scss';
 import { IWord, IUserWord, IEbook } from '../../types/types';
 import { getAllUsersWords, getUserId, getUserAgrWords } from '../../controller/user-controller';
 import { getWords, getOneWord } from '../../controller/words-controller';
@@ -23,9 +22,11 @@ export default class Ebook extends BaseComponent implements IEbook {
 
   private sprintGame: HTMLButtonElement;
 
-  public audioFlag;
+  public audioFlag: boolean;
 
-  public numOfLearnedOrDifCards;
+  public numOfLearnedOrDifCards: number;
+
+  private loader?: Loader;
 
   private loader: Loader;
 
@@ -46,12 +47,25 @@ export default class Ebook extends BaseComponent implements IEbook {
     this.sprintGame.id = 'sprint';
     this.numOfLearnedOrDifCards = 0;
     router.navigateApp([this.audioGame, this.sprintGame]);
-    this.drawCards().then((): void => this.loader.destroy());
+    this.drawCards();
     this.addControlsObserver();
   }
 
   public drawCards = async (): Promise<void> => {
     this.loader.createLoader(this.cardsView);
+    this.updateCards();
+  }
+
+  public updateCards(): void {
+    this.loader = new Loader();
+    this.loader.createLoader(document.body);
+    this.getWords().then((data: IWord[]): void => {
+      this.drawCards(data);
+      this.loader?.destroy();
+    });
+  }
+
+  private async getWords(): Promise<IWord[]> {
     const pageNumForApi: number = this.pagePagination.currentPageNum - 1;
     const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
     let words: IWord[];
@@ -60,6 +74,11 @@ export default class Ebook extends BaseComponent implements IEbook {
     } else {
       words = await getWords(sectionNumForApi, pageNumForApi);
     }
+    return words;
+  }
+
+  private drawCards = async (words: IWord[]): Promise<void> => {
+    const sectionNumForApi: number = this.sectionPagination.currentPageNum - 1;
     this.cardsView.classList.remove('learned-page');
     this.pagePagination.label.classList.remove('learned-page-label');
     this.numOfLearnedOrDifCards = 0;
@@ -90,6 +109,7 @@ export default class Ebook extends BaseComponent implements IEbook {
         false,
         wordData.userWord?.optional
       );
+
       if (wordData.userWord?.optional.isLearned) {
         this.numOfLearnedOrDifCards += 1;
         wordCard.addtoLearnedButton.classList.add('active-button');
@@ -100,6 +120,7 @@ export default class Ebook extends BaseComponent implements IEbook {
         wordCard.addToDifButton.classList.add('active-button');
         wordCard.element.classList.add('difficult-word');
       }
+
       return wordCard.element;
     });
     this.pagePagination.element.classList.remove('display-none');

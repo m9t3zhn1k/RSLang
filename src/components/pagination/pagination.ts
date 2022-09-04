@@ -62,27 +62,27 @@ export default class Pagination extends BaseComponent implements IPagination {
       if (this.currentPageNum !== START_PAGINATION_PAGE) {
         this.currentPageNum -= 1;
         this.labelPageNum.textContent = `${this.currentPageNum}`;
-        this.parentInstance.drawCards();
+        this.parentInstance.updateCards();
       }
     });
     this.rightArrow.addEventListener('click', (): void => {
       if (this.currentPageNum !== this.maxPageNum) {
         this.currentPageNum += 1;
         this.labelPageNum.textContent = `${this.currentPageNum}`;
-        this.parentInstance.drawCards();
+        this.parentInstance.updateCards();
       }
     });
     this.leftRewind.addEventListener('click', (): void => {
       if (this.currentPageNum !== START_PAGINATION_PAGE) {
         this.currentPageNum = START_PAGINATION_PAGE;
-        this.parentInstance.drawCards();
+        this.parentInstance.updateCards();
         this.labelPageNum.textContent = `${this.currentPageNum}`;
       }
     });
     this.rightRewind.addEventListener('click', (): void => {
       if (this.currentPageNum !== this.maxPageNum) {
         this.currentPageNum = this.maxPageNum;
-        this.parentInstance.drawCards();
+        this.parentInstance.updateCards();
         this.labelPageNum.textContent = `${this.currentPageNum}`;
       }
     });

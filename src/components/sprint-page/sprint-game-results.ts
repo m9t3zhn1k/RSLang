@@ -1,6 +1,9 @@
+import { updateGameStatistics } from '../../controller/statistics-controller';
+import { addGameResults } from '../../controller/user-controller';
 import { Router } from '../../router/router';
-import { IWord, WordResult } from '../../types/types';
+import { IUserWord, WordResult, WordResultSynch } from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
+import Loader from '../loader/loader';
 import { SprintGamePage } from './sprint-game-gaming';
 import { SprintStartPage } from './sprint-game-start';
 
@@ -15,18 +18,39 @@ export class SprintResultPage {
 
   private soundButtons: HTMLElement[] = [];
 
+  private loader: Loader;
+
   constructor(
     private parent: HTMLElement,
     private results: WordResult[],
     private score: number,
-    private router: Router
+    private router: Router,
+    private longestSeries: number
   ) {
-    this.devideResults(this.results);
-    this.renderResults();
+    this.cleanParent();
+    this.loader = new Loader();
+    this.loader.createLoader(document.body);
+    this.updateStatistics().then((): void => {
+      this.loader.destroy();
+      this.devideResults(this.results);
+      this.renderResults();
+    });
+  }
+
+  private async updateStatistics(): Promise<void> {
+    await Promise.all(
+      this.results.map(async (item: WordResult): Promise<WordResultSynch | undefined> => {
+        const word: IUserWord | void = await addGameResults(item.word.id, item.result);
+        if (word) {
+          return { word, result: item.result };
+        }
+      })
+    ).then(async (data: (WordResultSynch | undefined)[]): Promise<void> => {
+      await updateGameStatistics(data, this.longestSeries, 'sprint');
+    });
   }
 
   private renderResults(): void {
-    this.cleanParent();
     const buttonsContainer: HTMLElement = new BaseComponent(this.parent, 'div', ['game__results_buttons-container'])
       .element;
     const retryGameButton: HTMLElement = new BaseComponent(
@@ -70,13 +94,13 @@ export class SprintResultPage {
     }
   }
 
-  private devideResults(results: { word: IWord; result: boolean }[]): void {
-    this.correctAnswers = results.filter((item: { word: IWord; result: boolean }): boolean => item.result);
-    this.wrongAnswers = results.filter((item: { word: IWord; result: boolean }): boolean => !item.result);
+  private devideResults(results: WordResult[]): void {
+    this.correctAnswers = results.filter((item: WordResult): boolean => item.result);
+    this.wrongAnswers = results.filter((item: WordResult): boolean => !item.result);
   }
 
-  private renderWordResults(results: { word: IWord; result: boolean }[], parent: HTMLElement): void {
-    results.forEach((result: { word: IWord; result: boolean }): void => {
+  private renderWordResults(results: WordResult[], parent: HTMLElement): void {
+    results.forEach((result: WordResult): void => {
       const wordContainer: HTMLElement = new BaseComponent(parent, 'div', ['game__results_answer']).element;
       const soundIcon: HTMLElement = new BaseComponent(wordContainer, 'div', ['game__results_answer-button']).element;
       new BaseComponent(wordContainer, 'span', [], `${result.word.word}`);
