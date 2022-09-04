@@ -131,7 +131,8 @@ class AudioChallengeGame extends BaseComponent {
     imgForBtn.src = imgSound;
 
     const cardWrapper: BaseComponent = new BaseComponent(descriptionWrapper.element, 'div', ['description__card']);
-    const imgCard: HTMLImageElement = new BaseComponent(cardWrapper.element, 'img', ['card__img']).element as HTMLImageElement;
+    const imgCard: HTMLImageElement = new BaseComponent(cardWrapper.element, 'img', ['card__img'])
+      .element as HTMLImageElement;
     const wordSound: BaseComponent = new BaseComponent(cardWrapper.element, 'div', ['card__sound']);
     const buttonAudioCard: BaseComponent = new BaseComponent(wordSound.element, 'div', ['card__sound-button']);
     (new BaseComponent(buttonAudioCard.element, 'img').element as HTMLImageElement).src = imgSound;
@@ -152,7 +153,6 @@ class AudioChallengeGame extends BaseComponent {
       setTimeout(this.addAnimate, 250, buttonAudioCard.element);
       this.audio.play();
     });
-
     return { cardWrapper, soundWord, buttonAudio, buttonAudioCard, imgCard };
   }
 
