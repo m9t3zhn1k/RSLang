@@ -177,6 +177,7 @@ class AudioChallengeGame extends BaseComponent {
     this.buttonsWord.forEach((button: BaseComponent): void => {
       button.element.classList.remove('right-word');
       button.element.classList.remove('wrong-word');
+      button.element.classList.remove('green');
     });
   }
 
@@ -184,6 +185,7 @@ class AudioChallengeGame extends BaseComponent {
     let isCorrect: boolean = false;
     if (btnWord.element.textContent?.includes(this.dataWords[this.counterWord].wordTranslate)) {
       btnWord.element.classList.add('right-word');
+      btnWord.element.classList.add('green');
       this.rightWord.push(this.counterWord);
       isCorrect = true;
     } else {

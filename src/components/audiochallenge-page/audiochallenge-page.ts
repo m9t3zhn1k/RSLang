@@ -127,25 +127,29 @@ export class AudioChallengePage extends BaseComponent {
   ): void {
     languageLevels.forEach((level: BaseComponent): void => {
       level.element.addEventListener('click', (): void => {
-        languageLevels.forEach((btnLevel: BaseComponent): void => {
-          btnLevel.element.classList.remove('button-active');
-        });
         const key: string | null = level.element.textContent;
         this.levelGame = LANGUAGE_LEVELS[key as keyof typeof LANGUAGE_LEVELS];
-        (startGameButton.element as HTMLButtonElement).disabled = false;
-        level.element.classList.add('button-active');
+        const isButtonActive = level.element.classList.toggle('button-active');
+        languageLevels.forEach((button: BaseComponent): void => {
+          if (button.element !== level.element) {
+            button.element.classList.remove('button-active');
+          }
+        });
+        (startGameButton.element as HTMLButtonElement).disabled = !isButtonActive;
       });
     });
 
     startGameButton.element.addEventListener('click', async (): Promise<void> => {
       const page: number = this.generateRandomNum();
       if (this.levelGame !== null) {
+        this.loader.createLoader(document.body);
+        wrapperStart.remove();
         const data: IWord[] = await getWords(this.levelGame, page);
         this.words = [];
         this.words.push(...data);
         this.countRound = this.words.length;
-        wrapperStart.remove();
         this.renderGame();
+        this.loader.destroy()
       }
     });
   }
