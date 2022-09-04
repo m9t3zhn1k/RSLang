@@ -149,7 +149,7 @@ export class AudioChallengePage extends BaseComponent {
         this.words.push(...data);
         this.countRound = this.words.length;
         this.renderGame();
-        this.loader.destroy()
+        this.loader.destroy();
       }
     });
   }

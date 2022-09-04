@@ -26,7 +26,7 @@ $background-gradient-game: linear-gradient(-120deg, $blue-dark, $blue-medium);
   position: relative;
   border-radius: 25px;
   background: linear-gradient(-120deg, $blue-dark, $blue-medium);
-  flex: 0 1 30%;
+  width: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;

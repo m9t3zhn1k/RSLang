@@ -54,7 +54,7 @@ export class Header extends BaseComponent implements IHeader {
           this.authorization = new Authorization(document.body, this.changeContentForButtonLogin.bind(this));
           break;
         case 'Выйти':
-          localStorage.removeItem('rslang-team58-user');
+          window.localStorage.clear();
           this.changeContentForButtonLogin('Войти');
           document.location.reload();
           break;
