@@ -57,3 +57,5 @@ export const LANGUAGE_LEVELS: ILanguageLevels = {
 export const COUNT_WORDS = 5;
 
 export const COUNT_OF_WORDS_ON_PAGE = 20;
+
+export const TIME_TOKEN = 15552000;

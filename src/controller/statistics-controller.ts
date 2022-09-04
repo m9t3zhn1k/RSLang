@@ -1,6 +1,6 @@
 import { BASE_URL } from '../constants/constants';
 import { IStatistics, WordResultSynch } from '../types/types';
-import { getToken, getUserId } from './user-controller';
+import { getToken, getUserId, updateToken } from './user-controller';
 
 export const getUserStatistic: () => Promise<IStatistics | void> = async (): Promise<IStatistics | void> => {
   const userId: string | null = getUserId();
@@ -14,6 +14,7 @@ export const getUserStatistic: () => Promise<IStatistics | void> = async (): Pro
       Accept: 'application/json',
     },
   });
+  updateToken();
   return resp.ok ? resp.json() : null;
 };
 
@@ -89,4 +90,5 @@ export const updateGameStatistics = async (
     userStatistics.optional.newWords = userStatistics.optional.newWords.trim();
     await putUserStatistic({ optional: userStatistics.optional });
   }
+  updateToken();
 };
