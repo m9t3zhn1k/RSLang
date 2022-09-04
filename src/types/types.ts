@@ -107,7 +107,7 @@ export interface IWord {
   transcription: string;
   word: string;
   wordTranslate: string;
-  userWord?: { difficulty: string; optional: { isDif: boolean; isLearned: boolean } };
+  userWord?: { difficulty: string; optional: Optional };
 }
 
 export interface IResponseWord {
@@ -140,13 +140,7 @@ export type IAggregatedResponse = { paginatedResults: IResponseWord[]; totalCoun
 
 export interface IUserWord {
   id: string;
-  optional: {
-    isDif: boolean;
-    isLearned: boolean;
-    correctAnswers?: number;
-    incorrectAnswers?: number;
-    seriesOfCorrectAnswers?: number;
-  };
+  optional: Optional;
   wordId: string;
 }
 
@@ -156,13 +150,7 @@ export interface IQueryParam {
 }
 
 export type RequestBody = {
-  optional: {
-    isDif: boolean;
-    isLearned: boolean;
-    correctAnswers?: number;
-    incorrectAnswers?: number;
-    seriesOfCorrectAnswers?: number;
-  };
+  optional: Optional;
 };
 
 export type Optional = {
@@ -171,14 +159,15 @@ export type Optional = {
   correctAnswers?: number;
   incorrectAnswers?: number;
   seriesOfCorrectAnswers?: number;
+  initDate?: string;
+  learntDate?: string;
 };
 
 export interface IEbook {
   pagePagination: Pagination;
   numOfLearnedOrDifCards: number;
   audioFlag: boolean;
-  drawCards: () => Promise<void>;
-  addLearnedStyleToPage: () => void;
+  updateCards: () => void;
 }
 
 export interface IPagination {
@@ -201,6 +190,26 @@ export interface IPlayList {
   src: string;
 }
 
+export interface IStatistics {
+  optional: {
+    date: string;
+    newWords: string;
+    sprint: IGameStatistics;
+    audioChallenge: IGameStatistics;
+  };
+}
+
+export interface IGameStatistics {
+  answers: number;
+  newWords: string;
+  correctAnswers: number;
+  longestCorrectSeries: number;
+}
+
+export type StatisticsData = [statistics: IStatistics | void, userWords: IUserWord[] | null | void];
+
 export type IGetAllUsersWords = () => Promise<IUserWord[] | null | void>;
 
 export type WordResult = { word: IWord; result: boolean };
+
+export type WordResultSynch = { word: IUserWord; result: boolean };

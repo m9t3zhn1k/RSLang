@@ -11,16 +11,16 @@ export class Games extends BaseComponent {
     const wrapper: HTMLElement = new BaseComponent(container, 'div', ['game__body']).element;
     const wrapperButton: HTMLElement = new BaseComponent(wrapper, 'div', ['game-wrapper']).element;
     const descriptionAudioCall: string = `Тренировка Аудиовызов развивает словарный запас.
-     Вы должны выбрать перевод услышанного слова.`;
+      Вы должны выбрать перевод услышанного слова.`;
 
     const descriptionSprint: string = `Тренирует навык быстрого перевода с английского языка на русский.
-     Вам нужно выбрать соответствует ли перевод предложенному слову.`;
+      Вам нужно выбрать соответствует ли перевод предложенному слову.`;
 
     const audioObj: {
       gameButton: HTMLElement;
       containerImg: HTMLElement;
     } = this.renderButtonsForGame(wrapperButton, audioCallImg, descriptionAudioCall, 'Аудиовызов');
-    audioObj.containerImg.classList.add('animation-game')
+    audioObj.containerImg.classList.add('animation-game');
     const sprintObj: {
       gameButton: HTMLElement;
       containerImg: HTMLElement;
@@ -43,7 +43,8 @@ export class Games extends BaseComponent {
     const containerImg: HTMLElement = new BaseComponent(gameButton, 'div', ['game-button__wrapper-img']).element;
     const imgForBtn: HTMLElement = new BaseComponent(containerImg, 'img', ['game-button__img']).element;
     (imgForBtn as HTMLImageElement).src = img;
-    const descriptionGame: HTMLElement = new BaseComponent(containerImg, 'p', ['game-button__text'], `${description}`).element;
+    const descriptionGame: HTMLElement = new BaseComponent(containerImg, 'p', ['game-button__text'], `${description}`)
+      .element;
     new BaseComponent(gameButton, 'h3', ['game-button__title'], `${title}`).element;
     gameButton.addEventListener('mouseenter', (): void => {
       descriptionGame.classList.add('active');

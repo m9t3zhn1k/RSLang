@@ -2,6 +2,7 @@ import { BaseComponent } from '../../base-component/base-component';
 import { createUser, getUser, loginUser } from '../../../controller/user-controller';
 import { ILoginUser } from '../../../types/types';
 import Loader from '../../loader/loader';
+import { putUserStatistic } from '../../../controller/statistics-controller';
 
 class SingUp extends BaseComponent {
   private button: BaseComponent;
@@ -84,6 +85,14 @@ class SingUp extends BaseComponent {
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
         getUser(content.userId, content.token);
         this.contentForButton('Выйти');
+        await putUserStatistic({
+          optional: {
+            date: new Date().toLocaleDateString(),
+            newWords: 'null',
+            sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
+            audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
+          },
+        });
         document.location.reload();
       }
     }

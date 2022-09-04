@@ -151,9 +151,9 @@ button {
 }
 
 .x9 {
-animation: floatUp 4.1s infinite linear;
-transform: scale(0.2);
-left: 85%;
+  animation: floatUp 4.1s infinite linear;
+  transform: scale(0.2);
+  left: 85%;
 }
 
 @keyframes floatUp {
@@ -188,4 +188,9 @@ left: 85%;
   to {
     opacity: 1;
   }
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
 }
