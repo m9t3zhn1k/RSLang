@@ -1,5 +1,5 @@
 import { BaseComponent } from '../../base-component/base-component';
-import { createUser, getUser, loginUser } from '../../../controller/user-controller';
+import { createUser, getUser, loginUser, updateToken } from '../../../controller/user-controller';
 import { ILoginUser } from '../../../types/types';
 import Loader from '../../loader/loader';
 import { putUserStatistic } from '../../../controller/statistics-controller';
@@ -86,6 +86,7 @@ class SingUp extends BaseComponent {
         const content: ILoginUser = await responseLogin.json();
         localStorage.setItem('rslang-team58-user', JSON.stringify(content));
         getUser(content.userId, content.token);
+        updateToken();
         this.contentForButton('Выйти');
         await putUserStatistic({
           optional: {
