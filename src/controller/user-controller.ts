@@ -242,7 +242,6 @@ export const addOptional: (type: 'dif' | 'learned', wordId: string) => Promise<v
         ? { optional: { isDif: true, isLearned: false } }
         : { optional: { isDif: false, isLearned: true } };
     requestBody.optional.learntDate = requestBody.optional.isLearned ? new Date().toLocaleDateString() : 'null';
-    requestBody.optional.initDate = new Date().toLocaleDateString();
     createUserWord(userId, wordId, requestBody);
   }
   updateToken();

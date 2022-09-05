@@ -11,10 +11,22 @@ import {
 import { BaseComponent } from '../base-component/base-component';
 import Loader from '../loader/loader';
 import './statistics.scss';
-import Chart, { ChartItem } from 'chart.js/auto';
+import Chart, { ChartItem, ChartTypeRegistry } from 'chart.js/auto';
 
 export class Statistics extends BaseComponent {
   private loader: Loader;
+
+  private chartsInput?: HTMLInputElement;
+
+  private newWords?: StatisticsDateObject;
+
+  private learntWords?: StatisticsDateObject;
+
+  private canvas?: HTMLCanvasElement;
+
+  private canvasContext?: ChartItem;
+
+  private chart?: Chart;
 
   constructor(parent: HTMLElement) {
     super(parent, 'div', ['wrapper']);
@@ -43,7 +55,49 @@ export class Statistics extends BaseComponent {
       await putUserStatistic({ optional: statistics.optional });
     }
     const userWords: IUserWord[] | null | void = await getAllUsersWords();
+    this.setStatisticsWords(userWords);
     return [statistics, userWords];
+  }
+
+  private setStatisticsWords(userWords: IUserWord[] | null | void): void {
+    if (userWords) {
+      this.newWords = userWords
+        .filter((word: IUserWord): boolean => !!word.optional.initDate)
+        .reduce((acc: StatisticsDateObject, item: IUserWord): StatisticsDateObject => {
+          if (item.optional.initDate) {
+            if (~Object.keys(acc).findIndex((key: string): boolean => key === item.optional.initDate)) {
+              acc[item.optional.initDate] += 1;
+            } else {
+              acc[item.optional.initDate] = 1;
+            }
+          }
+          return acc;
+        }, {});
+
+      this.learntWords = Object.fromEntries(
+        Object.entries(
+          userWords
+            .filter((word: IUserWord): boolean => !!word.optional.learntDate && word.optional.learntDate !== 'null')
+            .reduce((acc: StatisticsDateObject, item): StatisticsDateObject => {
+              if (item.optional.learntDate) {
+                if (~Object.keys(acc).findIndex((key: string): boolean => key === item.optional.learntDate)) {
+                  acc[item.optional.learntDate] += 1;
+                } else {
+                  acc[item.optional.learntDate] = 1;
+                }
+              }
+              return acc;
+            }, {})
+        ).reduce((acc: StatisticsDateValue[], item: StatisticsDateValue, index: number): StatisticsDateValue[] => {
+          if (!index) {
+            acc.push([item[0], item[1]]);
+          } else {
+            acc.push([item[0], item[1] + acc[index - 1][1]]);
+          }
+          return acc;
+        }, [])
+      );
+    }
   }
 
   private renderResults(data: StatisticsData): void {
@@ -51,100 +105,67 @@ export class Statistics extends BaseComponent {
     if (statistics && userWords) {
       const shortTermStatisticsNodes: ShortTermStatisticsElements = this.renderShortTermStatistics();
       this.insertShortTermStatisticsValues(statistics, userWords, shortTermStatisticsNodes);
-      this.renderLongTermStatistics(userWords);
+      this.renderLongTermStatistics();
     }
   }
 
-  private renderLongTermStatistics(userWords: IUserWord[]): void {
+  private renderLongTermStatistics(): void {
     const longTermSection: HTMLElement = new BaseComponent(this.element, 'section', ['statistics__section']).element;
     const longTermContainer: HTMLElement = new BaseComponent(longTermSection, 'div', [
       'container',
       'statistics__container',
     ]).element;
     new BaseComponent(longTermContainer, 'h2', ['statistics__title'], 'Статистика за всё время');
-    const graphicContainer: HTMLElement = new BaseComponent(longTermContainer, 'div', ['statistics__graphic-container'])
+    const chartsSwitch: HTMLElement = new BaseComponent(longTermContainer, 'div', ['statistics__switch-container'])
       .element;
-    const newWords: StatisticsDateObject = userWords
-      .filter((word: IUserWord): boolean => !!word.optional.initDate)
-      .reduce((acc: StatisticsDateObject, item: IUserWord): StatisticsDateObject => {
-        if (item.optional.initDate) {
-          if (~Object.keys(acc).findIndex((key: string): boolean => key === item.optional.initDate)) {
-            acc[item.optional.initDate] += 1;
-          } else {
-            acc[item.optional.initDate] = 1;
-          }
-        }
-        return acc;
-      }, {});
-    const learntWords = Object.fromEntries(
-      Object.entries(
-        userWords
-          .filter((word: IUserWord): boolean => !!word.optional.learntDate && word.optional.learntDate !== 'null')
-          .reduce((acc: StatisticsDateObject, item): StatisticsDateObject => {
-            if (item.optional.learntDate) {
-              if (~Object.keys(acc).findIndex((key: string): boolean => key === item.optional.learntDate)) {
-                acc[item.optional.learntDate] += 1;
-              } else {
-                acc[item.optional.learntDate] = 1;
-              }
-            }
-            return acc;
-          }, {})
-      ).reduce((acc: StatisticsDateValue[], item: StatisticsDateValue, index: number): StatisticsDateValue[] => {
-        if (!index) {
-          acc.push([item[0], item[1]]);
-        } else {
-          acc.push([item[0], item[1] + acc[index - 1][1]]);
-        }
-        return acc;
-      }, [])
-    );
-    const canvas: HTMLCanvasElement = new BaseComponent(graphicContainer, 'canvas', ['statistics__graphic'])
-      .element as HTMLCanvasElement;
-    const ctx: ChartItem = canvas.getContext('2d') as ChartItem;
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(newWords),
-        datasets: [
-          {
-            label: 'Количество новых слов за каждый день изучения',
-            data: Object.values(newWords),
-            backgroundColor: '#02bfdf',
+    new BaseComponent(chartsSwitch, 'span', ['statistics__switch_title'], 'Количество новых слов');
+    const chartsLabel: HTMLLabelElement = new BaseComponent(chartsSwitch, 'label', ['statistics__switch'])
+      .element as HTMLLabelElement;
+    new BaseComponent(chartsSwitch, 'span', ['statistics__switch_title'], 'Прирост изученных слов');
+    this.chartsInput = new BaseComponent(chartsLabel, 'input', ['statistics__switch-checkbox'], '', {
+      type: 'checkbox',
+    }).element as HTMLInputElement;
+    new BaseComponent(chartsLabel, 'span', ['statistics__switch-slider']).element;
+    const chartsContainer: HTMLElement = new BaseComponent(longTermContainer, 'div', ['statistics__charts-container'])
+      .element;
+    this.canvas = new BaseComponent(chartsContainer, 'canvas', ['statistics__charts']).element as HTMLCanvasElement;
+    this.canvasContext = this.canvas.getContext('2d') as ChartItem;
+    this.chartsInput.addEventListener('change', this.renderChart.bind(this));
+    this.renderChart();
+  }
+
+  private renderChart(): void {
+    const type: keyof ChartTypeRegistry = this.chartsInput?.checked ? 'bar' : 'line';
+    const data: StatisticsDateObject | undefined = this.chartsInput?.checked ? this.learntWords : this.newWords;
+    if (this.chart) {
+      this.chart.destroy();
+    }
+    if (this.canvasContext && data) {
+      this.chart = new Chart(this.canvasContext, {
+        type: type,
+        data: {
+          labels: Object.keys(data),
+          datasets: [
+            {
+              data: Object.values(data),
+              backgroundColor: '#02bfdf',
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
+          plugins: {
+            legend: {
+              display: false,
+            },
           },
         },
-      },
-    });
-    const canvas2: HTMLCanvasElement = new BaseComponent(graphicContainer, 'canvas', ['statistics__graphic'])
-      .element as HTMLCanvasElement;
-    const ctx2: ChartItem = canvas2.getContext('2d') as ChartItem;
-    new Chart(ctx2, {
-      type: 'line',
-      data: {
-        labels: Object.keys(learntWords),
-        datasets: [
-          {
-            label: 'Увеличение общего количества изученных слов за весь период обучения по дням',
-            data: Object.values(learntWords),
-            backgroundColor: '#02bfdf',
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
+      });
+    }
   }
 
   private renderShortTermStatistics(): ShortTermStatisticsElements {
