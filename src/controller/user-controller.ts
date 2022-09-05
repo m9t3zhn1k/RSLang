@@ -285,6 +285,7 @@ export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<IUs
     ) {
       optional.isLearned = true;
       optional.isDif = false;
+      optional.learntDate = new Date().toLocaleDateString();
     }
   } else {
     optional.correctAnswers = optional.correctAnswers ?? 0;
@@ -292,6 +293,7 @@ export const addGameResults: (wordId: string, isCorrect: boolean) => Promise<IUs
     optional.seriesOfCorrectAnswers = 0;
     if (optional.isLearned) {
       optional.isLearned = false;
+      optional.learntDate = 'null';
     }
   }
   if (userWordData.userWord?.optional.initDate) {

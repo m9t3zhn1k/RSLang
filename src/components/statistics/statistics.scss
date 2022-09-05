@@ -68,15 +68,15 @@
   }
 
   &__graphic {
-    height: 444px;
-    width: 888px;
-    display: block;
     background: $grey-light;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
 
     &-container {
       display: flex;
       justify-content: center;
+      flex-direction: column;
+      gap: 2rem;
     }
   }
 }

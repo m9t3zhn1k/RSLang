@@ -230,3 +230,7 @@ export type ShortTermStatisticsElements = {
   rightAnswersSprintCounter: HTMLElement;
   longestSeriesSprintCounter: HTMLElement;
 };
+
+export type StatisticsDateValue = [string, number];
+
+export type StatisticsDateObject = { [key: string]: number };

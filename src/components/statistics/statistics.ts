@@ -1,9 +1,17 @@
 import { getUserStatistic, putUserStatistic, resetGameStatistics } from '../../controller/statistics-controller';
 import { getAllUsersWords, getUserId } from '../../controller/user-controller';
-import { IStatistics, IUserWord, ShortTermStatisticsElements, StatisticsData } from '../../types/types';
+import {
+  IStatistics,
+  IUserWord,
+  ShortTermStatisticsElements,
+  StatisticsData,
+  StatisticsDateObject,
+  StatisticsDateValue,
+} from '../../types/types';
 import { BaseComponent } from '../base-component/base-component';
 import Loader from '../loader/loader';
 import './statistics.scss';
+import Chart, { ChartItem } from 'chart.js/auto';
 
 export class Statistics extends BaseComponent {
   private loader: Loader;
@@ -13,7 +21,12 @@ export class Statistics extends BaseComponent {
     this.loader = new Loader();
     this.loader.createLoader(document.body);
     if (!getUserId()) {
-      new BaseComponent(this.element, 'p', ['notification'], 'Для сбора и просмотра статистики необходимо зарегистрироваться');
+      new BaseComponent(
+        this.element,
+        'p',
+        ['notification'],
+        'Для сбора и просмотра статистики необходимо зарегистрироваться'
+      );
       this.loader.destroy();
       return;
     }
@@ -38,17 +51,100 @@ export class Statistics extends BaseComponent {
     if (statistics && userWords) {
       const shortTermStatisticsNodes: ShortTermStatisticsElements = this.renderShortTermStatistics();
       this.insertShortTermStatisticsValues(statistics, userWords, shortTermStatisticsNodes);
-      //this.renderLongTermStatistics();
+      this.renderLongTermStatistics(userWords);
     }
   }
 
-  private renderLongTermStatistics() {
+  private renderLongTermStatistics(userWords: IUserWord[]): void {
     const longTermSection: HTMLElement = new BaseComponent(this.element, 'section', ['statistics__section']).element;
-    const longTermContainer: HTMLElement = new BaseComponent(longTermSection, 'div', ['container', 'statistics__container']).element;
-    new BaseComponent(longTermContainer, 'h2', ['statistics__title'], 'Статистика за всё время');
-    const graphicContainer: HTMLElement = new BaseComponent(longTermContainer, 'div', [
-      'statistics__graphic-container',
+    const longTermContainer: HTMLElement = new BaseComponent(longTermSection, 'div', [
+      'container',
+      'statistics__container',
     ]).element;
+    new BaseComponent(longTermContainer, 'h2', ['statistics__title'], 'Статистика за всё время');
+    const graphicContainer: HTMLElement = new BaseComponent(longTermContainer, 'div', ['statistics__graphic-container'])
+      .element;
+    const newWords: StatisticsDateObject = userWords
+      .filter((word: IUserWord): boolean => !!word.optional.initDate)
+      .reduce((acc: StatisticsDateObject, item: IUserWord): StatisticsDateObject => {
+        if (item.optional.initDate) {
+          if (~Object.keys(acc).findIndex((key: string): boolean => key === item.optional.initDate)) {
+            acc[item.optional.initDate] += 1;
+          } else {
+            acc[item.optional.initDate] = 1;
+          }
+        }
+        return acc;
+      }, {});
+    const learntWords = Object.fromEntries(
+      Object.entries(
+        userWords
+          .filter((word: IUserWord): boolean => !!word.optional.learntDate && word.optional.learntDate !== 'null')
+          .reduce((acc: StatisticsDateObject, item): StatisticsDateObject => {
+            if (item.optional.learntDate) {
+              if (~Object.keys(acc).findIndex((key: string): boolean => key === item.optional.learntDate)) {
+                acc[item.optional.learntDate] += 1;
+              } else {
+                acc[item.optional.learntDate] = 1;
+              }
+            }
+            return acc;
+          }, {})
+      ).reduce((acc: StatisticsDateValue[], item: StatisticsDateValue, index: number): StatisticsDateValue[] => {
+        if (!index) {
+          acc.push([item[0], item[1]]);
+        } else {
+          acc.push([item[0], item[1] + acc[index - 1][1]]);
+        }
+        return acc;
+      }, [])
+    );
+    const canvas: HTMLCanvasElement = new BaseComponent(graphicContainer, 'canvas', ['statistics__graphic'])
+      .element as HTMLCanvasElement;
+    const ctx: ChartItem = canvas.getContext('2d') as ChartItem;
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(newWords),
+        datasets: [
+          {
+            label: 'Количество новых слов за каждый день изучения',
+            data: Object.values(newWords),
+            backgroundColor: '#02bfdf',
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+    const canvas2: HTMLCanvasElement = new BaseComponent(graphicContainer, 'canvas', ['statistics__graphic'])
+      .element as HTMLCanvasElement;
+    const ctx2: ChartItem = canvas2.getContext('2d') as ChartItem;
+    new Chart(ctx2, {
+      type: 'line',
+      data: {
+        labels: Object.keys(learntWords),
+        datasets: [
+          {
+            label: 'Увеличение общего количества изученных слов за весь период обучения по дням',
+            data: Object.values(learntWords),
+            backgroundColor: '#02bfdf',
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
   }
 
   private renderShortTermStatistics(): ShortTermStatisticsElements {
