@@ -23,7 +23,7 @@ export class Application {
   }
 
   checkUserAuthorization(): void {
-    const date = localStorage.getItem('rslang-team58-user-time');
+    const date: string | null = localStorage.getItem('rslang-team58-user-time');
     const currentDate = Date.now();
     if (date && currentDate - +date > TIME_TOKEN) {
       window.localStorage.clear();
