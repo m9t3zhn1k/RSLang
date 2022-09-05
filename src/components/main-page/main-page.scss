@@ -192,6 +192,9 @@
     height: 44px;
     width: 44px;
     align-self: flex-end;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: flex-end;
     cursor: pointer;
 
     &_logo {

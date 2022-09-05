@@ -194,3 +194,16 @@ button {
   opacity: 0;
   visibility: hidden;
 }
+
+.notification {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  max-width: 1300px;
+  width: 90%;
+  margin: 0 auto;
+  color: $blue-darkest;
+  font-weight: 700;
+}

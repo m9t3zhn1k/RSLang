@@ -36,7 +36,7 @@ export const putUserStatistic: (statistics: IStatistics) => Promise<void> = asyn
   });
 };
 
-const resetGameStatistics: (statistics: IStatistics) => IStatistics = (statistics: IStatistics): IStatistics => {
+export const resetGameStatistics: (statistics: IStatistics) => IStatistics = (statistics: IStatistics): IStatistics => {
   statistics.optional.date = new Date().toLocaleDateString();
   statistics.optional.sprint.correctAnswers = 0;
   statistics.optional.sprint.answers = 0;
