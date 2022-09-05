@@ -43,7 +43,6 @@ export const createUser: (user: IUser) => Promise<Response> = async (user: IUser
     },
     body: JSON.stringify(user),
   });
-  await rawResponse.json();
 
   return rawResponse;
 };

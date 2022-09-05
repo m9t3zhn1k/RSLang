@@ -17,7 +17,7 @@ class SingUp extends BaseComponent {
 
   private confirmPassword: HTMLInputElement;
 
-  private messageForPass: BaseComponent;
+  private messageForm: BaseComponent;
 
   private loader: Loader;
 
@@ -44,12 +44,10 @@ class SingUp extends BaseComponent {
     this.inputPassword.name = 'password';
     this.confirmPassword = createItemForForm(this.form.element, 'Подтвердите пароль', 'password', 'Подтвердите пароль');
     this.confirmPassword.name = 'confirm password';
-    this.messageForPass = new BaseComponent(
-      this.confirmPassword.parentElement as HTMLElement,
-      'p',
-      ['form__message', 'message-active'],
-      'Пароли, которые Вы ввели, не совпадают'
-    );
+    this.messageForm = new BaseComponent(this.confirmPassword.parentElement as HTMLElement, 'p', [
+      'form__message',
+      'message-active',
+    ]);
     this.button = new BaseComponent(this.form.element, 'button', ['form__button'], 'Регистрация');
     (this.button.element as HTMLButtonElement).type = 'submit';
     this.form.element.addEventListener('submit', this.handlerRegForm.bind(this));
@@ -65,13 +63,12 @@ class SingUp extends BaseComponent {
     } else if (!this.isValidatePassword(this.inputPassword)) {
       this.formAddError(this.inputPassword);
     } else if (!this.areSamePasswords()) {
+      this.messageForm.element.textContent = 'Пароли, которые Вы ввели, не совпадают';
       this.showMessage();
       this.formAddError(this.confirmPassword);
     } else {
       this.registrationUser();
-      this.resetForm();
       this.hideMessage();
-      this.destroyAuthorization();
     }
   }
 
@@ -80,23 +77,33 @@ class SingUp extends BaseComponent {
     const email = this.inputEmail.value;
     const password = this.inputPassword.value;
     const response = await createUser({ email: email, password: password, name: this.inputLogin.value });
-    if (response.status === 200) {
-      const responseLogin: Response = await loginUser({ email: email, password: password });
-      if (responseLogin.status === 200) {
-        const content: ILoginUser = await responseLogin.json();
-        localStorage.setItem('rslang-team58-user', JSON.stringify(content));
-        getUser(content.userId, content.token);
-        updateToken();
-        this.contentForButton('Выйти');
-        await putUserStatistic({
-          optional: {
-            date: new Date().toLocaleDateString(),
-            newWords: 'null',
-            sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
-            audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
-          },
-        });
-        document.location.reload();
+    switch (response.status) {
+      case 200: {
+        const responseLogin: Response = await loginUser({ email: email, password: password });
+        this.resetForm();
+        this.destroyAuthorization()
+        if (responseLogin.status === 200) {
+          const content: ILoginUser = await responseLogin.json();
+          localStorage.setItem('rslang-team58-user', JSON.stringify(content));
+          getUser(content.userId, content.token);
+          updateToken();
+          this.contentForButton('Выйти');
+          await putUserStatistic({
+            optional: {
+              date: new Date().toLocaleDateString(),
+              newWords: 'null',
+              sprint: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
+              audioChallenge: { answers: 0, newWords: 'null', correctAnswers: 0, longestCorrectSeries: 0 },
+            },
+          });
+          document.location.reload();
+        }
+        break;
+      }
+      case 417: {
+        this.messageForm.element.textContent = 'Пользователь уже существует';
+        this.showMessage();
+        break
       }
     }
     this.loader.destroy();
@@ -131,11 +138,11 @@ class SingUp extends BaseComponent {
   }
 
   private showMessage(): void {
-    this.messageForPass.element.classList.remove('message-active');
+    this.messageForm.element.classList.remove('message-active');
   }
 
   private hideMessage(): void {
-    this.messageForPass.element.classList.add('message-active');
+    this.messageForm.element.classList.add('message-active');
   }
 }
 
