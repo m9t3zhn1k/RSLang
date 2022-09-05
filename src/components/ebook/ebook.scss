@@ -1,0 +1,94 @@
+@import "../../styles/pallete.scss";
+
+.ebook {
+    background-color: $text-light;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 3rem;   
+}
+
+.controls {
+    display: flex;
+    position: sticky;
+    top: -1px;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    margin-top: 6rem;
+    background-color: $text-light;
+    z-index: 2;
+}
+
+.cards-view {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.isSticky {
+    background: $background-gradient-game;
+}
+
+.isSticky > div > div,
+.isSticky > button {
+    border: .05rem solid $text-light;
+}
+
+.learned-page {
+    background-color: $white-green;
+}
+
+.dif-words-title {
+    font-size: 2rem;
+    color: $blue-darkest;
+}
+
+.button-game {
+    width: fit-content;
+    padding: 0rem 1rem;
+    background-color: $blue-medium;
+    color: $text-light;
+    text-align: center;
+    line-height: 3rem;
+    border-radius: 0.5rem;
+}
+
+.button-game:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+.non-active-button-game {
+    opacity: .2;
+}
+
+.non-active-button-game:hover {
+    cursor: default;
+    transform: none;
+}
+
+.games-wrap {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 1000px) {
+    .controls {
+        flex-wrap: wrap;
+        gap: .5rem 1rem;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+
+    .isSticky {
+        padding: 1rem 0;
+    }
+}
+

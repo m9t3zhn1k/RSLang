@@ -1,0 +1,17 @@
+@import "../../styles/pallete.scss";
+
+.preloader {
+  display: block;
+}
+
+.preloader-loading {
+  display: block;
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent url('../../assets/images/loader/loader.svg') center center no-repeat;
+  background-size: 150px;
+}
